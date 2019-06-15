@@ -1,5 +1,4 @@
 # Infinite Resolution Materials Format (IRMF) Shaders
-  An invention by Glenn M. Lewis - 2019-03-10
 
 ## Summary
 
