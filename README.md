@@ -3,20 +3,20 @@
 
 ## Summary
 
-    IRMF is a file format used to describe GLSL shaders that define
+IRMF is a file format used to describe GLSL shaders that define
 the materials in a 3D object with infinite resolution. IRMF
 completely eliminates the need for software slicers, STL, and G-code
 files used in 3D printers.
 
 ## Introduction
 
-    This article is about a revolutionary computational technique,
+This article is about a revolutionary computational technique,
 infinite resolution materials format (IRMF) shaders, that takes
 digitally-generated 3D models to the next level. You can think of it
 as the equivalent of Gutenberg's press for the creation of 3D
 objects.
 
-    Historically, geometric primitives such as spheres, cubes, cones,
+Historically, geometric primitives such as spheres, cubes, cones,
 etc. were combined to build up complex 3D models. Today,
 sophisticated parametric CAD programs such as Onshape.com allow
 designers to model complex 3D parts. However, it takes a great deal
@@ -33,7 +33,7 @@ resolution. Not only that, but the higher the desired resolution, the
 larger the STL file itself grows... to the point where it can not be
 easily handled by the tools that need to process it.
 
-    IRMF shaders turn this operation inside-out. Instead of
+IRMF shaders turn this operation inside-out. Instead of
 imperatively building up an object with a sequence of steps, IRMF
 shaders take a functional declarative approach. IRMF shaders answer
 the question "What material exists at this point in 3D space?" The
@@ -48,7 +48,7 @@ GPUs are used to determine what material is printed at each point in
 
 ## What is an "infinite resolution materials format (IRMF) shader"?
 
-    An IRMF shader consists of two parts: a JSON blob description and
+An IRMF shader consists of two parts: a JSON blob description and
 a set of instructions used to determine what material is placed at
 any point in 3D space. What makes it a shader is that it is used
 simultaneously for every voxel (volumetric pixel) within the
@@ -58,12 +58,12 @@ passed a position in space and returns the percentages of one or more
 materials. When compiled and run in parallel (one shader per point in
 3D space), it will be incredibly fast... nearly instantaneous.
 
-    If the GPU does not have enough capacity to assign one shader per
+If the GPU does not have enough capacity to assign one shader per
 point in 3D space, the design can be diced up into cubes or slices
 and then reassembled, or more GPUs could be employed to cover the
 full 3D object at the resolution desired.
 
-    Alternatively, depending on the style of 3D printer, the IRMF
+Alternatively, depending on the style of 3D printer, the IRMF
 shader could be processed within the 3D printer itself and no slicing
 step would be needed at all! Light-based 3D printers are
 exceptionally well suited to this paradigm. As the 3D printer is
@@ -78,48 +78,48 @@ resolution in 10 minutes." The exact same IRMF file describes the
 model with infinite resolution and does not need to be changed in
 this scenario.
 
-    The JSON blob is used to describe the physical dimensions (the
+The JSON blob is used to describe the physical dimensions (the
 minimum bounding box) of the object, how many materials it uses, and
 other parameters used by the shader. The shader portion itself is a
 standard GLSL shader.
 
 ## Inspiration
 
-    [Shadertoy.com](https://shadertoy.com) is an amazing collection
+[Shadertoy.com](https://shadertoy.com) is an amazing collection
 of GLSL shaders written by a lot of amazing creative people. From
 there, I found this incredible website: [The Book of
 Shaders](https://thebookofshaders.com/) which teaches shader writing
 from the ground up.
 
-    Additionally, I came across a similar use of JSON and GLSL called
+Additionally, I came across a similar use of JSON and GLSL called
 ISF located here: https://www.interactiveshaderformat.com/.
 
 ## What is the difference between GLSL and IRMF?
 
-    GLSL is the OpenGL Shading Language developed by the Khronos
+GLSL is the OpenGL Shading Language developed by the Khronos
 Group. GLSL files are compiled into shaders that can be run in
 parallel on GPU cards.
 
-    IRMF is designed to be a standard for working with GLSL in such a
+IRMF is designed to be a standard for working with GLSL in such a
 way that 3D printers can manufacture objects at any resolution
 possible. IRMF files consist of a JSON blob followed by a GLSL
 shader.
 
 ## How do I use IRMF?
 
-    An IRMF editor is in the works. Eventually, firmware for 3D
+An IRMF editor is in the works. Eventually, firmware for 3D
 printers will be written that natively read, parse, and use IRMF
 files to generate physical objects with one or more materials.
 
 ## Who created IRMF?
 
-    The IRMF Specification was created and is maintained by
+The IRMF Specification was created and is maintained by
 Glenn M. Lewis. Issues can be raised on the GitHub page for the
 IRMF Specification.
 
 ## What is the status of IRMF?
 
-    Currently, IRMF is just an idea that needs fully fleshing out.
+Currently, IRMF is just an idea that needs fully fleshing out.
 
 ----------------------------------------------------------------------
 
