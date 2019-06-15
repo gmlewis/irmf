@@ -13,7 +13,7 @@ This article is about a revolutionary computational technique,
 infinite resolution materials format (IRMF) shaders, that takes
 digitally-generated 3D models to the next level. You can think of it
 as the equivalent of Gutenberg's press for the creation of 3D
-objects.
+physical objects.
 
 Historically, geometric primitives such as spheres, cubes, cones,
 etc. were combined to build up complex 3D models. Today,
