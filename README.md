@@ -2,7 +2,7 @@
 
 ## Summary
 
-IRMF is a file format used to describe GLSL shaders that define
+IRMF is a file format used to describe GLSL ES shaders that define
 the materials in a 3D object with infinite resolution. IRMF
 completely eliminates the need for software slicers, STL, and G-code
 files used in 3D printers.
@@ -80,28 +80,28 @@ this scenario.
 The JSON blob is used to describe the physical dimensions (the
 minimum bounding box) of the object, how many materials it uses, and
 other parameters used by the shader. The shader portion itself is a
-standard GLSL shader.
+standard GLSL ES shader.
 
 ## Inspiration
 
 [Shadertoy.com](https://shadertoy.com) is an amazing collection
-of GLSL shaders written by a lot of amazing creative people. From
+of GLSL ES shaders written by a lot of amazing creative people. From
 there, I found this incredible website: [The Book of
 Shaders](https://thebookofshaders.com/) which teaches shader writing
 from the ground up.
 
-Additionally, I came across a similar use of JSON and GLSL called
+Additionally, I came across a similar use of JSON and GLSL ES called
 ISF located here: https://www.interactiveshaderformat.com/.
 
-## What is the difference between GLSL and IRMF?
+## What is the difference between GLSL ES and IRMF?
 
-GLSL is the OpenGL Shading Language developed by the Khronos
-Group. GLSL files are compiled into shaders that can be run in
+GLSL ES is the OpenGL Shading Language developed by the Khronos
+Group. GLSL ES files are compiled into shaders that can be run in
 parallel on GPU cards.
 
-IRMF is designed to be a standard for working with GLSL in such a
+IRMF is designed to be a standard for working with GLSL ES in such a
 way that 3D printers can manufacture objects at any resolution
-possible. IRMF files consist of a JSON blob followed by a GLSL
+possible. IRMF files consist of a JSON blob followed by a GLSL ES
 shader.
 
 ## How do I use IRMF?
