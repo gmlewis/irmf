@@ -3,21 +3,26 @@
 ## Background
 
 An IRMF ("Infinite Resolution Materials Format") file is a JSON blob containing
-required and optional fields followed by a GLSL ES shader that is written such
-that it can render a 2D slice of a 3D object at any resolution desired on a GPU.
+(required and optional) key-value pairs followed by a GLSL ES shader that is
+written such that it can "render" (or manufacture) a 3D object at any resolution
+desired. The renderer or 3D printer takes advantage of an on-board GPU to freely
+slice the model in any convenient 2D plane and take as many passes as necessary
+to fully define and fabricate the model.
 
-That 2D slice represents the quantity of up to four materials that the 3D printer
+That 2D plane represents the quantity of up to 16 materials that the 3D printer
 will deposit into 3D space along that 2D plane. By modifying the parameters while
 the printer is building the model and re-slicing the model from different angles
 and positions, the 3D printer can generate all the information it needs to build
-the model using up to four materials. (Future versions of this spec may support
-more than four materials.) Additionally, three material values can be combined to
-represent a full color spectrum for a single material.
+the model using up to 16 materials. (Future versions of this spec may support
+more than 16 materials.) Additionally, triplets of material values can be
+combined to represent a full color spectrum for a single material. There is
+nothing in the spec that limits the interpretation (or range) of the material
+values output by the IRMF shader.
 
-Each material value (located in the R, G, B, and A channels of the fragment shader)
-varies from 0 to 1, representing no material up to solid material. There is no
-checking that the material values sum up to 1, which allows the 3D printer
-manufacturer to use the values in clever ways.
+Each material value typically varies from 0 to 1, representing no material up
+to solid material. There is no checking that the material values sum up to 1,
+which allows the 3D printer manufacturer to use the values in clever and
+differentiating ways.
 
 ## Format Specifications
 
@@ -40,7 +45,10 @@ Here are the keys and sample values:
   * (*required* - this is the version of the IRMF spec)
 * `materials: ["<m1 name>","<m2 name>","<m3 name>","<m4 name>"],`
   * (*required* - must be the same length as the number of material values
-     output by this IRMF shader. e.g. `["support","AISI 1018 steel"]`)
+     output by this IRMF shader. e.g. `["support","AISI 1018 steel"]`. For
+     1-4 materials, the `mainModel4` function will be used. For 5-9
+     materials, the `mainModel9` function will be used. For 10-16 materials,
+     the `mainModel16` function will be used.)
 * `max: [<urx>,<ury>,<urz>],`
   * (*required* - upper right bounds of shader - e.g. `[0,0,0]`)
 * `min: [<llx>,<lly>,<llz>],`
@@ -57,15 +65,29 @@ be on a line by itself:
 
 * `}*/`
 
-What follows this JSON blob is an almost-standard ShaderToy (GLSL ES)
-"pixel shader" (or "full-screen fragment shader") with the exception that
-a function is provided by the IRMF viewer software or 3D printer (the
-*"renderer"*) that transforms the input `in vec2 fragCoord` to a `vec3 xyz`
-that (eventually) fully covers the minimum bounding box of the design in the
-provided units (typically "mm").
+What follows this JSON blob is a GLSL ES shader similar to a ShaderToy
+[`mainImage`](https://www.shadertoy.com/howto)
+"pixel shader" (or "full-screen fragment shader"), but instead of this
+ShaderToy function signature:
+
+* `void mainImage( out vec4 fragColor, in vec2 fragCoord );`
+
+IRMF instead uses one of the following (depending on how many materials
+are named in the JSON blob header):
+
+* `void mainModel4( out vec4 materials, in vec3 xyz );`
+  (for 1-4 materials)
+* `void mainModel9( out mat3 materials, in vec3 xyz );`
+  (for 5-9 materials)
+* `void mainModel16( out mat4 materials, in vec3 xyz );`
+  (for 10-16 materials)
+
+The `xyz` input can range anywhere within the minimum bounding box
+defined in the JSON blob header. The units are specified in the
+header.
 
 The renderer modifies this function on each slice of the design in order
-to calculate the amount of material needed at each point in space. It is
+to calculate the amount of material needed at each point in 3D space. It is
 free to "zoom in" to any portion of the design to get as much detail as
 necessary to generate the model. This is why IRMF shaders have infinite
 resolution. The renderer can get as much detail from the shader as it needs
