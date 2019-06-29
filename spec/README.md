@@ -2,22 +2,23 @@
 
 ## Background
 
-An IRMF ("Infinite Resolution Materials Format") file is a JSON blob containing
+An IRMF (“Infinite Resolution Materials Format”) file is a JSON blob containing
 (required and optional) key-value pairs followed by a GLSL ES shader that is
-written such that it can "render" (or manufacture) a 3D object at any resolution
+written such that it can “render” (or manufacture) a 3D object at any resolution
 desired. The renderer or 3D printer takes advantage of an on-board GPU to freely
 slice the model in any convenient 2D plane and take as many passes as necessary
 to fully define and fabricate the model.
 
-That 2D plane represents the quantity of up to 16 materials that the 3D printer
-will deposit into 3D space along that 2D plane. By modifying the parameters while
-the printer is building the model and re-slicing the model from different angles
-and positions, the 3D printer can generate all the information it needs to build
-the model using up to 16 materials. (Future versions of this spec may support
-more than 16 materials.) Additionally, triplets of material values can be
-combined to represent a full color spectrum for a single material. There is
-nothing in the spec that limits the interpretation (or range) of the material
-values output by the IRMF shader.
+That 2D plane represents the quantity of each material (up to 16 materials)
+that the renderer will deposit into 3D space along that 2D plane.
+(Future versions of this spec may support more than 16 materials.)
+By modifying the parameters while the printer is building the model and
+re-slicing it from different angles and positions, the 3D printer can get
+the information it needs to build the model.
+Additionally, triplets of material values can be combined
+to represent a full-color spectrum for a single material.
+There is nothing in the spec that limits the interpretation (or range) of
+the material values output by the IRMF shader.
 
 Each material value typically varies from 0 to 1, representing no material up
 to solid material. There is no checking that the material values sum up to 1,
@@ -27,7 +28,8 @@ differentiating ways.
 ## Format Specifications
 
 An IRMF file (also known as an IRMF shader) *MUST* start with the following three
-characters followed by a newline or (carriage return, newline on DOS systems):
+characters followed by a `\n` (newline or `\r\n` [carriage return, newline]
+on DOS systems):
 
 * `/*{`
 
@@ -67,7 +69,7 @@ be on a line by itself:
 
 What follows this JSON blob is a GLSL ES shader similar to a ShaderToy
 [`mainImage`](https://www.shadertoy.com/howto)
-"pixel shader" (or "full-screen fragment shader"), but instead of this
+“pixel shader” (or “full-screen fragment shader”), but instead of this
 ShaderToy function signature:
 
 * `void mainImage( out vec4 fragColor, in vec2 fragCoord );`
@@ -88,10 +90,10 @@ header.
 
 The renderer modifies this function on each slice of the design in order
 to calculate the amount of material needed at each point in 3D space. It is
-free to "zoom in" to any portion of the design to get as much detail as
+free to “zoom in” to any portion of the design to get as much detail as
 necessary to generate the model. This is why IRMF shaders have infinite
 resolution. The renderer can get as much detail from the shader as it needs
 in order to manufacture the part within the alloted timeframe. Higher
 resolution models typically take more time to manufacture, so the same
-IRMF shader can be used to create quick prototypes or highly detailed
+IRMF shader can be used to create quick prototypes or highly-detailed,
 final production-worthy parts.

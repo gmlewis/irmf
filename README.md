@@ -35,17 +35,17 @@ easily handled by the tools that need to process it.
 IRMF shaders turn this operation inside-out. Instead of
 imperatively building up an object with a sequence of steps, IRMF
 shaders take a functional declarative approach. IRMF shaders answer
-the question "What material exists at this point in 3D space?" The
+the question “What material exists at this point in 3D space?” The
 advantage to this approach is that the same shader can instantly
 provide a voxelized representation of the object at any desired
 output resolution by simply instantiating as many instances of this
-IRMF shader as needed. This is what is called an "embarrassingly
-parallel" computation and is what GPUs were designed for (although
+IRMF shader as needed. This is what is called an “embarrassingly
+parallel” computation and is what GPUs were designed for (although
 typically for rendering images on a 2D screen). With IRMF shaders,
 GPUs are used to determine what material is printed at each point in
 3D space.
 
-## What is an "infinite resolution materials format (IRMF) shader"?
+## What is an “infinite resolution materials format (IRMF) shader?”
 
 An IRMF shader consists of two parts: a JSON blob description and
 a set of instructions used to determine what material is placed at
@@ -71,9 +71,9 @@ percentage of materials belong at each location, and generates the
 materials without the need for slicing at all. The 3D printer could
 simply accept the extremely compact IRMF file itself as input, then
 generate the 3D object at any resolution the printer supports. In
-fact, one option on the 3D printer might be "How fast do you want
+fact, one option on the 3D printer might be “How fast do you want
 this part? It can be made with 1μm resolution in 1 minute and 1nm
-resolution in 10 minutes." The exact same IRMF file describes the
+resolution in 10 minutes.” The exact same IRMF file describes the
 model with infinite resolution and does not need to be changed in
 this scenario.
 
