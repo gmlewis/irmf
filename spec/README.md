@@ -61,7 +61,7 @@ What follows this JSON blob is an almost-standard ShaderToy (GLSL ES)
 "pixel shader" (or "full-screen fragment shader") with the exception that
 a function is provided by the IRMF viewer software or 3D printer (the
 *"renderer"*) that transforms the input `in vec2 fragCoord` to a `vec3 xyz`
-that (evntually) fully covers the minimum bounding box of the design in the
+that (eventually) fully covers the minimum bounding box of the design in the
 provided units (typically "mm").
 
 The renderer modifies this function on each slice of the design in order
