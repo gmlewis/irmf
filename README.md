@@ -12,7 +12,7 @@ files used in 3D printers.
 This article is about a revolutionary computational technique,
 infinite resolution materials format (IRMF) shaders, that takes
 digitally-generated 3D models to the next level. You can think of it
-as the equivalent of Gutenberg's press for the creation of 3D
+as the equivalent of Gutenberg’s press for the creation of 3D
 physical objects.
 
 Historically, geometric primitives such as spheres, cubes, cones,
@@ -25,7 +25,7 @@ G-code that a 3D printer can use to manufacture the
 objects. Additionally, extremely complex parts, especially organic
 shapes, are not well suited to this style of design and frequently
 overwhelm the legacy algorithms and slicing programs. Most
-importantly, the resulting STL triangle mesh doesn't accurately
+importantly, the resulting STL triangle mesh doesn’t accurately
 describe the desired surface of the model, but is only a tessellated
 approximation of the truly-desired object, having limited
 resolution. Not only that, but the higher the desired resolution, the
