@@ -27,6 +27,6 @@ Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
 void mainModel4( out vec4 materials, in vec3 xyz ) {
   const float radius = 5.0;  // 10mm diameter sphere.
   float r = length(xyz);  // distance from origin.
-  return vec4(r <= radius ? 1.0 : 0.0); // Only materials[0] is used; the others are ignored.
+  materials[0] = r <= radius ? 1.0 : 0.0; // Only materials[0] is used; the others are ignored.
 }
 ```
