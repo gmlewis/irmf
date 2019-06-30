@@ -134,6 +134,11 @@ IRMF Specification.
 Currently, IRMF is just an idea that needs fully fleshing out.
 Please see the [IRMF Spec](spec) for more information.
 
+## Examples
+
+* [001-sphere](examples/001-sphere)
+* [002-cube](examples/002-cube)
+
 ----------------------------------------------------------------------
 
 # License
