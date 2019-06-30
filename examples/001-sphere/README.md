@@ -5,7 +5,7 @@ is the perfectly-smooth sphere (*e.g.* a ball bearing, or actually any smooth, c
 STL (a triangle-based representation) is simply the wrong tool for the job.
 Not even do voxels solve the problem due to their finite image resolution.
 
-Yet, ironically, the perfect sphere is the very easiest thing to model using an IRMF shader.
+Yet, ironically, the perfect sphere is almost the easiest thing to model using an IRMF shader.
 
 Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
 
@@ -18,7 +18,7 @@ Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
   materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
-  notes: "Simplest-possible IRMF shader - Hello, Sphere!",
+  notes: "Simple IRMF shader - Hello, Sphere!",
   title: "10mm diameter Sphere",
   units: "mm",
   version: "1.0"
