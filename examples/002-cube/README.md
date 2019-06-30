@@ -9,6 +9,7 @@ and the MBB itself defines the object (the cube).
 
 Here is an [IRMF shader](cube.irmf) defining a 10mm diameter cube:
 
+```glsl
 /*{
   author: "Glenn M. Lewis",
   copyright: "Apache-2.0",
@@ -26,6 +27,7 @@ Here is an [IRMF shader](cube.irmf) defining a 10mm diameter cube:
 void mainModel4( out vec4 materials, in vec3 xyz ) {
   materials[0] = 1.0;
 }
+```
 
 ----------------------------------------------------------------------
 
