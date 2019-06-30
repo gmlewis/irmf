@@ -16,7 +16,7 @@ By modifying the parameters while the printer is building the model and
 re-slicing it from different angles and positions, the 3D printer can get
 the information it needs to build the model.
 Additionally, triplets of material values can be combined
-to represent a full-color spectrum for a single material.
+to represent a full-color (RGB) spectrum for a single material.
 There is nothing in the spec that limits the interpretation (or range) of
 the material values output by the IRMF shader.
 
@@ -38,29 +38,30 @@ Immediately following this opening are JSON key-value pairs
 Here are the keys and sample values:
 
 * `author: "<name of author>",`
-  * (*optional* - e.g. `"Glenn M. Lewis"`)
+  * *optional* - e.g. `"Glenn M. Lewis"`
 * `copyright: "<copyright text>",`
-  * (*optional* - e.g. `"Apache-2.0"`)
+  * *optional* - e.g. `"Apache-2.0"`
 * `date: "<date created>",`
-  * (*optional* - e.g. `"2019-06-28"`)
+  * *optional* - e.g. `"2019-06-28"`
 * `irmf: "1.0",`
-  * (*required* - this is the version of the IRMF spec)
+  * *required* - this is the version of the IRMF spec.
 * `materials: ["<m1 name>","<m2 name>","<m3 name>","<m4 name>"],`
-  * (*required* - must be the same length as the number of material values
-     output by this IRMF shader. e.g. `["support","AISI 1018 steel"]`. For
-     1-4 materials, the `mainModel4` function will be used. For 5-9
-     materials, the `mainModel9` function will be used. For 10-16 materials,
-     the `mainModel16` function will be used.)
+  * *required* - must be the same length as the number of material values
+     output by this IRMF shader. e.g. `["support","dielectric","AISI 1018 steel"]`.
+     The material name is used to identify the desired material to the 3D printer.
+    * For 1-4 materials, the `mainModel4` function will be used.
+    * For 5-9 materials, the `mainModel9` function will be used.
+    * For 10-16 materials, the `mainModel16` function will be used.
 * `max: [<urx>,<ury>,<urz>],`
-  * (*required* - upper right bounds of shader - e.g. `[0,0,0]`)
+  * *required* - upper right bounds of shader - e.g. `[0,0,0]`
 * `min: [<llx>,<lly>,<llz>],`
-  * (*required* - lower left bounds of shader - e.g. `[10,12,15]`)
+  * *required* - lower left bounds of shader - e.g. `[10,12,15]`
 * `notes: "<notes from IRMF shader author>",`
-  * (*optional*)
+  * *optional*
 * `units: "mm",`
-  * (*required* - can be `"mm"` or `"in"`)
+  * *required* - can be `"mm"` or `"in"`
 * `version: "<IRMF shader version>",`
-  * (*optional* - e.g. `"2.7"`)
+  * *optional* - determined by the IRMF shader author - e.g. `"2.7"`
 
 After the JSON key-value pairs, the following group of three characters *MUST*
 be on a line by itself:
