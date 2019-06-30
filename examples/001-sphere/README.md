@@ -15,7 +15,7 @@ Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
   copyright: "Apache-2.0",
   date: "2019-06-30",
   irmf: "1.0",
-  materials: ["dielectric","AISI 1018 steel"],
+  materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
   notes: "Simplest-possible IRMF shader - Hello, Sphere!",
