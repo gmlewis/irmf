@@ -87,6 +87,13 @@ minimum bounding box) of the object, how many materials it uses, and
 other parameters used by the shader. The shader portion itself is a
 standard GLSL ES shader.
 
+## Do IRMF shaders really have infinite resolution?
+
+OK, no. They are limited by the resolution of a GPU's `float`
+representation. However, they sure beat the resolution of STL and
+voxel representations of the same model if there are any curved
+surfaces involved!
+
 ## Inspiration
 
 [Shadertoy.com](https://shadertoy.com) is an amazing collection
