@@ -6,7 +6,7 @@
   materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
-  notes: "Simplest-possible IRMF shader - Hello, Sphere!",
+  notes: "Simple IRMF shader - Hello, Sphere!",
   title: "10mm diameter Sphere",
   units: "mm",
   version: "1.0"
