@@ -58,6 +58,8 @@ Here are the keys and sample values:
   * *required* - lower left bounds of shader - e.g. `[10,12,15]`
 * `notes: "<notes from IRMF shader author>",`
   * *optional*
+* `title: "<name of IRMF model>",`
+  * *optional*
 * `units: "mm",`
   * *required* - can be `"mm"` or `"in"`
 * `version: "<IRMF shader version>",`
