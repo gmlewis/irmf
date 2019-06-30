@@ -2,10 +2,14 @@
 
 ## Summary
 
-IRMF is a file format used to describe GLSL ES shaders that define
-the materials in a 3D object with infinite resolution. IRMF
-completely eliminates the need for software slicers, STL, and G-code
-files used in 3D printers.
+IRMF is a file format used to describe [GLSL
+ES](https://en.wikipedia.org/wiki/OpenGL_ES) shaders that define the
+materials in a 3D object with infinite resolution. IRMF completely
+eliminates the need for [software
+slicers](https://en.wikipedia.org/wiki/Slicer_(3D_printing)),
+[STL](https://en.wikipedia.org/wiki/STL_(file_format)), and
+[G-code](https://en.wikipedia.org/wiki/G-code) files used in
+[3D printers](https://en.wikipedia.org/wiki/3D_printing).
 
 ## Introduction
 
@@ -16,46 +20,47 @@ as the equivalent of Gutenberg’s press for the creation of 3D
 physical objects.
 
 Historically, geometric primitives such as spheres, cubes, cones,
-etc. were combined to build up complex 3D models. Today,
-sophisticated parametric CAD programs such as Onshape.com allow
-designers to model complex 3D parts. However, it takes a great deal
-of computing power to run the algorithms necessary to convert these
+etc. were combined to build up complex 3D models. Today, sophisticated
+parametric CAD programs such as [Onshape](https://cad.onshape.com/)
+allow designers to model complex 3D parts. However, it takes a great
+deal of computing power to run the algorithms necessary to convert these
 models into STL triangle meshes that are then sliced and converted to
-G-code that a 3D printer can use to manufacture the
-objects. Additionally, extremely complex parts, especially organic
+G-code that a 3D printer can use to manufacture the objects.
+Additionally, extremely complex parts, especially organic
 shapes, are not well suited to this style of design and frequently
-overwhelm the legacy algorithms and slicing programs. Most
-importantly, the resulting STL triangle mesh doesn’t accurately
-describe the desired surface of the model, but is only a tessellated
-approximation of the truly-desired object, having limited
-resolution. Not only that, but the higher the desired resolution, the
-larger the STL file itself grows... to the point where it can not be
-easily handled by the tools that need to process it.
+overwhelm the legacy algorithms and slicing programs. Most importantly,
+the resulting STL triangle mesh doesn’t accurately describe the desired
+surface of the model, but is only a tessellated approximation of the
+truly-desired object, having limited resolution. Not only that, but the
+higher the desired resolution, the larger the STL file itself
+grows... to the point where it can not be easily handled by the tools
+that need to process it.
 
-IRMF shaders turn this operation inside-out. Instead of
-imperatively building up an object with a sequence of steps, IRMF
-shaders take a functional declarative approach. IRMF shaders answer
-the question “What material exists at this point in 3D space?” The
-advantage to this approach is that the same shader can instantly
-provide a voxelized representation of the object at any desired
-output resolution by simply instantiating as many instances of this
-IRMF shader as needed. This is what is called an “embarrassingly
-parallel” computation and is what GPUs were designed for (although
-typically for rendering images on a 2D screen). With IRMF shaders,
-GPUs are used to determine what material is printed at each point in
-3D space.
+IRMF shaders turn this operation inside-out. Instead of imperatively
+building up an object with a sequence of steps, IRMF shaders take a
+functional declarative approach. IRMF shaders answer the question “What
+material exists at this point in 3D space?” The advantage to this
+approach is that the same shader can instantly provide a voxelized
+representation of the object at any desired output resolution by simply
+instantiating as many instances of this IRMF shader as needed. This is
+what is called an “embarrassingly parallel” computation and is what
+[GPUs](https://en.wikipedia.org/wiki/Graphics_processing_unit) were
+designed for (although typically for rendering images on a 2D
+screen). With IRMF shaders, GPUs are used to determine what material is
+printed at each point in 3D space.
 
 ## What is an “infinite resolution materials format (IRMF) shader?”
 
-An IRMF shader consists of two parts: a JSON blob description and
-a set of instructions used to determine what material is placed at
-any point in 3D space. What makes it a shader is that it is used
-simultaneously for every voxel (volumetric pixel) within the
-object. This means that the code has to behave differently for every
-(x,y,z) position within 3D space. Like a type press, the shader is
-passed a position in space and returns the percentages of one or more
-materials. When compiled and run in parallel (one shader per point in
-3D space), it will be incredibly fast... nearly instantaneous.
+An IRMF shader consists of two parts: a
+[JSON](https://en.wikipedia.org/wiki/JSON) blob description and a set of
+instructions used to determine what material is placed at any point in
+3D space. What makes it a shader is that it is used simultaneously for
+every voxel (volumetric pixel) within the object. This means that the
+code has to behave differently for every (x,y,z) position within 3D
+space. Like a type press, the shader is passed a position in space and
+returns the percentages of one or more materials. When compiled and run
+in parallel (one shader per point in 3D space), it will be incredibly
+fast... nearly instantaneous.
 
 If the GPU does not have enough capacity to assign one shader per
 point in 3D space, the design can be diced up into cubes or slices
@@ -85,19 +90,20 @@ standard GLSL ES shader.
 ## Inspiration
 
 [Shadertoy.com](https://shadertoy.com) is an amazing collection
-of GLSL ES shaders written by a lot of amazing creative people. From
+of GLSL ES shaders written by a lot of amazing, creative people. From
 there, I found this incredible website: [The Book of
 Shaders](https://thebookofshaders.com/) which teaches shader writing
 from the ground up.
 
 Additionally, I came across a similar use of JSON and GLSL ES called
-ISF located here: https://www.interactiveshaderformat.com/.
+[ISF](https://www.interactiveshaderformat.com/) but used for video.
 
 ## What is the difference between GLSL ES and IRMF?
 
-GLSL ES is the OpenGL Shading Language developed by the Khronos
-Group. GLSL ES files are compiled into shaders that can be run in
-parallel on GPU cards.
+GLSL ES is the [OpenGL Shading
+Language](https://www.khronos.org/opengles/) developed by the [Khronos
+Group](https://www.khronos.org/). GLSL ES files are compiled into
+shaders that can be run in parallel on GPU cards.
 
 IRMF is designed to be a standard for working with GLSL ES in such a
 way that 3D printers can manufacture objects at any resolution
