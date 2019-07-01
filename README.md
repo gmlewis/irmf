@@ -117,6 +117,45 @@ way that 3D printers can manufacture objects at any resolution
 possible. IRMF files consist of a JSON blob followed by a GLSL ES
 shader.
 
+## How are IRMF shaders different from signed distance functions (SDFs)?
+
+IRMF shaders are *much* easier to write than [SDFs](https://github.com/gmlewis/sdfx).
+In fact, one could write [genetic programs](https://github.com/gmlewis/gep)
+to generate IRMF shaders.
+
+Back in 2018, I was fed up with STL models and CAD tools that couldn't handle
+non-trivial booleans (think [bifilar coils](https://github.com/gmlewis/go-gerber))
+so I came across voxels and [wrote some tools](https://github.com/gmlewis/stldice)
+to make it easier to manipulate voxel designs and perform complex boolean operations
+that cause all other popular CAD tools to choke.
+
+Then I came to the realization that voxels, although they solved the boolean operation
+problems, did not address the problem of generating smooth curves and surfaces
+because they are inherently limited by the resolution of the image slices.
+
+Finally, I came across [SDFs](https://github.com/gmlewis/sdfx) and thought that I
+had found the modeling tool that would solve all the boolean and smooth surface
+problems for good. But then I contributed my first primitive, a [spiral](
+https://github.com/gmlewis/sdfx/blob/master/sdf/spiral.go), and found it incredibly
+difficult to get it right.
+
+In a 2D or 3D SDF, you must specify the signed *distance* from any point in 2D or 3D
+space (respectively) to the *nearest* edge of your primitive. Think of a spiral.
+That is a royal pain in the rear. The math was not fun.
+
+An IRMF shader, on the other hand, is given a single point in 3D space and all that
+is needed is for the shader to report what material(s) exist in that one point in
+space, and not how far it is to some other material.
+
+This makes IRMF shaders *orders of magnitude* easier to write than SDFs.
+IRMF shaders make boolean operations a breeze: zero times anything is zero; one
+times anything is that thing. Booleans solved. Likewise, IRMF shaders can represent
+curved surfaces as fine as the GPU can resolve... which is mighty fine.
+
+I'm very excited about the future of IRMF shaders, and envision a day when the
+Star Trek replicator will be a household device. "Hey replicator, print me a widget."
+"OK, your widget is ready."
+
 ## How do I use IRMF?
 
 An IRMF editor is in the works. Eventually, firmware for 3D
@@ -125,9 +164,9 @@ files to generate physical objects with one or more materials.
 
 ## Who created IRMF?
 
-The IRMF Specification was created and is maintained by
-Glenn M. Lewis. Issues can be raised on the GitHub page for the
-IRMF Specification.
+The IRMF Specification was created and is maintained by Glenn M. Lewis
+Issues can be raised on the [GitHub issues page](https://github.com/gmlewis/irmf/issues)
+for the IRMF Specification.
 
 ## What is the status of IRMF?
 
