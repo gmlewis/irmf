@@ -153,8 +153,8 @@ times anything is that thing. Booleans solved. Likewise, IRMF shaders can repres
 curved surfaces as fine as the GPU can resolve... which is mighty fine.
 
 I'm very excited about the future of IRMF shaders, and envision a day when the
-Star Trek replicator will be a household device. "Hey replicator, print me a widget."
-"OK, your widget is ready."
+Star Trek replicator will be a household device. “Hey replicator, print me a widget.”
+“OK, your widget is ready.”
 
 ## How do I use IRMF?
 
