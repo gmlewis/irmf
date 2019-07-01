@@ -11,6 +11,8 @@ slicers](https://en.wikipedia.org/wiki/Slicer_(3D_printing)),
 [G-code](https://en.wikipedia.org/wiki/G-code) files used in
 [3D printers](https://en.wikipedia.org/wiki/3D_printing).
 
+I believe that IRMF shaders will revolutionize the 3D-printing industry.
+
 ## Introduction
 
 This article is about a revolutionary computational technique,
