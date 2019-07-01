@@ -168,7 +168,8 @@ files to generate physical objects with one or more materials.
 
 ## Who created IRMF?
 
-The IRMF Specification was created and is maintained by Glenn M. Lewis
+The IRMF Specification was created and is maintained by Glenn M. Lewis.
+
 Issues can be raised on the [GitHub issues page](https://github.com/gmlewis/irmf/issues)
 for the IRMF Specification.
 
