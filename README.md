@@ -176,7 +176,8 @@ for the IRMF Specification.
 ## What is the status of IRMF?
 
 Currently, IRMF is just an idea that needs fully fleshing out.
-Please see the [IRMF Spec](spec) for more information.
+
+Please see the [IRMF Spec](spec) and [provided examples](examples) for more information.
 
 ## Examples
 
