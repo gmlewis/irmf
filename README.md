@@ -169,7 +169,9 @@ Star Trek replicator will be a household device. “Hey replicator, print me a w
 
 An IRMF editor is in the works. Eventually, firmware for 3D
 printers will be written that natively read, parse, and use IRMF
-files to generate physical objects with one or more materials.
+files to generate physical objects with one or more materials...
+thereby completely eliminating the need for STL files, software slicers,
+and G-Code files.
 
 ## Who created IRMF?
 
