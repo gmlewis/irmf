@@ -58,6 +58,14 @@ Here are the keys and sample values:
   * *required* - lower left bounds of shader - e.g. `[10,12,15]`
 * `notes: "<notes from IRMF shader author>",`
   * *optional*
+* `options: {<key1>: <value1>, <key2>: <value2> [,...]},`
+  * *optional* - These key-value pairs can be used by the renderer or 3D printer
+    as custom options that control the viewing or manufacturing of models.
+    
+    They are renderer- (or device-)specific. Renderers or 3D printers that don't
+    recognize individual options will simply ignore them (possibly with a warning).
+    
+    *e.g.* `{ showAxes: false, showSliders: false, goldPlating: "1um" }`.
 * `title: "<name of IRMF model>",`
   * *optional*
 * `units: "mm",`
