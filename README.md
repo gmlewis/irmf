@@ -89,10 +89,15 @@ standard GLSL ES shader.
 
 ## Do IRMF shaders really have infinite resolution?
 
-OK, no. They are limited by the resolution of a GPU's `float`
-representation. However, they sure beat the resolution of STL and
-voxel representations of the same model if there are any curved
-surfaces involved!
+Well, yes and no. They are currently limited by the resolution of a
+GPU's `float` representation. However, the IRMF shader itself is pure
+math and does not limit the resolution of the model, so `IRMF` is truly
+an appropriate term for the shaders as they are not the limiting factor.
+
+When GPUs have higher resolution in their numeric representations,
+no major changes will be needed to update the IRMF shaders... most
+likely it will involve a simple name change from `float` to the new
+keyword.
 
 ## Inspiration
 
