@@ -140,12 +140,16 @@ https://github.com/gmlewis/sdfx/blob/master/sdf/spiral.go), and found it incredi
 difficult to get it right.
 
 In a 2D or 3D SDF, you must specify the signed *distance* from any point in 2D or 3D
-space (respectively) to the *nearest* edge of your primitive. Think of a spiral.
+space (respectively) to the *nearest* edge of your primitive (negative is inside the
+object, zero is the edge, and positive is outside the object).
+Think of implementing this for a spiral.
 That is a royal pain in the rear. The math was not fun.
 
 An IRMF shader, on the other hand, is given a single point in 3D space and all that
 is needed is for the shader to report what material(s) exist in that one point in
-space, and not how far it is to some other material.
+space, and not how far it is to some other material. For the spiral case, you only
+need to determine if the point is inside the spiral or outside it, not how far the
+point is to the edge.
 
 This makes IRMF shaders *orders of magnitude* easier to write than SDFs.
 IRMF shaders make boolean operations a breeze: zero times anything is zero; one
