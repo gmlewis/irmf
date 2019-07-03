@@ -83,16 +83,16 @@ What follows this JSON blob is a GLSL ES shader similar to a ShaderToy
 “pixel shader” (or “full-screen fragment shader”), but instead of this
 ShaderToy function signature:
 
-* `void mainImage( out vec4 fragColor, in vec2 fragCoord );`
+* `void mainImage( out vec4 fragColor, in vec2 fragCoord )`
 
 IRMF instead uses one of the following (depending on how many materials
 are named in the JSON blob header):
 
-* `void mainModel4( out vec4 materials, in vec3 xyz );`
+* `void mainModel4( out vec4 materials, in vec3 xyz )`
   (for 1-4 materials)
-* `void mainModel9( out mat3 materials, in vec3 xyz );`
+* `void mainModel9( out mat3 materials, in vec3 xyz )`
   (for 5-9 materials)
-* `void mainModel16( out mat4 materials, in vec3 xyz );`
+* `void mainModel16( out mat4 materials, in vec3 xyz )`
   (for 10-16 materials)
 
 The `xyz` input can range anywhere within the minimum bounding box
