@@ -11,17 +11,13 @@ Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
 
 ```glsl
 /*{
-  author: "Glenn M. Lewis",
-  copyright: "Apache-2.0",
-  date: "2019-06-30",
   irmf: "1.0",
   materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
   notes: "Simple IRMF shader - Hello, Sphere!",
   title: "10mm diameter Sphere",
-  units: "mm",
-  version: "1.0"
+  units: "mm"
 }*/
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {

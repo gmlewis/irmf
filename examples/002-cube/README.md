@@ -11,17 +11,13 @@ Here is an [IRMF shader](cube.irmf) defining a 10mm diameter cube:
 
 ```glsl
 /*{
-  author: "Glenn M. Lewis",
-  copyright: "Apache-2.0",
-  date: "2019-06-30",
   irmf: "1.0",
   materials: ["PLA"],
   max: [10,10,10],
   min: [0,0,0],
   notes: "Simple IRMF shader - Hello, Cube!",
   title: "10mm diameter Cube",
-  units: "mm",
-  version: "1.0"
+  units: "mm"
 }*/
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
