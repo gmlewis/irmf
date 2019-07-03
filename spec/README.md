@@ -3,10 +3,11 @@
 ## Background
 
 An IRMF (“Infinite Resolution Materials Format”) file is a JSON blob containing
-(required and optional) key-value pairs followed by a GLSL ES shader that is
-written such that it can “render” (or manufacture) a 3D object at any resolution
-desired. The renderer or 3D printer takes advantage of an on-board GPU to freely
-slice the model in any convenient 2D plane and take as many passes as necessary
+(required and optional) key-value pairs followed by a [GLSL ES 3.0](https://en.wikipedia.org/wiki/OpenGL_ES#OpenGL_ES_3.0)
+shader that is written such that it can “render” (or manufacture) a 3D object at
+any resolution desired.
+The renderer or 3D printer takes advantage of an on-board GPU to freely
+slice the model in any convenient 2D plane and takes as many passes as necessary
 to fully define and fabricate the model.
 
 That 2D plane represents the quantity of each material (up to 16 materials)
