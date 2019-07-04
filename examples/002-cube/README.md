@@ -25,6 +25,8 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 }
 ```
 
+* Try loading [cube.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License

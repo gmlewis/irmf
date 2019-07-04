@@ -1,6 +1,6 @@
 # 001-sphere (ball bearing)
 
-One of the most notoriously-difficult objects to model and create using additive manufacturing 
+One of the most notoriously-difficult objects to model and create using additive manufacturing
 is the perfectly-smooth sphere (*e.g.* a ball bearing, or actually any smooth, curved surface).
 STL (a triangle-based representation) is simply the wrong tool for the job.
 Not even do voxels solve the problem due to their finite image resolution.
@@ -26,6 +26,8 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
   materials[0] = r <= radius ? 1.0 : 0.0; // Only materials[0] is used; the others are ignored.
 }
 ```
+
+* Try loading [sphere.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere.irmf) now in the experimental IRMF editor!
 
 ----------------------------------------------------------------------
 
