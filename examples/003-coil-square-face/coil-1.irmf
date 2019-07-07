@@ -13,7 +13,12 @@
 }*/
 
 float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec4 xyz) {
-  // TODO
+  xyz = xyz * xfm;
+  float rxy = length(xyz.xy)
+  if (rxy < radius-0.5*size || rxy > radius + 0.5*size) { return 0.; }
+  float z = mod(xyz.z, size+gap) + atan(xyz.y, xyz.x);
+  if (z > 0.5*size && z < 0.5*size + gap) { return 0; }
+  return 1.;
 }
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
