@@ -7,7 +7,9 @@ confines of the minimum bounding box (MBB). Since the MBB of a cube is the cube 
 we simply need to return a material value of 1 for all values passed to the shader,
 and the MBB itself defines the object (the cube).
 
-Here is an [IRMF shader](cube.irmf) defining a 10mm diameter cube:
+## cube-1.irmf
+
+Here is an [IRMF shader](cube-1.irmf) defining a 10mm diameter cube:
 
 ```glsl
 /*{
@@ -25,7 +27,79 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 }
 ```
 
-* Try loading [cube.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube.irmf) now in the experimental IRMF editor!
+* Try loading [cube-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-1.irmf) now in the experimental IRMF editor!
+
+## cube-2.irmf
+
+You would probably never write a shader like `cube-1.irmf`. It is just showing
+how the minimum bounding box of the shader defines the extent of the model.
+
+To be useful, we would want a `cube` function that could be easily positioned,
+rotated, and sized.
+
+Whenever something can be positioned, rotated, and sized, a common
+way to do so is to provide a `mat4` matrix that defines all these
+transformations in a single bundle. However, to start off, let's explicitly
+provide a `pos`ition and `size`.
+
+One thing that the "Book of Shaders" stresses is that the coordinate system
+is transformed such that the shader always performs its calculations in its
+own local coordinate system. Here's an example of this:
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  notes: "Simple IRMF shader - cube function",
+  title: "10mm diameter Cube",
+  units: "mm"
+}*/
+
+float cube(in vec3 pos, in float size, in vec3 xyz) {
+  xyz -= pos; // Move local coordinate system.
+  xyz /= size;  // Scale local coordinate system.
+  if (any(greaterThan(abs(xyz),vec3(0.5)))) { return 0.; }
+  return 1.;
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  materials[0] = cube(vec3(), 10., xyz);
+}
+```
+
+* Try loading [cube-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-2.irmf) now in the experimental IRMF editor!
+
+## cube-3.irmf
+
+`cube-2.irmf` has the drawback that it can't be rotated. Let's make a
+more general-purpose cube-like object that can be translated, scaled,
+and rotated.
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [.5,.5,.5],
+  min: [-.5,-.5,-.5],
+  notes: "Simple IRMF shader - cube function",
+  title: "1mm diameter Cube",
+  units: "mm"
+}*/
+
+float cube(in mat4 xfm, in vec4 xyz) {
+  xyz = xyz * xfm;
+  if (any(greaterThan(abs(xyz),vec4(0.5,0.5,0.5,1.)))) { return 0.; }
+  return 1.;
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  materials[0] = cube(mat4(), vec4(xyz,1.));  // mat4() is the identity matrix.
+}
+```
+
+* Try loading [cube-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-3.irmf) now in the experimental IRMF editor!
 
 ----------------------------------------------------------------------
 

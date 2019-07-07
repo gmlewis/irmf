@@ -1,0 +1,24 @@
+/*{
+  author: "Glenn M. Lewis",
+  copyright: "Apache-2.0",
+  date: "2019-06-30",
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  notes: "Simple IRMF shader - cube function",
+  title: "10mm diameter Cube",
+  units: "mm",
+  version: "1.0"
+}*/
+
+float cube(in vec3 pos, in float size, in vec3 xyz) {
+  xyz -= pos; // Move local coordinate system.
+  xyz /= size;  // Scale local coordinate system.
+  if (any(greaterThan(abs(xyz),vec3(0.5)))) { return 0.; }
+  return 1.;
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  materials[0] = cube(vec3(), 10., xyz);
+}

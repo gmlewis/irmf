@@ -33,7 +33,7 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 
 ## sphere-2.irmf
 
-sphere-1.irmf above is fine if your entire model is a sphere, but is not
+`sphere-1.irmf` above is fine if your entire model is a sphere, but is not
 terribly useful if you would like to make a more complex model out of
 one or more spheres. Let's make a `sphere` function that is reusable.
 
