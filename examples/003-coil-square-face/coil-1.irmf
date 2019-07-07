@@ -1,0 +1,21 @@
+/*{
+  author: "Glenn M. Lewis",
+  copyright: "Apache-2.0",
+  date: "2019-06-30",
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [4,4,120.375],
+  min: [-4,-4,-0.375],
+  notes: "Simple IRMF shader - coil with square cross-section face.",
+  title: "8mm diameter Coil",
+  units: "mm",
+  version: "1.0"
+}*/
+
+float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec4 xyz) {
+  // TODO
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  materials[0] = coilSquareFace(mat4(), 4.0, 0.75, 0.25, 120., vec4(xyz,1.));
+}
