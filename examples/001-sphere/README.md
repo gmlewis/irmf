@@ -7,7 +7,9 @@ Not even do voxels solve the problem due to their finite image resolution.
 
 Yet, ironically, the perfect sphere is almost the easiest thing to model using an IRMF shader.
 
-Here is an [IRMF shader](sphere.irmf) defining a 10mm diameter sphere:
+## sphere-1.irmf
+
+Here is an [IRMF shader](sphere-1.irmf) defining a 10mm diameter sphere:
 
 ```glsl
 /*{
@@ -27,7 +29,38 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 }
 ```
 
-* Try loading [sphere.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere.irmf) now in the experimental IRMF editor!
+* Try loading [sphere-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-1.irmf) now in the experimental IRMF editor!
+
+## sphere-2.irmf
+
+sphere-1.irmf above is fine if your entire model is a sphere, but is not
+terribly useful if you would like to make a more complex model out of
+one or more spheres. Let's make a `sphere` function that is reusable.
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["AISI 1018 steel"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  notes: "Simple IRMF shader - sphere function.",
+  title: "10mm diameter Sphere",
+  units: "mm"
+}*/
+
+float sphere(in vec3 pos, in float radius, in vec3 xyz) {
+  xyz -= pos;  // Move sphere into place.
+  float r = length(xyz);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  const float radius = 5.0;  // 10mm diameter sphere.
+  materials[0] = sphere(vec3(), radius, xyz);  // vec3() is [0,0,0] - the origin.
+}
+```
+
+* Try loading [sphere-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-2.irmf) now in the experimental IRMF editor!
 
 ----------------------------------------------------------------------
 
