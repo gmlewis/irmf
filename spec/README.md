@@ -54,11 +54,11 @@ Here are the keys and sample values:
     * For 5-9 materials, the `mainModel9` function will be used.
     * For 10-16 materials, the `mainModel16` function will be used.
 * `max: [<urx>,<ury>,<urz>],`
-  * *required* - upper right bounds of shader - e.g. `[0,0,0]`
+  * *required* - upper right bounds of shader - e.g. `[0,0,0]`.
 * `min: [<llx>,<lly>,<llz>],`
-  * *required* - lower left bounds of shader - e.g. `[10,12,15]`
+  * *required* - lower left bounds of shader - e.g. `[10,12,15]`.
 * `notes: "<notes from IRMF shader author>",`
-  * *optional*
+  * *optional*.
 * `options: {<key1>: <value1>, <key2>: <value2> [,...]},`
   * *optional* - These key-value pairs can be used by the renderer or 3D printer
     as custom options that control the viewing or manufacturing of models.
@@ -70,9 +70,10 @@ Here are the keys and sample values:
 * `title: "<name of IRMF model>",`
   * *optional*
 * `units: "mm",`
-  * *required* - can be `"mm"` or `"in"`
+  * *required* - can be `"mm"` or `"in"` or any string that the 3D printer chooses
+    to support (*e.g.* `"nm"`), but the units must be specified with the model.
 * `version: "<IRMF shader version>",`
-  * *optional* - determined by the IRMF shader author - e.g. `"2.7"`
+  * *optional* - determined by the IRMF shader author - e.g. `"2.7"`.
 
 After the JSON key-value pairs, the following group of three characters *MUST*
 be on a line by itself:
