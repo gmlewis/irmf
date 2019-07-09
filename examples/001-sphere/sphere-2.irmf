@@ -20,5 +20,5 @@ float sphere(in vec3 pos, in float radius, in vec3 xyz) {
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
   const float radius = 5.0;  // 10mm diameter sphere.
-  materials[0] = sphere(vec3(), radius, xyz);  // vec3() is [0,0,0] - the origin.
+  materials[0] = sphere(vec3(0), radius, xyz);  // vec3(0) is [0,0,0] - the origin.
 }
