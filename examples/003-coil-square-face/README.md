@@ -9,19 +9,27 @@ face.
 /*{
 }*/
 
+#define M_PI 3.1415926535897932384626433832795
+
 float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec4 xyz) {
   xyz = xyz * xfm;
-  float rxy = length(xyz.xy)
-  if (rxy < radius-0.5*size || rxy > radius + 0.5*size) { return 0.; }
-  float z = mod(xyz.z, size+gap) + atan(xyz.y, xyz.x);
-  if (z > 0.5*size && z < 0.5*size + gap) { return 0; }
+  // First, constrain the coil to the cylinder with wall thickness "size":
+  float rxy = length(xyz.xy);
+  if (rxy < (radius-0.5*size) || rxy > (radius + 0.5*size)) { return 0.; }
+  // If the current point is between the coils, return no material:
+  float angle = atan(xyz.y, xyz.x);
+  float z = mod(xyz.z, size+gap) + angle;
+  if (z > 0.5*size && z < 0.5*size + gap) { return 0.; }
+  // If the current point is within the first coil, stop it at angle < 0.
+  float num = floor(xyz.z / (size+gap));
+  if (num < 1. && angle < 0.5*M_PI) { return 0.; }
+  // Not finished yet...
   return 1.;
 }
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = coilSquareFace(mat4(), 4.0, 0.75, 0.25, 120., vec4(xyz,1.));
-}
-```
+  materials[0] = coilSquareFace(mat4(1), 4.0, 1.0, 1.0, 10., vec4(xyz,1.));
+}```
 
 * Try loading [coil-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/003-coil-square-face/coil-1.irmf) now in the experimental IRMF editor!
 
