@@ -17,9 +17,7 @@ Here is an [IRMF shader](sphere-1.irmf) defining a 10mm diameter sphere:
   materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
-  notes: "Simple IRMF shader - Hello, Sphere!",
-  title: "10mm diameter Sphere",
-  units: "mm"
+  units: "mm",
 }*/
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
@@ -43,9 +41,7 @@ one or more spheres. Let's make a `sphere` function that is reusable.
   materials: ["AISI 1018 steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
-  notes: "Simple IRMF shader - sphere function.",
-  title: "10mm diameter Sphere",
-  units: "mm"
+  units: "mm",
 }*/
 
 float sphere(in vec3 pos, in float radius, in vec3 xyz) {

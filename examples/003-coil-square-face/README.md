@@ -7,13 +7,6 @@ face.
 
 ```glsl
 /*{
-  irmf: "1.0",
-  materials: ["PLA"],
-  max: [4,4,120.375],
-  min: [-4,-4,-0.375],
-  notes: "Simple IRMF shader - coil with square cross-section face.",
-  title: "8mm diameter Coil",
-  units: "mm"
 }*/
 
 float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec4 xyz) {

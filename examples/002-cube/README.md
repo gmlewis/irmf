@@ -15,11 +15,9 @@ Here is an [IRMF shader](cube-1.irmf) defining a 10mm diameter cube:
 /*{
   irmf: "1.0",
   materials: ["PLA"],
-  max: [10,10,10],
-  min: [0,0,0],
-  notes: "Simple IRMF shader - Hello, Cube!",
-  title: "10mm diameter Cube",
-  units: "mm"
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
 }*/
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
@@ -52,9 +50,7 @@ own local coordinate system. Here's an example of this:
   materials: ["PLA"],
   max: [5,5,5],
   min: [-5,-5,-5],
-  notes: "Simple IRMF shader - cube function",
-  title: "10mm diameter Cube",
-  units: "mm"
+  units: "mm",
 }*/
 
 float cube(in vec3 pos, in float size, in vec3 xyz) {
@@ -65,7 +61,7 @@ float cube(in vec3 pos, in float size, in vec3 xyz) {
 }
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = cube(vec3(), 10., xyz);
+  materials[0] = cube(vec3(0), 10., xyz);
 }
 ```
 
@@ -81,11 +77,9 @@ and rotated.
 /*{
   irmf: "1.0",
   materials: ["PLA"],
-  max: [.5,.5,.5],
-  min: [-.5,-.5,-.5],
-  notes: "Simple IRMF shader - cube function",
-  title: "1mm diameter Cube",
-  units: "mm"
+  max: [0.5,0.5,0.5],
+  min: [-0.5,-0.5,-0.5],
+  units: "mm",
 }*/
 
 float cube(in mat4 xfm, in vec4 xyz) {
@@ -95,7 +89,7 @@ float cube(in mat4 xfm, in vec4 xyz) {
 }
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = cube(mat4(), vec4(xyz,1.));  // mat4() is the identity matrix.
+  materials[0] = cube(mat4(1), vec4(xyz,1.));  // mat4(1) is the identity matrix.
 }
 ```
 

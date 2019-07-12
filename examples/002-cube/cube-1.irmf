@@ -1,15 +1,16 @@
 /*{
-  author: "Glenn M. Lewis",
-  copyright: "Apache-2.0",
-  date: "2019-06-30",
-  irmf: "1.0",
-  materials: ["PLA"],
-  max: [10,10,10],
-  min: [0,0,0],
-  notes: "Simple IRMF shader - Hello, Cube!",
-  title: "10mm diameter Cube",
-  units: "mm",
-  version: "1.0"
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-06-30",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "Simple IRMF shader - Hello, Cube!",
+  "options": {},
+  "title": "10mm diameter Cube",
+  "units": "mm",
+  "version": "1.0"
 }*/
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
