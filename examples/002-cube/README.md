@@ -95,6 +95,31 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 
 * Try loading [cube-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-3.irmf) now in the experimental IRMF editor!
 
+## cube-csg.irmf
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["AISI 1018 steel"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float sphere(in vec3 pos, in float radius, in vec3 xyz) {
+  xyz -= pos;  // Move sphere into place.
+  float r = length(xyz);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+void mainModel4( out vec4 materials, in vec3 xyz ) {
+  const float radius = 6.0;  // 12mm diameter sphere.
+  materials[0] = 1.0 - sphere(vec3(0), radius, xyz);  // 1.0 is a cube.
+}
+```
+
+* Try loading [cube-csg.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-csg.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License
