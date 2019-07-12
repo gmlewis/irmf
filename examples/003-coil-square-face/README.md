@@ -7,6 +7,11 @@ face.
 
 ```glsl
 /*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [4,4,10.375],
+  min: [-4,-4,-0.375],
+  units: "mm",
 }*/
 
 #define M_PI 3.1415926535897932384626433832795
@@ -29,7 +34,8 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
   materials[0] = coilSquareFace(mat4(1), 4.0, 1.0, 1.0, 10., vec4(xyz,1.));
-}```
+}
+```
 
 * Try loading [coil-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/003-coil-square-face/coil-1.irmf) now in the experimental IRMF editor!
 

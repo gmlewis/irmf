@@ -1,15 +1,16 @@
 /*{
-  author: "Glenn M. Lewis",
-  copyright: "Apache-2.0",
-  date: "2019-06-30",
-  irmf: "1.0",
-  materials: ["PLA"],
-  max: [4,4,10.375],
-  min: [-4,-4,-0.375],
-  notes: "Simple IRMF shader - coil with square cross-section face.",
-  title: "8mm diameter Coil",
-  units: "mm",
-  version: "1.0"
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-06-30",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [4,4,10.375],
+  "min": [-4,-4,-0.375],
+  "notes": "Simple IRMF shader - coil with square cross-section face.",
+  "options": {},
+  "title": "8mm diameter Coil",
+  "units": "mm",
+  "version": "1.0"
 }*/
 
 #define M_PI 3.1415926535897932384626433832795
