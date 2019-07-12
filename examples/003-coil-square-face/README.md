@@ -9,8 +9,8 @@ face.
 /*{
   irmf: "1.0",
   materials: ["PLA"],
-  max: [4,4,10.375],
-  min: [-4,-4,-0.375],
+  max: [5,5,10.5],
+  min: [0,0,-0.5],
   units: "mm",
 }*/
 
@@ -18,22 +18,30 @@ face.
 
 float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec4 xyz) {
   xyz = xyz * xfm;
-  // First, constrain the coil to the cylinder with wall thickness "size":
+
+  // First, trivial reject on the two ends of the coil.
+  if (xyz.z < -0.5*size || xyz.z > nTurns*(size+gap)+0.5*size) { return 0.; }
+
+  // Then, constrain the coil to the cylinder with wall thickness "size":
   float rxy = length(xyz.xy);
   if (rxy < (radius-0.5*size) || rxy > (radius + 0.5*size)) { return 0.; }
+
   // If the current point is between the coils, return no material:
-  float angle = atan(xyz.y, xyz.x);
-  float z = mod(xyz.z, size+gap) + angle;
-  if (z > 0.5*size && z < 0.5*size + gap) { return 0.; }
+  float angle = atan(xyz.y, xyz.x)/(2.*M_PI);
+  if (angle < 0.) { angle += 1.; } // 0 <= angle <= 1 between coils
+  float dz = mod(xyz.z, size+gap)/(size+gap);  // 0 <= dz <= 1 between coils.
+
+  float ratio = 2.*M_PI*radius / size;  // Ratio of circumference to size
+  if (abs(dz-angle) > 0.04) { return 0.; }  // TODO: Fix 0.04
+
   // If the current point is within the first coil, stop it at angle < 0.
-  float num = floor(xyz.z / (size+gap));
-  if (num < 1. && angle < 0.5*M_PI) { return 0.; }
-  // Not finished yet...
+  if (xyz.z < 0.5*size && angle > 0.5) { return 0.; }
+
   return 1.;
 }
 
 void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = coilSquareFace(mat4(1), 4.0, 1.0, 1.0, 10., vec4(xyz,1.));
+  materials[0] = coilSquareFace(mat4(1), 4., 1., 4., 2., vec4(xyz,1.));
 }
 ```
 
