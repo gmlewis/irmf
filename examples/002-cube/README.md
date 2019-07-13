@@ -56,7 +56,7 @@ own local coordinate system. Here's an example of this:
 float cube(in vec3 pos, in float size, in vec3 xyz) {
   xyz -= pos; // Move local coordinate system.
   xyz /= size; // Scale local coordinate system.
-  if (any(greaterThan(abs(xyz), vec3(0.5)))) {return 0.0; }
+  if (any(greaterThan(abs(xyz), vec3(0.5)))) { return 0.0; }
   return 1.0;
 }
 
@@ -84,7 +84,7 @@ and rotated.
 
 float cube(in mat4 xfm, in vec4 xyz) {
   xyz = xyz * xfm;
-  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) {return 0.0; }
+  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) { return 0.0; }
   return 1.0;
 }
 

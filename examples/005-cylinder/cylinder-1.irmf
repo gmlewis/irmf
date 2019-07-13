@@ -17,11 +17,11 @@ float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
   // First, trivial reject on the two ends of the cylinder.
-  if (xyz.z < 0.0 || xyz.z > height) {return 0.0; }
+  if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
   
   // Then, constrain radius of the cylinder:
   float rxy = length(xyz.xy);
-  if (rxy > radius) {return 0.0; }
+  if (rxy > radius) { return 0.0; }
   
   return 1.0;
 }

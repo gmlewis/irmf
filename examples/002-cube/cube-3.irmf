@@ -15,7 +15,7 @@
 
 float cube(in mat4 xfm, in vec4 xyz) {
   xyz = xyz * xfm;
-  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) {return 0.0; }
+  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) { return 0.0; }
   return 1.0;
 }
 
