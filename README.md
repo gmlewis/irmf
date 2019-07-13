@@ -193,6 +193,7 @@ Please see the [IRMF Spec](spec) and [provided examples](examples) for more info
 * [001-sphere](examples/001-sphere)
 * [002-cube](examples/002-cube)
 * [003-coil-square-face](examples/003-coil-square-face)
+* [004-coil-circle-face](examples/004-coil-circle-face)
 
 ----------------------------------------------------------------------
 
