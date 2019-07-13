@@ -20,7 +20,7 @@ Here is an [IRMF shader](cube-1.irmf) defining a 10mm diameter cube:
   units: "mm",
 }*/
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
+void mainModel4(out vec4 materials, in vec3 xyz) {
   materials[0] = 1.0;
 }
 ```
@@ -55,13 +55,13 @@ own local coordinate system. Here's an example of this:
 
 float cube(in vec3 pos, in float size, in vec3 xyz) {
   xyz -= pos; // Move local coordinate system.
-  xyz /= size;  // Scale local coordinate system.
-  if (any(greaterThan(abs(xyz),vec3(0.5)))) { return 0.; }
-  return 1.;
+  xyz /= size; // Scale local coordinate system.
+  if (any(greaterThan(abs(xyz), vec3(0.5)))) {return 0.0; }
+  return 1.0;
 }
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = cube(vec3(0), 10., xyz);
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = cube(vec3(0), 10.0, xyz);
 }
 ```
 
@@ -84,12 +84,12 @@ and rotated.
 
 float cube(in mat4 xfm, in vec4 xyz) {
   xyz = xyz * xfm;
-  if (any(greaterThan(abs(xyz),vec4(0.5,0.5,0.5,1.)))) { return 0.; }
-  return 1.;
+  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) {return 0.0; }
+  return 1.0;
 }
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
-  materials[0] = cube(mat4(1), vec4(xyz,1.));  // mat4(1) is the identity matrix.
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = cube(mat4(1), vec4(xyz, 1.0)); // mat4(1) is the identity matrix.
 }
 ```
 
@@ -107,14 +107,14 @@ void mainModel4( out vec4 materials, in vec3 xyz ) {
 }*/
 
 float sphere(in vec3 pos, in float radius, in vec3 xyz) {
-  xyz -= pos;  // Move sphere into place.
+  xyz -= pos; // Move sphere into place.
   float r = length(xyz);
   return r <= radius ? 1.0 : 0.0;
 }
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
-  const float radius = 6.0;  // 12mm diameter sphere.
-  materials[0] = 1.0 - sphere(vec3(0), radius, xyz);  // 1.0 is a cube.
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float radius = 6.0; // 12mm diameter sphere.
+  materials[0] = 1.0 - sphere(vec3(0), radius, xyz); // 1.0 is a cube.
 }
 ```
 

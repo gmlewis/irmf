@@ -20,9 +20,9 @@ Here is an [IRMF shader](sphere-1.irmf) defining a 10mm diameter sphere:
   units: "mm",
 }*/
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
-  const float radius = 5.0;  // 10mm diameter sphere.
-  float r = length(xyz);  // distance from origin.
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float radius = 5.0; // 10mm diameter sphere.
+  float r = length(xyz); // distance from origin.
   materials[0] = r <= radius ? 1.0 : 0.0; // Only materials[0] is used; the others are ignored.
 }
 ```
@@ -45,14 +45,14 @@ one or more spheres. Let's make a `sphere` function that is reusable.
 }*/
 
 float sphere(in vec3 pos, in float radius, in vec3 xyz) {
-  xyz -= pos;  // Move sphere into place.
+  xyz -= pos; // Move sphere into place.
   float r = length(xyz);
   return r <= radius ? 1.0 : 0.0;
 }
 
-void mainModel4( out vec4 materials, in vec3 xyz ) {
-  const float radius = 5.0;  // 10mm diameter sphere.
-  materials[0] = sphere(vec3(0), radius, xyz);  // vec3(0) is [0,0,0] - the origin.
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float radius = 5.0; // 10mm diameter sphere.
+  materials[0] = sphere(vec3(0), radius, xyz); // vec3(0) is [0,0,0] - the origin.
 }
 ```
 
