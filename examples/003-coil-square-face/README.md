@@ -20,7 +20,7 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
   // First, trivial reject on the two ends of the coil.
-  if (xyz.z <- 0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) {return 0.0; }
+  if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) {return 0.0; }
   
   // Then, constrain the coil to the cylinder with wall thickness "size":
   float rxy = length(xyz.xy);
