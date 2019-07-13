@@ -7,11 +7,15 @@ the model into much smaller parts that it could more easily handle).
 
 But even after breaking up the model, the CAD tools would attempt to output
 STL files to represent the design, which would end up being hundreds of
-megabytes (MB). Online tools have a maximum upload size limit that this
-design exceeded.
+megabytes (MB). Online 3D printing sites have a maximum upload size limit that
+this design exceeded.
 
 So I determined that there must be a better way, and I believe I have
-finally found it... IRMF shaders.
+finally found it... IRMF shaders. The next step will be to get IRMF shader
+support built into the 3D printers themselves so that these shaders can
+be sent directly to the printer as input, and out comes the part as fast
+as the printer can make it. No STL. No slicing. No G-Code. Just the
+IRMF shader.
 
 ## bifilar-electromagnet-1.irmf
 
