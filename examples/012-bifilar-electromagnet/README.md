@@ -59,7 +59,15 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
   return 1.0;
 }
 
-mat3 rotAxis(vec3 axis, float a) {
+float coilPlusConnectorWire(in mat4 xfm, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
+  float coil = coilSquareFace(xfm, innerRadius, size, gap, nTurns, xyz);
+  
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  // TODO: Make the connector wire on the outer edge of the coils for easy hookup.
+  return coil;
+}
+
+ mat3 rotAxis(vec3 axis, float a) {
   // This is from: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
   float s = sin(a);
   float c = cos(a);
@@ -68,34 +76,34 @@ mat3 rotAxis(vec3 axis, float a) {
   mat3 p = mat3(axis.x * axis, axis.y * axis, axis.z * axis);
   mat3 q = mat3(c, - as.z, as.y, as.z, c, - as.x, - as.y, as.x, c);
   return p * oc + q;
-}
+ }
 
-mat4 rotZ(float degrees) {
+ mat4 rotZ(float degrees) {
   return mat4(rotAxis(vec3(0, 0, 1), M_PI * degrees / 180.0));
-}
+ }
 
-vec2 bifilarElectromagnet(float nTurns, in vec3 xyz) {
+ vec2 bifilarElectromagnet(float size, float gap, float nTurns, in vec3 xyz) {
   const float inc = 360.0 / 20.0;
-  float coil01 = coilSquareFace(mat4(1) * rotZ(0.0 * inc), 3.0, 0.85, 0.15, nTurns, xyz);
-  float coil02 = coilSquareFace(mat4(1) * rotZ(1.0 * inc), 4.0, 0.85, 0.15, nTurns, xyz);
-  float coil03 = coilSquareFace(mat4(1) * rotZ(2.0 * inc), 5.0, 0.85, 0.15, nTurns, xyz);
-  float coil04 = coilSquareFace(mat4(1) * rotZ(3.0 * inc), 6.0, 0.85, 0.15, nTurns, xyz);
-  float coil05 = coilSquareFace(mat4(1) * rotZ(4.0 * inc), 7.0, 0.85, 0.15, nTurns, xyz);
-  float coil06 = coilSquareFace(mat4(1) * rotZ(5.0 * inc), 8.0, 0.85, 0.15, nTurns, xyz);
-  float coil07 = coilSquareFace(mat4(1) * rotZ(6.0 * inc), 9.0, 0.85, 0.15, nTurns, xyz);
-  float coil08 = coilSquareFace(mat4(1) * rotZ(7.0 * inc), 10.0, 0.85, 0.15, nTurns, xyz);
-  float coil09 = coilSquareFace(mat4(1) * rotZ(8.0 * inc), 11.0, 0.85, 0.15, nTurns, xyz);
-  float coil10 = coilSquareFace(mat4(1) * rotZ(9.0 * inc), 12.0, 0.85, 0.15, nTurns, xyz);
-  float coil11 = coilSquareFace(mat4(1) * rotZ(10.0 * inc), 13.0, 0.85, 0.15, nTurns, xyz);
-  float coil12 = coilSquareFace(mat4(1) * rotZ(11.0 * inc), 14.0, 0.85, 0.15, nTurns, xyz);
-  float coil13 = coilSquareFace(mat4(1) * rotZ(12.0 * inc), 15.0, 0.85, 0.15, nTurns, xyz);
-  float coil14 = coilSquareFace(mat4(1) * rotZ(13.0 * inc), 16.0, 0.85, 0.15, nTurns, xyz);
-  float coil15 = coilSquareFace(mat4(1) * rotZ(14.0 * inc), 17.0, 0.85, 0.15, nTurns, xyz);
-  float coil16 = coilSquareFace(mat4(1) * rotZ(15.0 * inc), 18.0, 0.85, 0.15, nTurns, xyz);
-  float coil17 = coilSquareFace(mat4(1) * rotZ(16.0 * inc), 19.0, 0.85, 0.15, nTurns, xyz);
-  float coil18 = coilSquareFace(mat4(1) * rotZ(17.0 * inc), 20.0, 0.85, 0.15, nTurns, xyz);
-  float coil19 = coilSquareFace(mat4(1) * rotZ(18.0 * inc), 21.0, 0.85, 0.15, nTurns, xyz);
-  float coil20 = coilSquareFace(mat4(1) * rotZ(19.0 * inc), 22.0, 0.85, 0.15, nTurns, xyz);
+  float coil01 = coilPlusConnectorWire(mat4(1) * rotZ(0.0 * inc), 3.0, 23.0, size, gap, nTurns, xyz);
+  float coil02 = coilPlusConnectorWire(mat4(1) * rotZ(1.0 * inc), 4.0, 23.0, size, gap, nTurns, xyz);
+  float coil03 = coilPlusConnectorWire(mat4(1) * rotZ(2.0 * inc), 5.0, 23.0, size, gap, nTurns, xyz);
+  float coil04 = coilPlusConnectorWire(mat4(1) * rotZ(3.0 * inc), 6.0, 23.0, size, gap, nTurns, xyz);
+  float coil05 = coilPlusConnectorWire(mat4(1) * rotZ(4.0 * inc), 7.0, 23.0, size, gap, nTurns, xyz);
+  float coil06 = coilPlusConnectorWire(mat4(1) * rotZ(5.0 * inc), 8.0, 23.0, size, gap, nTurns, xyz);
+  float coil07 = coilPlusConnectorWire(mat4(1) * rotZ(6.0 * inc), 9.0, 23.0, size, gap, nTurns, xyz);
+  float coil08 = coilPlusConnectorWire(mat4(1) * rotZ(7.0 * inc), 10.0, 23.0, size, gap, nTurns, xyz);
+  float coil09 = coilPlusConnectorWire(mat4(1) * rotZ(8.0 * inc), 11.0, 23.0, size, gap, nTurns, xyz);
+  float coil10 = coilPlusConnectorWire(mat4(1) * rotZ(9.0 * inc), 12.0, 23.0, size, gap, nTurns, xyz);
+  float coil11 = coilPlusConnectorWire(mat4(1) * rotZ(10.0 * inc), 13.0, 23.0, size, gap, nTurns, xyz);
+  float coil12 = coilPlusConnectorWire(mat4(1) * rotZ(11.0 * inc), 14.0, 23.0, size, gap, nTurns, xyz);
+  float coil13 = coilPlusConnectorWire(mat4(1) * rotZ(12.0 * inc), 15.0, 23.0, size, gap, nTurns, xyz);
+  float coil14 = coilPlusConnectorWire(mat4(1) * rotZ(13.0 * inc), 16.0, 23.0, size, gap, nTurns, xyz);
+  float coil15 = coilPlusConnectorWire(mat4(1) * rotZ(14.0 * inc), 17.0, 23.0, size, gap, nTurns, xyz);
+  float coil16 = coilPlusConnectorWire(mat4(1) * rotZ(15.0 * inc), 18.0, 23.0, size, gap, nTurns, xyz);
+  float coil17 = coilPlusConnectorWire(mat4(1) * rotZ(16.0 * inc), 19.0, 23.0, size, gap, nTurns, xyz);
+  float coil18 = coilPlusConnectorWire(mat4(1) * rotZ(17.0 * inc), 20.0, 23.0, size, gap, nTurns, xyz);
+  float coil19 = coilPlusConnectorWire(mat4(1) * rotZ(18.0 * inc), 21.0, 23.0, size, gap, nTurns, xyz);
+  float coil20 = coilPlusConnectorWire(mat4(1) * rotZ(19.0 * inc), 22.0, 23.0, size, gap, nTurns, xyz);
   
   float metal = coil01 + coil02 + coil03 + coil04 + coil05 + coil06 +
   coil07 + coil08 + coil09 + coil10 + coil11 + coil12 + coil13 +
@@ -104,12 +112,12 @@ vec2 bifilarElectromagnet(float nTurns, in vec3 xyz) {
   float dielectric = 0.0;
   
   return vec2(metal, dielectric);
-}
+ }
 
-void mainModel4(out vec4 materials, in vec3 xyz) {
+ void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 60.0;
-  materials.xy = bifilarElectromagnet(120.0, xyz);
-}
+  materials.xy = bifilarElectromagnet(0.85, 0.15, 120.0, xyz);
+ }
 ```
 
 * Try loading [bifilar-electromagnet-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/012-bifilar-electromagnet/bifilar-electromagnet-1.irmf) now in the experimental IRMF editor!
