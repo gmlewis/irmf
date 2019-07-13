@@ -79,26 +79,27 @@ float coilPlusConnectorWires(float coilNum, float numCoils, float inc, float inn
   float coilRadius = coilNum + innerRadius;
   float coil = coilSquareFace(xfm, coilRadius, size, gap, nTurns, xyz);
   
-  vec3 coilXYZ = (vec4(xyz, 1.0) * xfm).xyz;
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
   float bz = -(size + gap);
   float tz = nTurns * (size + gap);
   float tzp1 = (nTurns + 1.0) * (size + gap);
   
-  coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, coilXYZ);
-  coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, coilXYZ);
-  coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, coilXYZ);
-  coil += box(vec3(coilRadius, 0.0, tz), vec3(coilRadius, 0.0, tzp1), size, coilXYZ);
+  coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
   
-  mat4 nextCoilXfm = mat4(1) * rotZ((coilNum + 1.0) * inc);
-  
-  coil += wire((vec4(coilRadius, 0.0, tzp1, 1.0) * xfm).xyz, (vec4(connectorRadius, 0.0, tzp1, 1.0) * nextCoilXfm).xyz, size, xyz);
+  if (coilNum >= 2.0) { // Connect the start of this coil to the end of two coils prior.
+    float lastCoilRadius = coilNum - 2.0 + innerRadius;
+    coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+    coil += box(vec3(lastCoilRadius, 0.0, tz), vec3(lastCoilRadius, 0.0, tzp1), size, xyz);
+  }
   
   return coil;
 }
 
  vec2 bifilarElectromagnet(float size, float gap, float nTurns, in vec3 xyz) {
-  if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
+  // if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
   // if (xyz.z > 0.0) { return vec2(0); }  // For debugging ends.
   
   const float numCoils = 20.0;

@@ -66,7 +66,7 @@ float box(vec3 start, vec3 end, float size, in vec3 xyz) {
   return 1.0;
 }
 
- mat3 rotAxis(vec3 axis, float a) {
+mat3 rotAxis(vec3 axis, float a) {
   // This is from: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
   float s = sin(a);
   float c = cos(a);
@@ -75,30 +75,40 @@ float box(vec3 start, vec3 end, float size, in vec3 xyz) {
   mat3 p = mat3(axis.x * axis, axis.y * axis, axis.z * axis);
   mat3 q = mat3(c, - as.z, as.y, as.z, c, - as.x, - as.y, as.x, c);
   return p * oc + q;
- }
+}
 
- mat4 rotZ(float degrees) {
+mat4 rotZ(float degrees) {
   return mat4(rotAxis(vec3(0, 0, 1), M_PI * degrees / 180.0));
- }
+}
+
+float wire(vec3 start, vec3 end, float size, in vec3 xyz) {
+  vec3 v = end - start;
+  float angle = dot(v, vec3(1, 0, 0));
+  xyz -= start;
+  xyz = (vec4(xyz, 1) * rotZ(angle)).xyz;
+  return box(vec3(0), vec3(length(v), 0, 0), size, xyz);
+}
 
 float coilPlusConnectorWires(float coilNum, float numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
   mat4 xfm = mat4(1) * rotZ(coilNum * inc);
   float coilRadius = coilNum + innerRadius;
   float coil = coilSquareFace(xfm, coilRadius, size, gap, nTurns, xyz);
   
-  vec3 coilXYZ = (vec4(xyz, 1.0) * xfm).xyz;
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
   float bz = -(size + gap);
   float tz = nTurns * (size + gap);
   float tzp1 = (nTurns + 1.0) * (size + gap);
   
-  coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, coilXYZ);
-  coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, coilXYZ);
-  coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, coilXYZ);
-  coil += box(vec3(coilRadius, 0.0, tz), vec3(coilRadius, 0.0, tzp1), size, coilXYZ);
+  coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
   
-  mat4 nextCoilXfm = mat4(1) * rotZ((coilNum + 1.0) * inc);
-  vec3 nextCoilXYZ = (vec4(xyz, 1.0) * nextCoilXfm).xyz;
+  if (coilNum >= 2.0) { // Connect the start of this coil to the end of two coils prior.
+    float lastCoilRadius = coilNum - 2.0 + innerRadius;
+    coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+    coil += box(vec3(lastCoilRadius, 0.0, tz), vec3(lastCoilRadius, 0.0, tzp1), size, xyz);
+  }
   
   return coil;
 }
