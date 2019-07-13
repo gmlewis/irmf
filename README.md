@@ -131,14 +131,14 @@ In fact, one could write [genetic programs](https://github.com/gmlewis/gep)
 to generate IRMF shaders.
 
 Back in 2018, I was fed up with STL models and CAD tools that couldn't handle
-non-trivial booleans (think [bifilar coils](https://github.com/gmlewis/go-gerber))
-so I came across voxels and [wrote some tools](https://github.com/gmlewis/stldice)
+non-trivial booleans (think [bifilar coils](https://github.com/gmlewis/go-gerber/tree/master/examples/bifilar-electromagnet))
+so I came across the idea of voxels and [wrote some tools](https://github.com/gmlewis/stldice)
 to make it easier to manipulate voxel designs and perform complex boolean operations
-that cause all other popular CAD tools to choke.
+that otherwise cause the other popular CAD tools (I tried *most* of them) to choke.
 
 Then I came to the realization that voxels, although they solved the boolean operation
 problems, did not address the problem of generating smooth curves and surfaces
-because they are inherently limited by the resolution of the image slices.
+because voxels are inherently limited by the resolution of the image slices.
 
 Finally, I came across [SDFs](https://github.com/gmlewis/sdfx) and thought that I
 had found the modeling tool that would solve all the boolean and smooth surface
@@ -148,12 +148,12 @@ difficult to get it right.
 
 In a 2D or 3D SDF, you must specify the signed *distance* from any point in 2D or 3D
 space (respectively) to the *nearest* edge of your primitive (negative is inside the
-object, zero is the edge, and positive is outside the object).
-Think of implementing this for a spiral.
-That is a royal pain in the rear. The math was not fun.
+object, zero is on the edge, and positive is outside the object).
+Imagine implementing this for a spiral.
+It is a royal pain in the rear. The math was not fun.
 
 An IRMF shader, on the other hand, is given a single point in 3D space and all that
-is needed is for the shader to report what material(s) exist in that one point in
+is needed is for the shader to report what material(s) exist at that one point in
 space, and not how far it is to some other material. For the spiral case, you only
 need to determine if the point is inside the spiral or outside it, not how far the
 point is to the edge.
@@ -170,6 +170,8 @@ Star Trek replicator will be a household device. “Hey replicator, print me a w
 ## How do I use IRMF?
 
 An [IRMF shader editor](https://github.com/gmlewis/irmf-editor) is in the works.
+See the [examples](#examples) below for models that display in the IRMF editor.
+
 Eventually, firmware for 3D printers will be written that natively read, parse,
 and use IRMF files to generate physical objects with one or more materials...
 thereby completely eliminating the need for STL files, software slicers,
@@ -177,16 +179,16 @@ and G-Code files.
 
 ## Who created IRMF?
 
-The IRMF Specification was created and is maintained by Glenn M. Lewis.
+The IRMF specification and editor were created and are maintained by Glenn M. Lewis.
 
 Issues can be raised on the [GitHub issues page](https://github.com/gmlewis/irmf/issues)
-for the IRMF Specification.
+for the IRMF specification (or [editor](https://github.com/gmlewis/irmf-editor/issues)).
 
 ## What is the status of IRMF?
 
 Currently, IRMF is just an idea that needs fully fleshing out.
 
-Please see the [IRMF Spec](spec) and [provided examples](examples) for more information.
+Please see the [IRMF Spec](spec) and [provided examples](#examples) for more information.
 
 ## Examples
 
