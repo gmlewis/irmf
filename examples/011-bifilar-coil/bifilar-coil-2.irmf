@@ -3,12 +3,12 @@
   "copyright": "Apache-2.0",
   "date": "2019-07-13",
   "irmf": "1.0",
-  "materials": ["metal"],
+  "materials": ["metal","dielectric"],
   "max": [200,200,0.425],
   "min": [-200,-200,-0.425],
   "notes": "Simple IRMF shader - bifilar-coil.",
   "options": {},
-  "title": "bifilar-coil",
+  "title": "bifilar-coil with dielectric",
   "units": "mm",
   "version": "1.0"
 }*/
@@ -54,13 +54,28 @@ mat3 rotAxis(vec3 axis, float a) {
   return p * oc + q;
 }
 
-float bifilarCoil(in mat4 xfm, float size, float gap, float nTurns, in vec3 xyz) {
+float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  // First, trivial reject on the two ends of the cylinder.
+  if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
+  
+  // Then, constrain radius of the cylinder:
+  float rxy = length(xyz.xy);
+  if (rxy > radius) { return 0.0; }
+  
+  return 1.0;
+}
+
+vec2 bifilarCoilWithDielectric(in mat4 xfm, float size, float gap, float nTurns, in vec3 xyz) {
   float coil1 = spiralSquareFace(xfm, size, 2.0 * (size + gap), nTurns, xyz);
   mat4 rot180Z = mat4(rotAxis(vec3(0, 0, 1), M_PI));
   float coil2 = spiralSquareFace(xfm * rot180Z, size, 2.0 * (size + gap), nTurns, xyz);
-  return coil1 + coil2;
+  float dielectric = cylinder(xfm, 2.0 * (size + gap) * nTurns, size, xyz + vec3(0, 0, 0.5 * size));
+  dielectric -= (coil1 + coil2); // Don't put dielectric where the metal is.
+  return vec2(coil1 + coil2, dielectric);
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = bifilarCoil(mat4(1), 0.85, 0.15, 66.0, xyz);
+  materials.xy = bifilarCoilWithDielectric(mat4(1), 0.85, 0.15, 66.0, xyz);
 }
