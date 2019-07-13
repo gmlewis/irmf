@@ -1,0 +1,33 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-12",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [1,1,0.5],
+  "min": [-1,-1,-0.5],
+  "notes": "Simple IRMF shader - square tetrahedron.",
+  "options": {},
+  "title": "square tetrahedron",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float squareTetrahedron(in mat4 xfm, in vec3 xyz) {
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  // Trivially reject above and below the tetrahedron.
+  if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
+  
+  // Calculate the new size based on the height.
+  float zsize = mix(1.0, 0.0, xyz.z);
+  
+  if (any(greaterThan(xyz.xy, vec2(zsize)))|| any(lessThan(xyz.xy, vec2(-zsize)))) { return 0.0; }
+  
+  return 1.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz.z += 0.5;
+  materials[0] = squareTetrahedron(mat4(1), xyz);
+}
