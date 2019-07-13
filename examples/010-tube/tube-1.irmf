@@ -1,0 +1,32 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-13",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "Simple IRMF shader - tube.",
+  "options": {},
+  "title": "tube",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float tube(in mat4 xfm, float innerRadius, float outerRadius, float height, in vec3 xyz) {
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  // First, trivial reject on the two ends of the tube.
+  if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
+  
+  // Then, constrain the tube to the inner and outer radii.
+  float rxy = length(xyz.xy);
+  if (rxy < innerRadius || rxy > outerRadius) { return 0.0; }
+  
+  return 1.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz.z += 5.0;
+  materials[0] = tube(mat4(1), 4.0, 5.0, 10.0, xyz);
+}
