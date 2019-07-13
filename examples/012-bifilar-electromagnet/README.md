@@ -23,8 +23,8 @@ IRMF shader.
 /*{
   irmf: "1.0",
   materials: ["metal", "dielectric"],
-  max: [25,25,60],
-  min: [-25,-25,-60],
+  max: [25,25,61],
+  min: [-25,-25,-61],
   units: "mm",
 }*/
 
@@ -59,11 +59,27 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
   return 1.0;
 }
 
-float coilPlusConnectorWire(in mat4 xfm, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
+float box(vec3 start, vec3 end, float size, in vec3 xyz) {
+  vec3 ll = min(start, end) - vec3(0.5 * size);
+  vec3 ur = max(start, end) + vec3(0.5 * size);
+  if (any(lessThan(xyz, ll))|| any(greaterThan(xyz, ur))) { return 0.0; }
+  return 1.0;
+}
+
+float coilPlusConnectorWires(in mat4 xfm, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
   float coil = coilSquareFace(xfm, innerRadius, size, gap, nTurns, xyz);
   
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  // TODO: Make the connector wire on the outer edge of the coils for easy hookup.
+  
+  float bz = -(size + gap);
+  float tz = nTurns * (size + gap);
+  float tzp1 = (nTurns + 1.0) * (size + gap);
+  
+  coil += box(vec3(innerRadius, 0.0, 0.0), vec3(innerRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(innerRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
+  coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+  coil += box(vec3(innerRadius, 0.0, tz), vec3(innerRadius, 0.0, tzp1), size, xyz);
+  
   return coil;
 }
 
@@ -83,27 +99,30 @@ float coilPlusConnectorWire(in mat4 xfm, float innerRadius, float connectorRadiu
  }
 
  vec2 bifilarElectromagnet(float size, float gap, float nTurns, in vec3 xyz) {
+  // if (xyz.z < 120.0) { return vec2(0); } // For debugging ends.
+  // if (xyz.z > 0.0) { return vec2(0); }  // For debugging ends.
+  
   const float inc = 360.0 / 20.0;
-  float coil01 = coilPlusConnectorWire(mat4(1) * rotZ(0.0 * inc), 3.0, 23.0, size, gap, nTurns, xyz);
-  float coil02 = coilPlusConnectorWire(mat4(1) * rotZ(1.0 * inc), 4.0, 23.0, size, gap, nTurns, xyz);
-  float coil03 = coilPlusConnectorWire(mat4(1) * rotZ(2.0 * inc), 5.0, 23.0, size, gap, nTurns, xyz);
-  float coil04 = coilPlusConnectorWire(mat4(1) * rotZ(3.0 * inc), 6.0, 23.0, size, gap, nTurns, xyz);
-  float coil05 = coilPlusConnectorWire(mat4(1) * rotZ(4.0 * inc), 7.0, 23.0, size, gap, nTurns, xyz);
-  float coil06 = coilPlusConnectorWire(mat4(1) * rotZ(5.0 * inc), 8.0, 23.0, size, gap, nTurns, xyz);
-  float coil07 = coilPlusConnectorWire(mat4(1) * rotZ(6.0 * inc), 9.0, 23.0, size, gap, nTurns, xyz);
-  float coil08 = coilPlusConnectorWire(mat4(1) * rotZ(7.0 * inc), 10.0, 23.0, size, gap, nTurns, xyz);
-  float coil09 = coilPlusConnectorWire(mat4(1) * rotZ(8.0 * inc), 11.0, 23.0, size, gap, nTurns, xyz);
-  float coil10 = coilPlusConnectorWire(mat4(1) * rotZ(9.0 * inc), 12.0, 23.0, size, gap, nTurns, xyz);
-  float coil11 = coilPlusConnectorWire(mat4(1) * rotZ(10.0 * inc), 13.0, 23.0, size, gap, nTurns, xyz);
-  float coil12 = coilPlusConnectorWire(mat4(1) * rotZ(11.0 * inc), 14.0, 23.0, size, gap, nTurns, xyz);
-  float coil13 = coilPlusConnectorWire(mat4(1) * rotZ(12.0 * inc), 15.0, 23.0, size, gap, nTurns, xyz);
-  float coil14 = coilPlusConnectorWire(mat4(1) * rotZ(13.0 * inc), 16.0, 23.0, size, gap, nTurns, xyz);
-  float coil15 = coilPlusConnectorWire(mat4(1) * rotZ(14.0 * inc), 17.0, 23.0, size, gap, nTurns, xyz);
-  float coil16 = coilPlusConnectorWire(mat4(1) * rotZ(15.0 * inc), 18.0, 23.0, size, gap, nTurns, xyz);
-  float coil17 = coilPlusConnectorWire(mat4(1) * rotZ(16.0 * inc), 19.0, 23.0, size, gap, nTurns, xyz);
-  float coil18 = coilPlusConnectorWire(mat4(1) * rotZ(17.0 * inc), 20.0, 23.0, size, gap, nTurns, xyz);
-  float coil19 = coilPlusConnectorWire(mat4(1) * rotZ(18.0 * inc), 21.0, 23.0, size, gap, nTurns, xyz);
-  float coil20 = coilPlusConnectorWire(mat4(1) * rotZ(19.0 * inc), 22.0, 23.0, size, gap, nTurns, xyz);
+  float coil01 = coilPlusConnectorWires(mat4(1) * rotZ(0.0 * inc), 3.0, 23.0, size, gap, nTurns, xyz);
+  float coil02 = coilPlusConnectorWires(mat4(1) * rotZ(1.0 * inc), 4.0, 23.0, size, gap, nTurns, xyz);
+  float coil03 = coilPlusConnectorWires(mat4(1) * rotZ(2.0 * inc), 5.0, 23.0, size, gap, nTurns, xyz);
+  float coil04 = coilPlusConnectorWires(mat4(1) * rotZ(3.0 * inc), 6.0, 23.0, size, gap, nTurns, xyz);
+  float coil05 = coilPlusConnectorWires(mat4(1) * rotZ(4.0 * inc), 7.0, 23.0, size, gap, nTurns, xyz);
+  float coil06 = coilPlusConnectorWires(mat4(1) * rotZ(5.0 * inc), 8.0, 23.0, size, gap, nTurns, xyz);
+  float coil07 = coilPlusConnectorWires(mat4(1) * rotZ(6.0 * inc), 9.0, 23.0, size, gap, nTurns, xyz);
+  float coil08 = coilPlusConnectorWires(mat4(1) * rotZ(7.0 * inc), 10.0, 23.0, size, gap, nTurns, xyz);
+  float coil09 = coilPlusConnectorWires(mat4(1) * rotZ(8.0 * inc), 11.0, 23.0, size, gap, nTurns, xyz);
+  float coil10 = coilPlusConnectorWires(mat4(1) * rotZ(9.0 * inc), 12.0, 23.0, size, gap, nTurns, xyz);
+  float coil11 = coilPlusConnectorWires(mat4(1) * rotZ(10.0 * inc), 13.0, 23.0, size, gap, nTurns, xyz);
+  float coil12 = coilPlusConnectorWires(mat4(1) * rotZ(11.0 * inc), 14.0, 23.0, size, gap, nTurns, xyz);
+  float coil13 = coilPlusConnectorWires(mat4(1) * rotZ(12.0 * inc), 15.0, 23.0, size, gap, nTurns, xyz);
+  float coil14 = coilPlusConnectorWires(mat4(1) * rotZ(13.0 * inc), 16.0, 23.0, size, gap, nTurns, xyz);
+  float coil15 = coilPlusConnectorWires(mat4(1) * rotZ(14.0 * inc), 17.0, 23.0, size, gap, nTurns, xyz);
+  float coil16 = coilPlusConnectorWires(mat4(1) * rotZ(15.0 * inc), 18.0, 23.0, size, gap, nTurns, xyz);
+  float coil17 = coilPlusConnectorWires(mat4(1) * rotZ(16.0 * inc), 19.0, 23.0, size, gap, nTurns, xyz);
+  float coil18 = coilPlusConnectorWires(mat4(1) * rotZ(17.0 * inc), 20.0, 23.0, size, gap, nTurns, xyz);
+  float coil19 = coilPlusConnectorWires(mat4(1) * rotZ(18.0 * inc), 21.0, 23.0, size, gap, nTurns, xyz);
+  float coil20 = coilPlusConnectorWires(mat4(1) * rotZ(19.0 * inc), 22.0, 23.0, size, gap, nTurns, xyz);
   
   float metal = coil01 + coil02 + coil03 + coil04 + coil05 + coil06 +
   coil07 + coil08 + coil09 + coil10 + coil11 + coil12 + coil13 +
