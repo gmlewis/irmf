@@ -1,0 +1,57 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-13",
+  "irmf": "1.0",
+  "materials": ["metal", "dielectric"],
+  "max": [5,5,60],
+  "min": [-5,-5,-60],
+  "notes": "The IRMF shader that started it all... the bifilar electromagnet.",
+  "options": {},
+  "title": "bifilar electromagnet",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec3 xyz) {
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  // First, trivial reject on the two ends of the coil.
+  if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
+  
+  // Then, constrain the coil to the cylinder with wall thickness "size":
+  float rxy = length(xyz.xy);
+  if (rxy < radius - 0.5 * size || rxy > radius + 0.5 * size) { return 0.0; }
+  
+  // If the current point is between the coils, return no material:
+  float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
+  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between coils
+  float dz = mod(xyz.z, size + gap); // 0 <= dz <= (size+gap) between coils.
+  
+  float lastHelixZ = angle * (size + gap);
+  if (lastHelixZ > dz) { lastHelixZ -= (size + gap); }
+  float nextHelixZ = lastHelixZ + (size + gap);
+  
+  if (dz > lastHelixZ + 0.5 * size && dz < nextHelixZ - 0.5 * size) { return 0.0; }
+  
+  // If the current point is within start of the first coil, stop it at angle < 0.
+  if (xyz.z < 0.5 * size && angle > 0.5) { return 0.0; }
+  // If the current point is with the end of the last coil, stop it at angle > PI.
+  if (xyz.z > nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
+  
+  return 1.0;
+}
+
+vec2 bifilarElectromagnet(float nTurns, in vec3 xyz) {
+  float coil1 = coilSquareFace(mat4(1), 3.0, 0.85, 0.15, nTurns, xyz);
+  float metal = coil1;
+  float dielectric = 0.0;
+  return vec2(metal, dielectric);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz.z += 60.0;
+  materials.xy = bifilarElectromagnet(120.0, xyz);
+}
