@@ -202,6 +202,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [008-spiral-square-face](examples/008-spiral-square-face)
 * [009-spiral-circle-face](examples/009-spiral-circle-face)
 * [010-tube](examples/010-tube)
+* [011-bifilar-coil](examples/011-bifilar-coil)
 
 ----------------------------------------------------------------------
 
