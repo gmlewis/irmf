@@ -43,6 +43,7 @@ float spiralCircleFace(in mat4 xfm, float size, float gap, float nTurns, in vec3
   
   // At this point, we are within the circle cross-section face, so let's round the edge.
   lastSpiralR = floor((r - 2.0 * M_PI) / (size + gap)) * (size + gap) + 2.0 * M_PI + angle * (size + gap);
+  if (lastSpiralR > r) { lastSpiralR -= (size + gap); }
   nextSpiralR = lastSpiralR + size + gap;
   angle *= 2.0 * M_PI;
   vec3 lastSpiralCenter = vec3(lastSpiralR * cos(angle), lastSpiralR * sin(angle), 0.0);
