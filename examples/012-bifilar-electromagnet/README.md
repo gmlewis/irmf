@@ -23,8 +23,8 @@ IRMF shader.
 /*{
   irmf: "1.0",
   materials: ["metal", "dielectric"],
-  max: [5,5,60],
-  min: [-5,-5,-60],
+  max: [25,25,60],
+  min: [-25,-25,-60],
   units: "mm",
 }*/
 
@@ -60,9 +60,33 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
 }
 
 vec2 bifilarElectromagnet(float nTurns, in vec3 xyz) {
-  float coil1 = coilSquareFace(mat4(1), 3.0, 0.85, 0.15, nTurns, xyz);
-  float metal = coil1;
+  float coil01 = coilSquareFace(mat4(1), 3.0, 0.85, 0.15, nTurns, xyz);
+  float coil02 = coilSquareFace(mat4(1), 4.0, 0.85, 0.15, nTurns, xyz);
+  float coil03 = coilSquareFace(mat4(1), 5.0, 0.85, 0.15, nTurns, xyz);
+  float coil04 = coilSquareFace(mat4(1), 6.0, 0.85, 0.15, nTurns, xyz);
+  float coil05 = coilSquareFace(mat4(1), 7.0, 0.85, 0.15, nTurns, xyz);
+  float coil06 = coilSquareFace(mat4(1), 8.0, 0.85, 0.15, nTurns, xyz);
+  float coil07 = coilSquareFace(mat4(1), 9.0, 0.85, 0.15, nTurns, xyz);
+  float coil08 = coilSquareFace(mat4(1), 10.0, 0.85, 0.15, nTurns, xyz);
+  float coil09 = coilSquareFace(mat4(1), 11.0, 0.85, 0.15, nTurns, xyz);
+  float coil10 = coilSquareFace(mat4(1), 12.0, 0.85, 0.15, nTurns, xyz);
+  float coil11 = coilSquareFace(mat4(1), 13.0, 0.85, 0.15, nTurns, xyz);
+  float coil12 = coilSquareFace(mat4(1), 14.0, 0.85, 0.15, nTurns, xyz);
+  float coil13 = coilSquareFace(mat4(1), 15.0, 0.85, 0.15, nTurns, xyz);
+  float coil14 = coilSquareFace(mat4(1), 16.0, 0.85, 0.15, nTurns, xyz);
+  float coil15 = coilSquareFace(mat4(1), 17.0, 0.85, 0.15, nTurns, xyz);
+  float coil16 = coilSquareFace(mat4(1), 18.0, 0.85, 0.15, nTurns, xyz);
+  float coil17 = coilSquareFace(mat4(1), 19.0, 0.85, 0.15, nTurns, xyz);
+  float coil18 = coilSquareFace(mat4(1), 20.0, 0.85, 0.15, nTurns, xyz);
+  float coil19 = coilSquareFace(mat4(1), 21.0, 0.85, 0.15, nTurns, xyz);
+  float coil20 = coilSquareFace(mat4(1), 22.0, 0.85, 0.15, nTurns, xyz);
+  
+  float metal = coil01 + coil02 + coil03 + coil04 + coil05 + coil06 +
+  coil07 + coil08 + coil09 + coil10 + coil11 + coil12 + coil13 +
+  coil14 + coil15 + coil16 + coil17 + coil18 + coil19 + coil20;
+  
   float dielectric = 0.0;
+  
   return vec2(metal, dielectric);
 }
 
