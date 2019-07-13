@@ -197,6 +197,7 @@ Please see the [IRMF Spec](spec) and [provided examples](examples) for more info
 * [005-cylinder](examples/005-cylinder)
 * [006-square-tetrahedron](examples/006-square-tetrahedron)
 * [007-cone](examples/007-cone)
+* [008-spiral-square-face](examples/008-spiral-square-face)
 
 ----------------------------------------------------------------------
 
