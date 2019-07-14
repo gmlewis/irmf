@@ -22,15 +22,15 @@ IRMF shader.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal", "dielectric"],
-  max: [25,25,61],
+  materials: ["metal","dielectric"],
+  max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
 }*/
 
 #define M_PI 3.1415926535897932384626433832795
 
-float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec3 xyz) {
+float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, float trimEndAngle, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
   // First, trivial reject on the two ends of the coil.
@@ -51,10 +51,13 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
   
   if (dz > lastHelixZ + 0.5 * size && dz < nextHelixZ - 0.5 * size) { return 0.0; }
   
-  // If the current point is within start of the first coil, stop it at angle < 0.
+  // If the current point is within the start of the first coil, stop it at angle < 0 (angle>0.5 due to wraparound).
   if (xyz.z < 0.5 * size && angle > 0.5) { return 0.0; }
-  // If the current point is with the end of the last coil, stop it at angle > PI.
-  if (xyz.z > nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
+  // If the current point is within the end of the last coil, stop it at angle > PI (angle<0.5 due to wraparound).
+  // Additionally, chop off the trimEndAngle. As a result, switch back to radians.
+  angle *= 2.0 * M_PI;
+  if (xyz.z > nTurns * (size + gap) - 0.5 * size &&
+  (angle < M_PI || angle >= 2.0 * M_PI - trimEndAngle)) { return 0.0; }
   
   return 1.0;
 }
@@ -77,8 +80,8 @@ mat3 rotAxis(vec3 axis, float a) {
   return p * oc + q;
 }
 
-mat4 rotZ(float degrees) {
-  return mat4(rotAxis(vec3(0, 0, 1), M_PI * degrees / 180.0));
+mat4 rotZ(float angle) {
+  return mat4(rotAxis(vec3(0, 0, 1), angle));
 }
 
 float wire(vec3 start, vec3 end, float size, in vec3 xyz) {
@@ -89,10 +92,17 @@ float wire(vec3 start, vec3 end, float size, in vec3 xyz) {
   return box(vec3(0), vec3(length(v), 0, 0), size, xyz);
 }
 
-float coilPlusConnectorWires(float coilNum, float numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
-  mat4 xfm = mat4(1) * rotZ(coilNum * inc);
-  float coilRadius = coilNum + innerRadius;
-  float coil = coilSquareFace(xfm, coilRadius, size, gap, nTurns, xyz);
+float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
+  float radiusOffset = float(coilNum - 1);
+  mat4 xfm = mat4(1) * rotZ(radiusOffset * inc);
+  float coilRadius = radiusOffset + innerRadius;
+  float trimEndAngle = 2.0 * inc;
+  if (coilNum == numCoils) {
+    trimEndAngle = 0.5 * inc; // Special case to access the exit wire.
+  } else if (coilNum == numCoils - 1) {
+    trimEndAngle = 3.0 * inc;
+  }
+  float coil = coilSquareFace(xfm, coilRadius, size, gap, nTurns, trimEndAngle, xyz);
   
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
   
@@ -104,10 +114,25 @@ float coilPlusConnectorWires(float coilNum, float numCoils, float inc, float inn
   coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
   coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
   
-  if (coilNum >= 2.0) { // Connect the start of this coil to the end of two coils prior.
-    float lastCoilRadius = coilNum - 2.0 + innerRadius;
+  float zexit = (nTurns + 10.0) * (size + gap);
+  if (coilNum >= 3) { // Connect the start of this coil to the end of two coils prior.
+    float lastCoilRadius = radiusOffset - 2.0 + innerRadius;
     coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
     coil += box(vec3(lastCoilRadius, 0.0, tz), vec3(lastCoilRadius, 0.0, tzp1), size, xyz);
+  } else if (coilNum == 2) { // Connect the start of 2 to the end of the last odd coil.
+    float endOddRadius = float(numCoils - 2) + innerRadius;
+    coil += box(vec3(endOddRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+    coil += box(vec3(endOddRadius, 0.0, tz), vec3(endOddRadius, 0.0, tzp1), size, xyz);
+  } else if (coilNum == 1) { // Bring out the exit wires.
+    // Start of coil1:
+    coil += box(vec3(connectorRadius, 0.0, tz), vec3(connectorRadius, 0.0, zexit), size, xyz);
+  }
+  
+  if (coilNum == numCoils) { // Special case to access the exit wire.
+    // End of coil 'numCoils':
+    xfm = mat4(1) * rotZ(0.5 * inc);
+    xyz = (vec4(xyz, 1.0) * xfm).xyz;
+    coil += box(vec3(connectorRadius - (size + gap), 0.0, tz), vec3(connectorRadius - (size + gap), 0.0, zexit), size, xyz);
   }
   
   return coil;
@@ -117,31 +142,31 @@ float coilPlusConnectorWires(float coilNum, float numCoils, float inc, float inn
   // if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
   // if (xyz.z > 0.0) { return vec2(0); }  // For debugging ends.
   
-  const float numCoils = 20.0;
-  const float inc = 360.0 / numCoils;
+  const int numCoils = 20;
+  const float inc = 2.0 * M_PI / float(numCoils);
   const float innerRadius = 3.0;
-  float connectorRadius = innerRadius + numCoils * (size + gap);
+  float connectorRadius = innerRadius + float(numCoils) * (size + gap);
   
-  float coil01 = coilPlusConnectorWires(0.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil02 = coilPlusConnectorWires(1.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil03 = coilPlusConnectorWires(2.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil04 = coilPlusConnectorWires(3.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil05 = coilPlusConnectorWires(4.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil06 = coilPlusConnectorWires(5.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil07 = coilPlusConnectorWires(6.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil08 = coilPlusConnectorWires(7.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil09 = coilPlusConnectorWires(8.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil10 = coilPlusConnectorWires(9.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil11 = coilPlusConnectorWires(10.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil12 = coilPlusConnectorWires(11.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil13 = coilPlusConnectorWires(12.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil14 = coilPlusConnectorWires(13.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil15 = coilPlusConnectorWires(14.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil16 = coilPlusConnectorWires(15.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil17 = coilPlusConnectorWires(16.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil18 = coilPlusConnectorWires(17.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil19 = coilPlusConnectorWires(18.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil20 = coilPlusConnectorWires(19.0, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil01 = coilPlusConnectorWires(1, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil02 = coilPlusConnectorWires(2, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil03 = coilPlusConnectorWires(3, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil04 = coilPlusConnectorWires(4, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil05 = coilPlusConnectorWires(5, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil06 = coilPlusConnectorWires(6, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil07 = coilPlusConnectorWires(7, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil08 = coilPlusConnectorWires(8, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil09 = coilPlusConnectorWires(9, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil10 = coilPlusConnectorWires(10, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil11 = coilPlusConnectorWires(11, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil12 = coilPlusConnectorWires(12, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil13 = coilPlusConnectorWires(13, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil14 = coilPlusConnectorWires(14, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil15 = coilPlusConnectorWires(15, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil16 = coilPlusConnectorWires(16, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil17 = coilPlusConnectorWires(17, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil18 = coilPlusConnectorWires(18, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil19 = coilPlusConnectorWires(19, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float coil20 = coilPlusConnectorWires(20, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
   
   float metal = coil01 + coil02 + coil03 + coil04 + coil05 + coil06 +
   coil07 + coil08 + coil09 + coil10 + coil11 + coil12 + coil13 +

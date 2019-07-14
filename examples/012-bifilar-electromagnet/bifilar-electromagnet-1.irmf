@@ -4,7 +4,7 @@
   "date": "2019-07-13",
   "irmf": "1.0",
   "materials": ["metal","dielectric"],
-  "max": [25,25,61],
+  "max": [25,25,71],
   "min": [-25,-25,-61],
   "notes": "The IRMF shader that started it all... the bifilar electromagnet.",
   "options": {},
@@ -83,7 +83,7 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   float coilRadius = radiusOffset + innerRadius;
   float trimEndAngle = 2.0 * inc;
   if (coilNum == numCoils) {
-    trimEndAngle = inc;
+    trimEndAngle = 0.5 * inc; // Special case to access the exit wire.
   } else if (coilNum == numCoils - 1) {
     trimEndAngle = 3.0 * inc;
   }
@@ -99,6 +99,7 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
   coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
   
+  float zexit = (nTurns + 10.0) * (size + gap);
   if (coilNum >= 3) { // Connect the start of this coil to the end of two coils prior.
     float lastCoilRadius = radiusOffset - 2.0 + innerRadius;
     coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
@@ -107,13 +108,23 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
     float endOddRadius = float(numCoils - 2) + innerRadius;
     coil += box(vec3(endOddRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
     coil += box(vec3(endOddRadius, 0.0, tz), vec3(endOddRadius, 0.0, tzp1), size, xyz);
+  } else if (coilNum == 1) { // Bring out the exit wires.
+    // Start of coil1:
+    coil += box(vec3(connectorRadius, 0.0, tz), vec3(connectorRadius, 0.0, zexit), size, xyz);
+  }
+  
+  if (coilNum == numCoils) { // Special case to access the exit wire.
+    // End of coil 'numCoils':
+    xfm = mat4(1) * rotZ(0.5 * inc);
+    xyz = (vec4(xyz, 1.0) * xfm).xyz;
+    coil += box(vec3(connectorRadius - (size + gap), 0.0, tz), vec3(connectorRadius - (size + gap), 0.0, zexit), size, xyz);
   }
   
   return coil;
 }
 
  vec2 bifilarElectromagnet(float size, float gap, float nTurns, in vec3 xyz) {
-  if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
+  // if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
   // if (xyz.z > 0.0) { return vec2(0); }  // For debugging ends.
   
   const int numCoils = 20;
