@@ -138,39 +138,16 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   return coil;
 }
 
- vec2 bifilarElectromagnet(float size, float gap, float nTurns, in vec3 xyz) {
-  // if (xyz.z < 120.1) { return vec2(0); } // For debugging ends.
-  // if (xyz.z > 0.0) { return vec2(0); }  // For debugging ends.
-  
-  const int numCoils = 20;
-  const float inc = 2.0 * M_PI / float(numCoils);
-  const float innerRadius = 3.0;
+ vec2 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap, float nTurns, in vec3 xyz) {
+  int numCoils = 2*numPairs;
+  float inc = 2.0 * M_PI / float(numCoils);
   float connectorRadius = innerRadius + float(numCoils) * (size + gap);
   
-  float coil01 = coilPlusConnectorWires(1, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil02 = coilPlusConnectorWires(2, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil03 = coilPlusConnectorWires(3, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil04 = coilPlusConnectorWires(4, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil05 = coilPlusConnectorWires(5, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil06 = coilPlusConnectorWires(6, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil07 = coilPlusConnectorWires(7, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil08 = coilPlusConnectorWires(8, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil09 = coilPlusConnectorWires(9, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil10 = coilPlusConnectorWires(10, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil11 = coilPlusConnectorWires(11, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil12 = coilPlusConnectorWires(12, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil13 = coilPlusConnectorWires(13, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil14 = coilPlusConnectorWires(14, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil15 = coilPlusConnectorWires(15, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil16 = coilPlusConnectorWires(16, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil17 = coilPlusConnectorWires(17, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil18 = coilPlusConnectorWires(18, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil19 = coilPlusConnectorWires(19, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
-  float coil20 = coilPlusConnectorWires(20, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  float metal = 0.0;
   
-  float metal = coil01 + coil02 + coil03 + coil04 + coil05 + coil06 +
-  coil07 + coil08 + coil09 + coil10 + coil11 + coil12 + coil13 +
-  coil14 + coil15 + coil16 + coil17 + coil18 + coil19 + coil20;
+  for(int i = 1; i <= numCoils; i ++ ) {
+    metal += coilPlusConnectorWires(i, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  }
   
   float dielectric = 0.0;
   
@@ -179,7 +156,7 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
 
  void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 60.0;
-  materials.xy = bifilarElectromagnet(0.85, 0.15, 120.0, xyz);
+  materials.xy = bifilarElectromagnet(10, 3.0, 0.85, 0.15, 120.0, xyz);
  }
 ```
 
