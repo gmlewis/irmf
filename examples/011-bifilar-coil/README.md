@@ -20,29 +20,29 @@ radius and an outer radius.
 
 float spiralSquareFace(in mat4 xfm, float size, float gap, float nTurns, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-
+  
   // First, trivial reject above and below the spiral.
   if (xyz.z < -0.5 * size || xyz.z > 0.5 * size) { return 0.0; }
-
+  
   float r = length(xyz.xy);
   if (r < 2.0 * M_PI - 0.5 * size || r > 2.0 * M_PI + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
-
+  
   // If the current point is between the spirals, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
   if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between spirals
   float dr = mod(r - 2.0 * M_PI, size + gap); // 0 <= dr <= (size+gap) between spirals.
-
+  
   float lastSpiralR = angle * (size + gap);
   if (lastSpiralR > dr) { lastSpiralR -= (size + gap); }
   float nextSpiralR = lastSpiralR + (size + gap);
-
+  
   if (dr > lastSpiralR + 0.5 * size && dr < nextSpiralR - 0.5 * size) { return 0.0; }
-
+  
   // If the current point is within start of the first spiral, stop it at angle < 0.
   if (r < 2.0 * M_PI + 0.5 * size && angle > 0.5) { return 0.0; }
   // If the current point is with the end of the last spiral, stop it at angle > PI.
   if (r > 2.0 * M_PI + nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
-
+  
   return 1.0;
 }
 
@@ -90,29 +90,29 @@ Let's take bifilar-coil-1 above and add in dielectric between the metal wires.
 
 float spiralSquareFace(in mat4 xfm, float size, float gap, float nTurns, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-
+  
   // First, trivial reject above and below the spiral.
   if (xyz.z < -0.5 * size || xyz.z > 0.5 * size) { return 0.0; }
-
+  
   float r = length(xyz.xy);
   if (r < 2.0 * M_PI - 0.5 * size || r > 2.0 * M_PI + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
-
+  
   // If the current point is between the spirals, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
   if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between spirals
   float dr = mod(r - 2.0 * M_PI, size + gap); // 0 <= dr <= (size+gap) between spirals.
-
+  
   float lastSpiralR = angle * (size + gap);
   if (lastSpiralR > dr) { lastSpiralR -= (size + gap); }
   float nextSpiralR = lastSpiralR + (size + gap);
-
+  
   if (dr > lastSpiralR + 0.5 * size && dr < nextSpiralR - 0.5 * size) { return 0.0; }
-
+  
   // If the current point is within start of the first spiral, stop it at angle < 0.
   if (r < 2.0 * M_PI + 0.5 * size && angle > 0.5) { return 0.0; }
   // If the current point is with the end of the last spiral, stop it at angle > PI.
   if (r > 2.0 * M_PI + nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
-
+  
   return 1.0;
 }
 
@@ -129,14 +129,14 @@ mat3 rotAxis(vec3 axis, float a) {
 
 float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-
+  
   // First, trivial reject on the two ends of the cylinder.
   if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
-
+  
   // Then, constrain radius of the cylinder:
   float rxy = length(xyz.xy);
   if (rxy > radius) { return 0.0; }
-
+  
   return 1.0;
 }
 

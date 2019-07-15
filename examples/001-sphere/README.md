@@ -62,6 +62,46 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [sphere-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-2.irmf) now in the experimental IRMF editor!
 
+## sphere-3.irmf
+
+Sometimes you just want a slice of a sphere, and I find it easier to think
+in terms of degrees when sectioning things with a 'from' and 'to', so I
+made the parameters degrees in this case.
+
+![sphere-3.png](sphere-3.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA1","PLA2"],
+  max: [7,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float sphere(in vec3 pos, in float radius, float fromDeg, float toDeg, in vec3 xyz) {
+  xyz -= pos; // Move sphere into place.
+  float r = length(xyz);
+  if (r > radius) { return 0.0; }
+
+  float angleDeg = mod(360.0 + atan(xyz.y, xyz.x) * 180.0 / M_PI, 360.0);
+  if (fromDeg < toDeg &&(angleDeg < fromDeg || angleDeg > toDeg)) { return 0.0; }
+  if (fromDeg > toDeg && angleDeg < fromDeg && angleDeg > toDeg) { return 0.0; }
+
+  return 1.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float radius = 5.0;
+  materials[0] = sphere(vec3(0), radius, 45.0, 315.0, xyz);
+  materials[1] = sphere(vec3(0), radius, 315.0, 45.0, xyz - vec3(2, 0, 0));
+}
+```
+
+* Try loading [sphere-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-3.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License

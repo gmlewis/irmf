@@ -20,30 +20,30 @@ face.
 
 float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-
+  
   // First, trivial reject on the two ends of the coil.
   if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
-
+  
   // Then, constrain the coil to the cylinder with wall thickness "size":
   float rxy = length(xyz.xy);
   if (rxy < radius - 0.5 * size || rxy > radius + 0.5 * size) { return 0.0; }
-
+  
   // If the current point is between the coils, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
   if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between coils
   float dz = mod(xyz.z, size + gap); // 0 <= dz <= (size+gap) between coils.
-
+  
   float lastHelixZ = angle * (size + gap);
   if (lastHelixZ > dz) { lastHelixZ -= (size + gap); }
   float nextHelixZ = lastHelixZ + (size + gap);
-
+  
   if (dz > lastHelixZ + 0.5 * size && dz < nextHelixZ - 0.5 * size) { return 0.0; }
-
+  
   // If the current point is within start of the first coil, stop it at angle < 0.
   if (xyz.z < 0.5 * size && angle > 0.5) { return 0.0; }
   // If the current point is with the end of the last coil, stop it at angle > PI.
   if (xyz.z > nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
-
+  
   return 1.0;
 }
 

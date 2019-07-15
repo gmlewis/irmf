@@ -18,14 +18,14 @@ radius and an outer radius.
 
 float tube(in mat4 xfm, float innerRadius, float outerRadius, float height, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-
+  
   // First, trivial reject on the two ends of the tube.
   if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
-
+  
   // Then, constrain the tube to the inner and outer radii.
   float rxy = length(xyz.xy);
   if (rxy < innerRadius || rxy > outerRadius) { return 0.0; }
-
+  
   return 1.0;
 }
 
