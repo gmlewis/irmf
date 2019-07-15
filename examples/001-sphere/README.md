@@ -11,6 +11,8 @@ Yet, ironically, the perfect sphere is almost the easiest thing to model using a
 
 Here is an [IRMF shader](sphere-1.irmf) defining a 10mm diameter sphere:
 
+![sphere-1.png](sphere-1.png)
+
 ```glsl
 /*{
   irmf: "1.0",
@@ -34,6 +36,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 `sphere-1.irmf` above is fine if your entire model is a sphere, but is not
 terribly useful if you would like to make a more complex model out of
 one or more spheres. Let's make a `sphere` function that is reusable.
+
+![sphere-2.png](sphere-2.png)
 
 ```glsl
 /*{

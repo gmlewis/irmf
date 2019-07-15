@@ -1,8 +1,10 @@
 # 007-cone
 
+## cone-1.irmf
+
 Here is a unit cone.
 
-## cone-1.irmf
+![cone-1.png](cone-1.png)
 
 ```glsl
 /*{
@@ -15,16 +17,16 @@ Here is a unit cone.
 
 float cone(in mat4 xfm, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+
   // Trivially reject above and below the cone.
   if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
-  
+
   // Calculate the new size based on the height.
   float zsize = mix(1.0, 0.0, xyz.z);
   float r = length(xyz.xy);
-  
+
   if (r > zsize) { return 0.0; }
-  
+
   return 1.0;
 }
 

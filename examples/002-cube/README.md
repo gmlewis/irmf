@@ -11,6 +11,8 @@ and the MBB itself defines the object (the cube).
 
 Here is an [IRMF shader](cube-1.irmf) defining a 10mm diameter cube:
 
+![cube-1.png](cube-1.png)
+
 ```glsl
 /*{
   irmf: "1.0",
@@ -44,6 +46,8 @@ One thing that the "Book of Shaders" stresses is that the coordinate system
 is transformed such that the shader always performs its calculations in its
 own local coordinate system. Here's an example of this:
 
+![cube-2.png](cube-2.png)
+
 ```glsl
 /*{
   irmf: "1.0",
@@ -73,6 +77,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 more general-purpose cube-like object that can be translated, scaled,
 and rotated.
 
+![cube-3.png](cube-3.png)
+
 ```glsl
 /*{
   irmf: "1.0",
@@ -96,6 +102,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Try loading [cube-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-3.irmf) now in the experimental IRMF editor!
 
 ## cube-csg.irmf
+
+![cube-csg.png](cube-csg.png)
 
 ```glsl
 /*{

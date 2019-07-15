@@ -1,9 +1,11 @@
 # 006-square-tetrahedron
 
+## tetrahedron-1.irmf
+
 If we make a tetrahedron with a square base that fits with a (-1,-1,-1)-(1,1,1)
 cube, then it could be scaled to any size independently along each axis.
 
-## tetrahedron-1.irmf
+![tetrahedron-1.png](tetrahedron-1.png)
 
 ```glsl
 /*{
@@ -16,15 +18,15 @@ cube, then it could be scaled to any size independently along each axis.
 
 float squareTetrahedron(in mat4 xfm, in vec3 xyz) {
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+
   // Trivially reject above and below the tetrahedron.
   if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
-  
+
   // Calculate the new size based on the height.
   float zsize = mix(1.0, 0.0, xyz.z);
-  
+
   if (any(greaterThan(xyz.xy, vec2(zsize)))|| any(lessThan(xyz.xy, vec2(-zsize)))) { return 0.0; }
-  
+
   return 1.0;
 }
 
