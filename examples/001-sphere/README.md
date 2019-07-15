@@ -85,11 +85,11 @@ float sphere(in vec3 pos, in float radius, float fromDeg, float toDeg, in vec3 x
   xyz -= pos; // Move sphere into place.
   float r = length(xyz);
   if (r > radius) { return 0.0; }
-
+  
   float angleDeg = mod(360.0 + atan(xyz.y, xyz.x) * 180.0 / M_PI, 360.0);
   if (fromDeg < toDeg &&(angleDeg < fromDeg || angleDeg > toDeg)) { return 0.0; }
   if (fromDeg > toDeg && angleDeg < fromDeg && angleDeg > toDeg) { return 0.0; }
-
+  
   return 1.0;
 }
 
