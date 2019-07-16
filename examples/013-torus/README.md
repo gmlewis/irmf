@@ -80,8 +80,6 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 5.0;
   materials[0] = torus(vec3(0), 9.0, 3.0, 45.0, 315.0, xyz);
   materials[1] = torus(vec3(2, 0, 0), 9.0, 3.0, 315.0, 45.0, xyz);
-  materials[2] = 0.0;
-  materials[3] = 0.0;
 }
 ```
 
