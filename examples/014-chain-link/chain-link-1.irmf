@@ -1,0 +1,60 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-15",
+  "irmf": "1.0",
+  "materials": ["PLA1"],
+  "max": [21,15,15],
+  "min": [-15,-15,-15],
+  "notes": "Chain link.",
+  "options": {},
+  "title": "Chain Link",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float torus(in vec3 pos, float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
+  xyz -= pos; // Move torus into place.
+  float r = length(xyz);
+  if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
+  
+  float angle = atan(xyz.y, xyz.x);
+  vec3 center = vec3(majorRadius * cos(angle), majorRadius * sin(angle), 0);
+  vec3 v = xyz - center;
+  float r2 = length(v);
+  if (r2 > minorRadius) { return 0.0; }
+  
+  float angleDeg = mod(360.0 + atan(xyz.y, xyz.x) * 180.0 / M_PI, 360.0);
+  if (fromDeg < toDeg &&(angleDeg < fromDeg || angleDeg > toDeg)) { return 0.0; }
+  if (fromDeg > toDeg && angleDeg < fromDeg && angleDeg > toDeg) { return 0.0; }
+  
+  return 1.0;
+}
+
+float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
+  xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  // First, trivial reject on the two ends of the cylinder.
+  if (xyz.x < 0.0 || xyz.x > height) { return 0.0; }
+  
+  // Then, constrain radius of the cylinder:
+  float r = length(xyz.yz);
+  if (r > radius) { return 0.0; }
+  
+  return 1.0;
+}
+
+float chainLink(in vec3 pos, float majorRadius, float minorRadius, float separator, in vec3 xyz) {
+  xyz -= pos;
+  float result = torus(vec3(0), majorRadius, minorRadius, 90.0, 270.0, xyz);
+  result += torus(vec3(separator, 0, 0), majorRadius, minorRadius, 270.0, 90.0, xyz);
+  result += cylinder(mat4(1), minorRadius, separator, xyz - vec3(0, majorRadius, 0));
+  result += cylinder(mat4(1), minorRadius, separator, xyz + vec3(0, majorRadius, 0));
+  return result;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = chainLink(vec3(0), 9.0, 3.0, 6.0, xyz);
+}
