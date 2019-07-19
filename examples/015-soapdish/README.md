@@ -197,6 +197,69 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [soapdish-step-04.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-04.irmf) now in the experimental IRMF editor!
 
+## soapdish-step-05.irmf
+
+Now before adding all the details, let's squish the dish in the Y direction.
+
+Note that it feels weird to _multiply_ by `width/height` (which is greater
+than one) when we know we are _squishing_ the depth by `height/width`. But
+the thing to remember here is that when writing shaders, it is tremendously
+easier to alter the incoming coordinate space _before_ creating the objects
+because it makes the math within the objects so much simpler by keeping
+everything near the origin `(0,0,0)`.
+
+![soapdish-step-05.png](soapdish-step-05.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA1"],
+  max: [57.5,57.5,12],
+  min: [-57.5,-57.5,-12],
+  units: "mm",
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float halfTorus(float majorRadius, float minorRadius, in vec3 xyz) {
+  float r = length(xyz);
+  if (xyz.z > minorRadius || xyz.z < 0.0) { return 0.0; } // Just to top half.
+  if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
+
+  float angle = atan(xyz.y, xyz.x);
+  vec3 center = vec3(majorRadius * cos(angle), majorRadius * sin(angle), 0);
+  vec3 v = xyz - center;
+  float r2 = length(v);
+  if (r2 > minorRadius) { return 0.0; }
+
+  return 1.0;
+}
+
+float cone(float radius, float height, in vec3 xyz) {
+  if (xyz.z > height || xyz.z < 0.0) { return 0.0; }
+  float r = length(xyz.xy);
+  if (r > radius - (height - xyz.z)) { return 0.0; }
+  return 1.0;
+}
+
+float soapdish(float width, float depth, float height, in vec3 xyz) {
+  const float baseHeight = 4.0;
+  const float separation = 3.0;
+  vec3 squish = vec3(1, width / depth, 1);
+  float result = cone(0.5 * width, height - baseHeight, xyz * squish);
+  result += halfTorus(0.5 * width - separation, separation, xyz * squish - vec3(0, 0, height - baseHeight));
+  result -= cone(0.5 * width, height - baseHeight, xyz * squish - vec3(0, 0, separation));
+  return result;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  // Add 12 to the Z value to center the object vertically.
+  materials[0] = soapdish(105.0, 82.0, 24.0, xyz + vec3(0, 0, 12));
+}
+```
+
+* Try loading [soapdish-step-05.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-05.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License
