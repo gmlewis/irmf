@@ -172,6 +172,11 @@ Star Trek replicator will be a household device. “Hey replicator, print me a w
 An [IRMF shader editor](https://github.com/gmlewis/irmf-editor) is in the works.
 See the [examples](#examples) below for models that display in the IRMF editor.
 
+I'm also working on an [IRMF slicer](https://github.com/gmlewis/irmf-slicer)
+that will provide a bridge from IRMF shaders to 3D printers that can accept
+voxel image slices as input, until the time when all 3D printers natively
+support `*.irmf` files as an alternative input format to `*.gcode` files.
+
 Eventually, firmware for 3D printers will be written that natively read, parse,
 and use IRMF files to generate physical objects with one or more materials...
 thereby completely eliminating the need for STL files, software slicers,
