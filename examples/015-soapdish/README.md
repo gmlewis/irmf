@@ -105,13 +105,13 @@ float halfTorus(float majorRadius, float minorRadius, in vec3 xyz) {
   float r = length(xyz);
   if (xyz.z > minorRadius || xyz.z < 0.0) { return 0.0; } // Just to top half.
   if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
-  
+
   float angle = atan(xyz.y, xyz.x);
   vec3 center = vec3(majorRadius * cos(angle), majorRadius * sin(angle), 0);
   vec3 v = xyz - center;
   float r2 = length(v);
   if (r2 > minorRadius) { return 0.0; }
-  
+
   return 1.0;
 }
 
@@ -136,6 +136,66 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-03.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-03.irmf) now in the experimental IRMF editor!
+
+## soapdish-step-04.irmf
+
+I just realized that I measured incorrectly. Instead of it being 85mm wide, it is
+105mm side. I could go back and fix all the steps above, but this is actually a
+great learning opportunity, so let's go in and fix the dimensions.
+
+The MBB needs to change and let's add a couple parameters to the soapdish
+function to make it easy to change.
+
+![soapdish-step-04.png](soapdish-step-04.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA1"],
+  max: [57.5,57.5,12],
+  min: [-57.5,-57.5,-12],
+  units: "mm",
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float halfTorus(float majorRadius, float minorRadius, in vec3 xyz) {
+  float r = length(xyz);
+  if (xyz.z > minorRadius || xyz.z < 0.0) { return 0.0; } // Just to top half.
+  if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
+
+  float angle = atan(xyz.y, xyz.x);
+  vec3 center = vec3(majorRadius * cos(angle), majorRadius * sin(angle), 0);
+  vec3 v = xyz - center;
+  float r2 = length(v);
+  if (r2 > minorRadius) { return 0.0; }
+
+  return 1.0;
+}
+
+float cone(float radius, float height, in vec3 xyz) {
+  if (xyz.z > height || xyz.z < 0.0) { return 0.0; }
+  float r = length(xyz.xy);
+  if (r > radius - (height - xyz.z)) { return 0.0; }
+  return 1.0;
+}
+
+float soapdish(float width, float height, in vec3 xyz) {
+  const float baseHeight = 4.0;
+  const float separation = 3.0;
+  float result = cone(0.5 * width, height - baseHeight, xyz);
+  result += halfTorus(0.5 * width - separation, separation, xyz - vec3(0, 0, height - baseHeight));
+  result -= cone(0.5 * width, height - baseHeight, xyz - vec3(0, 0, separation));
+  return result;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  // Add 12 to the Z value to center the object vertically.
+  materials[0] = soapdish(105.0, 24.0, xyz + vec3(0, 0, 12));
+}
+```
+
+* Try loading [soapdish-step-04.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-04.irmf) now in the experimental IRMF editor!
 
 ----------------------------------------------------------------------
 
