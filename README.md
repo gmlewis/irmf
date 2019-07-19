@@ -211,6 +211,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [012-bifilar-electromagnet](examples/012-bifilar-electromagnet)
 * [013-torus](examples/013-torus)
 * [014-chain-link](examples/014-chain-link)
+* [015-soapdish](examples/015-soapdish)
 
 ----------------------------------------------------------------------
 
