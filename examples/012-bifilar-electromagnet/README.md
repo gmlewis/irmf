@@ -173,6 +173,9 @@ vec2 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap
   float spindleRadius = 2.0 * float(numPairs + 1) * (size + gap) + innerRadius;
   dielectric += cylinder(mat4(1), spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
   dielectric += cylinder(mat4(1), spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
+  // This next step is important... we don't want any dielectric material wherever
+  // the metal is located, so we just subtract the metal out of the dielectric.
+  dielectric -= metal;
   
   return vec2(metal, dielectric);
  }

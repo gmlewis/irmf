@@ -11,8 +11,8 @@ link out of a couple partial toroids and a couple cylinders:
 /*{
   irmf: "1.0",
   materials: ["PLA1"],
-  max: [21,15,15],
-  min: [-15,-15,-15],
+  max: [21,15,3],
+  min: [-15,-15,-3],
   units: "mm",
 }*/
 

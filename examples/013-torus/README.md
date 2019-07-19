@@ -10,8 +10,8 @@ It turns out that a torus is also relatively easy to model:
 /*{
   irmf: "1.0",
   materials: ["PLA1"],
-  max: [15,15,15],
-  min: [-15,-15,-15],
+  max: [15,15,3],
+  min: [-15,-15,-3],
   units: "mm",
 }*/
 
@@ -51,8 +51,8 @@ made the parameters degrees in this case.
 /*{
   irmf: "1.0",
   materials: ["PLA1","PLA2"],
-  max: [17,15,15],
-  min: [-15,-15,-15],
+  max: [17,15,3],
+  min: [-15,-15,-3],
   units: "mm",
 }*/
 
