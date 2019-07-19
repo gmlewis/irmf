@@ -1,0 +1,34 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-19",
+  "irmf": "1.0",
+  "materials": ["PLA1"],
+  "max": [42.5,42.5,12],
+  "min": [-42.5,-42.5,-12],
+  "notes": "One step in soapdish tutorial.",
+  "options": {},
+  "title": "soapdish",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float cone(float radius, float height, in vec3 xyz) {
+  if (xyz.z > height || xyz.z < 0.0) { return 0.0; }
+  float r = length(xyz.xy);
+  if (r > radius - (height - xyz.z)) { return 0.0; }
+  return 1.0;
+}
+
+float soapdish(in vec3 xyz) {
+  float result = cone(42.5, 20.0, xyz);
+  result -= cone(42.5, 20.0, xyz - vec3(0, 0, 3));
+  return result;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  // Add 12 to the Z value to center the object vertically.
+  materials[0] = soapdish(xyz + vec3(0, 0, 12));
+}
