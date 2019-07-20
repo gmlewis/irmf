@@ -101,6 +101,6 @@ float soapdish(float width, float depth, float height, in vec3 xyz) {
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  // Add 8 to the Z value to center the object vertically.
+  // Center the object vertically.
   materials[0] = soapdish(105.0, 82.0, 24.0, xyz + vec3(0, 0, 6));
 }
