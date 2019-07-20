@@ -586,6 +586,125 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [soapdish-step-09.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-09.irmf) now in the experimental IRMF editor!
 
+## soapdish-step-10.irmf
+
+Now we need to focus on the base to let the water drain out.
+
+It's really a squished cylinder that can be squished with the rest of
+the bowl shape, so let's do that.
+
+We'll go ahead and add the cylindrical drain cutouts for the base at
+the same time.
+
+For some reason, I had to tweak the MBB settings, but here is the final
+model.
+
+![soapdish-step-10.png](soapdish-step-10.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA1"],
+  max: [57.5,57.5,18],
+  min: [-57.5,-57.5,-12],
+  units: "mm",
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float halfTorus(float majorRadius, float minorRadius, in vec3 xyz) {
+  float r = length(xyz);
+  if (xyz.z > minorRadius || xyz.z < 0.0) { return 0.0; } // Just to top half.
+  if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
+  
+  float angle = atan(xyz.y, xyz.x);
+  vec3 center = vec3(majorRadius * cos(angle), majorRadius * sin(angle), 0);
+  vec3 v = xyz - center;
+  float r2 = length(v);
+  if (r2 > minorRadius) { return 0.0; }
+  
+  return 1.0;
+}
+
+float cone(float radius, float height, in vec3 xyz) {
+  if (xyz.z > height || xyz.z < 0.0) { return 0.0; }
+  float r = length(xyz.xy);
+  if (r > radius - (height - xyz.z)) { return 0.0; }
+  return 1.0;
+}
+
+float sphere(float radius, in vec3 xyz) {
+  float r = length(xyz);
+  if (r > radius) { return 0.0; }
+  return 1.0;
+}
+
+float post(in vec3 xyz) {
+  const float height = 5.0;
+  const float radius = 5.0;
+  float result = sphere(radius, xyz - vec3(0, 0, height)); // Top the post with a sphere.
+  if (xyz.z > height || xyz.z < 0.0) { return result; }
+  float r = length(xyz.xy);
+  if (r > radius) { return result; }
+  return 1.0;
+}
+
+float drain(in vec3 xyz) {
+  float r3 = length(xyz - vec3(0, 0, 0.5));
+  if (r3 <= 3.0) { return 1.0; } // Top the drain off with a sphere.
+  float r = length(xyz.xy);
+  if (r > 2.0) { return 0.0; }
+  return 1.0;
+}
+
+float base(float radius, float baseHeight, in vec3 xyz) {
+  if (xyz.z > baseHeight || xyz.z < 0.0) { return 0.0; }
+  float r = length(xyz.xy);
+  if (r > radius) { return 0.0; }
+  return 1.0;
+}
+
+float baseDrain(float radius, in vec3 xyz) {
+  float r = length(xyz.xz);
+  if (r > radius) { return 0.0; }
+  return 1.0;
+}
+
+float soapdish(float width, float depth, float height, in vec3 xyz) {
+  const float baseHeight = 6.0;
+  const float separation = 3.0;
+  vec3 squish = vec3(1, width / depth, 1);
+  float result = cone(0.5 * width, height - baseHeight, xyz * squish);
+  result += halfTorus(0.5 * width - separation, separation, xyz * squish - vec3(0, 0, height - baseHeight));
+  result += base(0.5 * width - height + baseHeight, baseHeight, xyz * squish + vec3(0, 0, baseHeight));
+  result -= cone(0.5 * width, height - baseHeight, xyz * squish - vec3(0, 0, separation));
+  
+  vec3 offset = vec3(12.5, 12.5, separation);
+  for(int i = -1; i <= 1; i ++ ) {
+    for(int j = -1; j <= 1; j ++ ) {
+      result += post(xyz - offset * vec3(i, j, 1));
+    }
+  }
+  result += post(xyz - vec3(-25, 0, separation));
+  result += post(xyz - vec3(25, 0, separation));
+  
+  for(int i = -2; i < 2; i ++ ) {
+    result -= drain(xyz - offset * vec3(i, - 1, 1) - vec3(6.25, 6.25, 0));
+    result -= drain(xyz - offset * vec3(i, 0, 1) - vec3(6.25, 6.25, 0));
+    result -= baseDrain(4.0, xyz - offset * vec3(i, 0, 0) + vec3(-6.25, 0, baseHeight));
+  }
+  
+  return result;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  // Add 8 to the Z value to center the object vertically.
+  materials[0] = soapdish(105.0, 82.0, 24.0, xyz + vec3(0, 0, 6));
+}
+```
+
+* Try loading [soapdish-step-10.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-10.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License
