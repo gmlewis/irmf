@@ -44,6 +44,18 @@ Here are the keys and sample values:
   * *optional* - e.g. `"Apache-2.0"`
 * `date: "<date created>",`
   * *optional* - e.g. `"2019-06-28"`
+* `encoding: "<shader encoding>",`
+  * *optional* - this specifies the encoding of the shader portion of the file.
+    Possible values are:
+    * _null_ or `""` - default (ASCII) encoding.
+    * "gpg" - encrypted [GnuPG](https://gnupg.org/) ASCII-armored encoding for a
+      particular device or printer manufacturer. This can be useful if someone
+      wanted to sell their model but didn't want to release the shader source code.
+    * "gzip" - binary compressed [gzip](https://en.wikipedia.org/wiki/Gzip) format.
+    * "gzip+base64" - ASCII [Base64](https://en.wikipedia.org/wiki/Base64) encoding
+      of [gzip'd](https://en.wikipedia.org/wiki/Gzip) binary compressed format.
+      This can be useful when the IRMF shader gets large (for example, when rendering
+      text in your model).
 * `irmf: "1.0",`
   * *required* - this is the version of the IRMF spec.
 * `materials: ["<m1 name>","<m2 name>","<m3 name>","<m4 name>"],`
