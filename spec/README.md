@@ -24,7 +24,11 @@ the material values output by the IRMF shader.
 Each material value typically varies from 0 to 1, representing no material up
 to solid material. There is no checking that the material values sum up to 1,
 which allows the 3D printer manufacturer to use the values in clever and
-differentiating ways.
+differentiating ways. But in general, if the material value is less than or
+equal to 0, there will be no material, and if the value is greater than
+or equal to 1, there will be solid material in that location. (This makes it
+much easier to write shaders since you don't need to worry about clamping
+the material values explicitly between 0 and 1.)
 
 ## Format Specifications
 
