@@ -19,6 +19,13 @@ be sent directly to the printer as input, and out comes the part as fast
 as the printer can make it. No STL. No slicing. No G-Code. Just the
 IRMF shader.
 
+It's also interesting to note that this model uses 6845 bytes as an IRMF
+shader. If you slice this model at 100 micron resolution (with my experimental
+[IRMF slicer](https://github.com/gmlewis/irmf-slicer)), it generates
+a ZIP file of over 5MB, and so far there is no traditional CAD tool (free
+or commercial) that can even generate an STL file for it. If they could, the
+resulting STL file would be enormous.
+
 ![bifilar-electromagnet-1.png](bifilar-electromagnet-1.png)
 
 ```glsl
