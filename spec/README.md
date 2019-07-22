@@ -92,9 +92,9 @@ be on a line by itself:
 
 * `}*/`
 
-What follows this JSON blob is a GLSL ES 3.0 shader
+What immediately follows this JSON blob is a GLSL ES 3.0 shader
 ([quick reference PDF](https://www.khronos.org/files/opengles3-quick-reference-card.pdf))
-similar to a ShaderToy
+(using the specified `encoding`) similar to a ShaderToy
 [`mainImage`](https://www.shadertoy.com/howto)
 “pixel shader” (or “full-screen fragment shader”), but instead of this
 ShaderToy function signature:
