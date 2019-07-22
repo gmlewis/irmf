@@ -19,7 +19,9 @@ This article is about a revolutionary computational technique,
 infinite resolution materials format (IRMF) shaders, that takes
 digitally-generated 3D models to the next level. You can think of it
 as the equivalent of Gutenberg’s press for the creation of 3D
-physical objects.
+physical objects. Perhaps a more modern analogy would be to think of
+IRMF as the 3D-printer equivalent to [PostScript](https://en.wikipedia.org/wiki/PostScript)
+for 2D printers.
 
 Historically, geometric primitives such as spheres, cubes, cones,
 etc. were combined to build up complex 3D models. Today, sophisticated
