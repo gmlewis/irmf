@@ -214,6 +214,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [013-torus](examples/013-torus)
 * [014-chain-link](examples/014-chain-link)
 * [015-soapdish](examples/015-soapdish)
+* [016-text](examples/016-text)
 
 ----------------------------------------------------------------------
 
