@@ -186,10 +186,11 @@ and G-Code files.
 
 ## Who created IRMF?
 
-The IRMF specification and editor were created and are maintained by Glenn M. Lewis.
+The IRMF specification, editor, and slicer were created and are maintained by Glenn M. Lewis.
 
 Issues can be raised on the [GitHub issues page](https://github.com/gmlewis/irmf/issues)
-for the IRMF specification (or [editor](https://github.com/gmlewis/irmf-editor/issues)).
+for the IRMF specification (or [editor](https://github.com/gmlewis/irmf-editor/issues)
+or [slicer](https://github.com/gmlewis/irmf-slicer/issues)).
 
 ## What is the status of IRMF?
 
