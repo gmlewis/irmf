@@ -1,4 +1,4 @@
-# 014-soapdish
+# 015-soapdish
 
 Let's model a soapdish (like [this one](http://www.thingiverse.com/thing:135154) on Thingiverse.com)
 in a step-by-step, tutorial fashion.
@@ -485,7 +485,6 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   // Add 12 to the Z value to center the object vertically.
   materials[0] = soapdish(105.0, 82.0, 24.0, xyz + vec3(0, 0, 12));
 }
-
 ```
 
 * Try loading [soapdish-step-08.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-08.irmf) now in the experimental IRMF editor!
