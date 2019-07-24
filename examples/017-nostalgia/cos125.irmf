@@ -1,0 +1,24 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2019-07-24",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "Nostalgic cos(θ)+cos(2θ)+cos(5θ) 3D function.",
+  "options": {},
+  "title": "cos125",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float cos125(in float thickness, in vec3 xyz) {
+  float theta = length(xyz.xy);
+  float z = cos(theta) + cos(2.0 * theta) + cos(5.0 * theta);
+  return (xyz.z <= z && xyz.z >= z-thickness) ? 1.0 : 0.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = cos125(0.1, xyz);
+}
