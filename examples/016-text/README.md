@@ -8,6 +8,9 @@ is in the works, and is starting to show some promise.
 
 ![text-1.png](text-1.png)
 
+* Try loading [text-1-gzip+base64.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/016-text/text-1-gzip+base64.irmf) now in the experimental IRMF editor!
+* Try loading [text-1-gzip.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/016-text/text-1-gzip.irmf) now in the experimental IRMF editor!
+
 ```glsl
 /*{
   irmf: "1.0",
