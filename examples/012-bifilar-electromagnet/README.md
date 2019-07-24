@@ -31,7 +31,7 @@ resulting STL file would be enormous.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal","dielectric"],
+  materials: ["33CrMoV12","dielectric"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
