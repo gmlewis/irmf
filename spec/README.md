@@ -12,7 +12,7 @@ to fully define and fabricate the model.
 
 That 2D plane represents the quantity of each material
 that the renderer will deposit into 3D space along that 2D plane.
-(An unlimited number of homogeneous or full-color materails are supported.)
+(An unlimited number of homogeneous or full-color materials are supported.)
 By modifying the parameters while the printer is building the model and
 re-slicing it from different angles and positions, the 3D printer can get
 the information it needs to build the model.
