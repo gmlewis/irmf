@@ -10,14 +10,14 @@ The renderer or 3D printer takes advantage of an on-board GPU to freely
 slice the model in any convenient 2D plane and takes as many passes as necessary
 to fully define and fabricate the model.
 
-That 2D plane represents the quantity of each material (up to 16 materials)
+That 2D plane represents the quantity of each material
 that the renderer will deposit into 3D space along that 2D plane.
-(Future versions of this spec may support more than 16 materials.)
+(An unlimited number of homogeneous or full-color materails are supported.)
 By modifying the parameters while the printer is building the model and
 re-slicing it from different angles and positions, the 3D printer can get
 the information it needs to build the model.
-Additionally, triplets of material values can be combined
-to represent a full-color (RGB) spectrum for a single material.
+Additionally, triplets (or groups) of material values can be combined
+to represent a full-color (RGB, HSL, or any format) spectrum for a single material.
 There is nothing in the spec that limits the interpretation (or range) of
 the material values output by the IRMF shader.
 
@@ -69,6 +69,8 @@ Here are the keys and sample values:
     * For 1-4 materials, the `mainModel4` function will be used.
     * For 5-9 materials, the `mainModel9` function will be used.
     * For 10-16 materials, the `mainModel16` function will be used.
+    * For 17-32 materials, the `mainModel32` function will be used.
+    * For 33-48 materials, the `mainModel48` function will be used, _etc_.
 * `max: [<urx>,<ury>,<urz>],`
   * *required* - upper right bounds of shader - e.g. `[0,0,0]`.
 * `min: [<llx>,<lly>,<llz>],`
@@ -78,10 +80,10 @@ Here are the keys and sample values:
 * `options: {<key1>: <value1>, <key2>: <value2> [,...]},`
   * *optional* - These key-value pairs can be used by the renderer or 3D printer
     as custom options that control the viewing or manufacturing of models.
-    
+
     They are renderer- (or device-)specific. Renderers or 3D printers that don't
     recognize individual options will simply ignore them (possibly with a warning).
-    
+
     *e.g.* `{ showAxes: false, showSliders: false, goldPlating: "1um" }`.
 * `title: "<name of IRMF model>",`
   * *optional*
@@ -114,6 +116,12 @@ are named in the JSON blob header):
   (for 5-9 materials)
 * `void mainModel16( out mat4 materials, in vec3 xyz )`
   (for 10-16 materials)
+* `void mainModel32( out mat4 materialsA, out mat4 materialsB, in vec3 xyz )`
+  (for 17-32 materials)
+* `void mainModel48( out mat4 materialsA, out mat4 materialsB, out mat4 materialsC, in vec3 xyz )`
+  (for 33-48 materials)
+
+  ... _etc._ ...
 
 The `xyz` input can range anywhere within the minimum bounding box
 defined in the JSON blob header. The units are specified in the
