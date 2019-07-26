@@ -217,7 +217,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [015-soapdish](examples/015-soapdish)
 * [016-text](examples/016-text)
 * [017-nostalgia](examples/017-nostalgia)
-
+* [018-rodin-coil](examples/018-rodin-coil)
 
 ----------------------------------------------------------------------
 
