@@ -7,11 +7,6 @@ were not capable of handling the complexity without jumping through hoops
 to accomodate the inner workings of the tools (typically by breaking up
 the model into much smaller parts that it could more easily handle).
 
-But even after breaking up the model, the CAD tools would attempt to output
-STL files to represent the design, which would end up being hundreds of
-megabytes (MB). Online 3D printing sites have a maximum upload size limit that
-this design exceeded.
-
 So I determined that there must be a better way, and I believe I have
 finally found it... IRMF shaders. The next step will be to get IRMF shader
 support built into the 3D printers themselves so that these shaders can
@@ -22,9 +17,11 @@ IRMF shader.
 It's also interesting to note that this model uses 6845 bytes as an IRMF
 shader. If you slice this model at 100 micron resolution (with my experimental
 [IRMF slicer](https://github.com/gmlewis/irmf-slicer)), it generates
-a ZIP file of over 5MB, and so far there is no traditional CAD tool (free
-or commercial) that can even generate an STL file for it. If they could, the
-resulting STL file would be enormous.
+a ZIP file of over 5MB, and so far there are no traditional CAD tools (free
+or commercial) that can even generate an STL file for it (due to the
+complex boolean operation of subtracting the helical windings from the
+dielectric material). Even if they could, the resulting STL file would be
+absolutely enormous... much larger than online 3D printing sites support.
 
 ![bifilar-electromagnet-1.png](bifilar-electromagnet-1.png)
 
