@@ -17,8 +17,8 @@ IRMF shader.
 It's also interesting to note that this model uses 6845 bytes as an IRMF
 shader. If you slice this model at 42 micron resolution (with my experimental
 [IRMF slicer](https://github.com/gmlewis/irmf-slicer)), it generates
-a ZIP file of over 135MB, and so far there are no traditional CAD tools (free
-or commercial) that can even generate an STL file for it (due to the
+a ZIP file around 135MB in size, and so far there are no traditional CAD tools
+(free or commercial) that can even generate an STL file for it (due to the
 complex boolean operation of subtracting the helical windings from the
 dielectric material). Even if they could, the resulting STL file would be
 absolutely enormous... much larger than online 3D printing sites support.
