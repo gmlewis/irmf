@@ -15,9 +15,9 @@ as the printer can make it. No STL. No slicing. No G-Code. Just the
 IRMF shader.
 
 It's also interesting to note that this model uses 6845 bytes as an IRMF
-shader. If you slice this model at 100 micron resolution (with my experimental
+shader. If you slice this model at 42 micron resolution (with my experimental
 [IRMF slicer](https://github.com/gmlewis/irmf-slicer)), it generates
-a ZIP file of over 5MB, and so far there are no traditional CAD tools (free
+a ZIP file of over 135MB, and so far there are no traditional CAD tools (free
 or commercial) that can even generate an STL file for it (due to the
 complex boolean operation of subtracting the helical windings from the
 dielectric material). Even if they could, the resulting STL file would be
