@@ -28,6 +28,10 @@ resulting STL file would be enormous.
 
 ![bifilar-electromagnet-1.png](bifilar-electromagnet-1.png)
 
+Here's a cut-away view of the same model showing the inner winding structure:
+
+![cut-away](cutaway.png)
+
 ```glsl
 /*{
   irmf: "1.0",
