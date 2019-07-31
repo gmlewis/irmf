@@ -60,8 +60,11 @@ Here are the keys and sample values:
       of [gzip'd](https://en.wikipedia.org/wiki/Gzip) binary compressed format.
       This can be useful when the IRMF shader gets large (for example, when rendering
       text in your model).
+* `glslVersion: "#version 300 es",`
+  * *optional* - this specifies the GLSL version being used in the shader.
+    This defaults to `"#version 300 es"`.
 * `irmf: "1.0",`
-  * *required* - this is the version of the IRMF spec.
+  * *required* - this is the _major.minor_ version of the IRMF spec.
 * `materials: ["<m1 name>","<m2 name>","<m3 name>","<m4 name>"],`
   * *required* - must be the same length as the number of material values
      output by this IRMF shader. e.g. `["support","dielectric","AISI 1018 steel"]`.
