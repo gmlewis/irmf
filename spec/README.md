@@ -3,7 +3,7 @@
 ## Background
 
 An IRMF (“Infinite Resolution Materials Format”) file is a JSON blob containing
-(required and optional) key-value pairs followed by a [GLSL ES 3.0](https://en.wikipedia.org/wiki/OpenGL_ES#OpenGL_ES_3.0)
+(required and optional) key-value pairs followed by a [GLSL ES](https://en.wikipedia.org/wiki/OpenGL_ES#OpenGL_ES_3.0)
 shader that is written such that it can “render” (or manufacture) a 3D object at
 any resolution desired.
 The renderer or 3D printer takes advantage of an on-board GPU to freely
@@ -101,7 +101,7 @@ be on a line by itself:
 
 * `}*/`
 
-What immediately follows this JSON blob is a GLSL ES 3.0 shader
+What immediately follows this JSON blob is a GLSL ES shader
 ([quick reference PDF](https://www.khronos.org/files/opengles3-quick-reference-card.pdf))
 (using the specified `encoding`) similar to a ShaderToy
 [`mainImage`](https://www.shadertoy.com/howto)
