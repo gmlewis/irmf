@@ -103,6 +103,13 @@ no major changes will be needed to update the IRMF shaders... most
 likely it will involve a simple name change from `float` to the new
 keyword.
 
+## What? 3D printers with GPUs? Are you crazy?
+
+Why not? Check out this beauty:
+
+* [NVIDIA Brings Affordable GPU to the Edge with Jetson Nano](
+  https://thenewstack.io/nvidia-brings-affordable-gpu-to-the-edge-with-jetson-nano/)
+
 ## Inspiration
 
 [Shadertoy.com](https://shadertoy.com) is an amazing collection
