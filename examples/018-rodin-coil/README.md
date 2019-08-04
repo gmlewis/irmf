@@ -18,9 +18,9 @@ point to make "start" and "end" wires.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal","dielectric"],
-  max: [200,200,100],
-  min: [-200,-200,-100],
+  materials: ["metal"],
+  max: [170,150,50],
+  min: [-150,-150,-50],
   units: "mm",
 }*/
 
@@ -29,13 +29,13 @@ point to make "start" and "end" wires.
 float torus(float majorRadius,float minorRadius,in vec3 xyz){
   float r=length(xyz);
   if(r>majorRadius+minorRadius||r<majorRadius-minorRadius){return 0.;}
-
+  
   float angle=atan(xyz.y,xyz.x);
   vec3 center=vec3(majorRadius*cos(angle),majorRadius*sin(angle),0);
   vec3 v=xyz-center;
   float r2=length(v);
   if(r2>minorRadius){return 0.;}
-
+  
   return 1.;
 }
 
@@ -71,12 +71,12 @@ float cube(in mat4 xfm,float size,in vec3 xyz){
 float rodinCoil(float majorRadius,float minorRadius,float bundleRadius,float numBundles,int twistsPerRevolution,in vec3 xyz){
   float r=length(xyz);
   if(r>majorRadius+minorRadius||r<majorRadius-minorRadius){return 0.;}
-
+  
   float angle=atan(xyz.y,xyz.x);
   if(angle<0.){angle+=(2.*M_PI);}
   vec3 torusSliceXYZ=(vec4(xyz,1)*rotZ(-angle)).xyz-vec3(majorRadius,0,0);
   vec3 twistedSliceXYZ=(vec4(torusSliceXYZ,1)*rotY((float(twistsPerRevolution)+(1./numBundles))*angle)).xyz;
-
+  
   float subAngle=atan(twistedSliceXYZ.z,twistedSliceXYZ.x);
   if(subAngle<0.){subAngle+=(2.*M_PI);}
   float bundleNum=floor(subAngle*numBundles/(2.*M_PI)+.5*numBundles/(2.*M_PI));
@@ -86,7 +86,7 @@ float rodinCoil(float majorRadius,float minorRadius,float bundleRadius,float num
   vec3 subBundleXYZ=twistedSliceXYZ-bundleCenter;
   float r2=length(subBundleXYZ.xz);
   if(r2>bundleRadius){return 0.;}
-
+  
   return 1.;
 }
 
@@ -106,7 +106,7 @@ float wiredRodinCoil(float majorRadius,float minorRadius,float bundleRadius,int 
   coil-=cube(rot,bundleRadius,xyz-vec3(x,0,0));
   coil+=wire(rot,vec3(x,0,bundleRadius),vec3(x+4.*bundleRadius,0,bundleRadius),bundleRadius,xyz);
   coil+=wire(rot,vec3(x,0,-bundleRadius),vec3(x+4.*bundleRadius,0,-bundleRadius),bundleRadius,xyz);
-
+  
   return coil;
 }
 
@@ -117,14 +117,6 @@ void mainModel4(out vec4 materials,in vec3 xyz){
 ```
 
 * Try loading [rodin-coil-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/018-rodin-coil/rodin-coil-1.irmf) now in the experimental IRMF editor!
-
-## rodin-coil-2.irmf
-
-Here is the Rodin coil model where each bundle is split into many wires, still
-with the property that the entire coil is made up of one very long strand of
-wire.
-
-TODO
 
 ----------------------------------------------------------------------
 
