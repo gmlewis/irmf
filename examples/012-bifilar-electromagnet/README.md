@@ -196,6 +196,191 @@ vec2 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap
 
 * Try loading [bifilar-electromagnet-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/012-bifilar-electromagnet/bifilar-electromagnet-1.irmf) now in the experimental IRMF editor!
 
+## axial-radial-bifilar-electromagnet-1.irmf
+
+It turns out that the `bifilar-electromagnet-1.irmf` design above is strictly
+bifilar in the radial direction, meaning that the capacitance of the coils
+is only radial.
+
+If the coils are wound such that the first and second coils share the same
+radius but are wound next to each other (180-degrees out of phase), and then
+the next pair of windings is completely rotated 180 degrees, then the
+capacitance between the coils will be in both the radial direction _and_ the
+axial direction!
+
+Here is the start of such a design. It is a work-in-progress and still needs
+wiring up at the endpoints.
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["33CrMoV12"],
+  max: [25,25,71],
+  min: [-25,-25,-61],
+  units: "mm",
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float coilSquareFace(in mat4 xfm,float radius,float size,float gap,float nTurns,float trimEndAngle,in vec3 xyz){
+  xyz=(vec4(xyz,1.)*xfm).xyz;
+  
+  // First, trivial reject on the two ends of the coil.
+  if(xyz.z<-.5*size||xyz.z>nTurns*(size+gap)+.5*size){return 0.;}
+  
+  // Then, constrain the coil to the cylinder with wall thickness "size":
+  float rxy=length(xyz.xy);
+  if(rxy<radius-.5*size||rxy>radius+.5*size){return 0.;}
+  
+  // If the current point is between the coils, return no material:
+  float angle=atan(xyz.y,xyz.x)/(2.*M_PI);
+  if(angle<0.){angle+=1.;}// 0 <= angle <= 1 between coils
+  float dz=mod(xyz.z,size+gap);// 0 <= dz <= (size+gap) between coils.
+  
+  float lastHelixZ=angle*(size+gap);
+  if(lastHelixZ>dz){lastHelixZ-=(size+gap);}
+  float nextHelixZ=lastHelixZ+(size+gap);
+  
+  if(dz>lastHelixZ+.5*size&&dz<nextHelixZ-.5*size){return 0.;}
+  
+  // If the current point is within the start of the first coil, stop it at angle < 0 (angle>0.5 due to wraparound).
+  if(xyz.z<.5*size&&angle>.5){return 0.;}
+  // If the current point is within the end of the last coil, stop it at angle > PI (angle<0.5 due to wraparound).
+  // Additionally, chop off the trimEndAngle. As a result, switch back to radians.
+  angle*=2.*M_PI;
+  if(xyz.z>nTurns*(size+gap)-.5*size&&
+  (angle<M_PI||angle>=2.*M_PI-trimEndAngle)){return 0.;}
+  
+  return 1.;
+}
+
+float box(vec3 start,vec3 end,float size,in vec3 xyz){
+  vec3 ll=min(start,end)-vec3(.5*size);
+  vec3 ur=max(start,end)+vec3(.5*size);
+  if(any(lessThan(xyz,ll))||any(greaterThan(xyz,ur))){return 0.;}
+  return 1.;
+}
+
+mat3 rotAxis(vec3 axis,float a){
+  // This is from: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
+  float s=sin(a);
+  float c=cos(a);
+  float oc=1.-c;
+  vec3 as=axis*s;
+  mat3 p=mat3(axis.x*axis,axis.y*axis,axis.z*axis);
+  mat3 q=mat3(c,-as.z,as.y,as.z,c,-as.x,-as.y,as.x,c);
+  return p*oc+q;
+}
+
+mat4 rotZ(float angle){
+  return mat4(rotAxis(vec3(0,0,1),angle));
+}
+
+float wire(vec3 start,vec3 end,float size,in vec3 xyz){
+  vec3 v=end-start;
+  float angle=dot(v,vec3(1,0,0));
+  xyz-=start;
+  xyz=(vec4(xyz,1)*rotZ(angle)).xyz;
+  return box(vec3(0),vec3(length(v),0,0),size,xyz);
+}
+
+float coilPlusConnectorWires(int coilNum,int numCoils,float inc,float innerRadius,float connectorRadius,float size,float gap,float nTurns,in vec3 xyz){
+  float radiusOffset=float(coilNum-1);
+  mat4 xfm=mat4(1)*rotZ(radiusOffset*inc);
+  float coilRadius=radiusOffset+innerRadius;
+  float trimEndAngle=2.*inc;
+  if(coilNum==numCoils){
+    trimEndAngle=.5*inc;// Special case to access the exit wire.
+  }else if(coilNum==numCoils-1){
+    trimEndAngle=3.*inc;
+  }
+  float coil=coilSquareFace(xfm,coilRadius,size,gap,nTurns,trimEndAngle,xyz);
+  
+  //   xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  
+  //   float bz = -(size + gap);
+  //   float tz = nTurns * (size + gap);
+  //   float tzp1 = (nTurns + 1.0) * (size + gap);
+  
+  //   coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, xyz);
+  //   coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
+  //   coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+  
+  //   float zexit = (nTurns + 10.0) * (size + gap);
+  //   if (coilNum >= 3) { // Connect the start of this coil to the end of two coils prior.
+    //     float lastCoilRadius = radiusOffset - 2.0 + innerRadius;
+    //     coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+    //     coil += box(vec3(lastCoilRadius, 0.0, tz), vec3(lastCoilRadius, 0.0, tzp1), size, xyz);
+  //   } else if (coilNum == 2) { // Connect the start of 2 to the end of the last odd coil.
+    //     float endOddRadius = float(numCoils - 2) + innerRadius;
+    //     coil += box(vec3(endOddRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
+    //     coil += box(vec3(endOddRadius, 0.0, tz), vec3(endOddRadius, 0.0, tzp1), size, xyz);
+  //   } else if (coilNum == 1) { // Bring out the exit wires.
+    //     // Start of coil1:
+    //     coil += box(vec3(connectorRadius, 0.0, tz), vec3(connectorRadius, 0.0, zexit), size, xyz);
+  //   }
+  
+  //   if (coilNum == numCoils) { // Special case to access the exit wire.
+    //     // End of coil 'numCoils':
+    //     xfm = mat4(1) * rotZ(0.5 * inc);
+    //     xyz = (vec4(xyz, 1.0) * xfm).xyz;
+    //     coil += box(vec3(connectorRadius - (size + gap), 0.0, tz), vec3(connectorRadius - (size + gap), 0.0, zexit), size, xyz);
+  //   }
+  
+  return coil;
+}
+
+float cylinder(in mat4 xfm,float radius,float height,in vec3 xyz){
+  xyz=(vec4(xyz,1.)*xfm).xyz;
+  
+  // First, trivial reject on the two ends of the cylinder.
+  if(xyz.z<0.||xyz.z>height){return 0.;}
+  
+  // Then, constrain radius of the cylinder:
+  float rxy=length(xyz.xy);
+  if(rxy>radius){return 0.;}
+  
+  return 1.;
+}
+
+vec2 arBifilarElectromagnet(int numPairs,float innerRadius,float size,float gap,int numTurns,in vec3 xyz){
+  float nTurns=float(numTurns);
+  float inc=2.*M_PI/float(numPairs);
+  float connectorRadius=innerRadius+float(numPairs)*(size+gap);
+  
+  float metal=0.;
+  
+  mat4 xfm=mat4(1)*rotZ(M_PI);
+  vec3 xyz180=(vec4(xyz,1.)*xfm).xyz;
+  
+  for(int i=1;i<=numPairs;i++){
+    metal+=coilPlusConnectorWires(i,numPairs,inc,innerRadius,connectorRadius,size,size+2.*gap,nTurns,xyz);
+    metal+=coilPlusConnectorWires(i,numPairs,inc,innerRadius,connectorRadius,size,size+2.*gap,nTurns,xyz180);
+  }
+  
+  float dielectric=0.;
+  float dielectricRadius=2.*float(numPairs)*(size+gap)+innerRadius+gap;
+  float dielectricHeight=(nTurns+4.)*(size+gap);
+  dielectric+=cylinder(mat4(1),dielectricRadius,dielectricHeight,xyz+vec3(0,0,2));
+  
+  float spindleRadius=2.*float(numPairs+1)*(size+gap)+innerRadius;
+  dielectric+=cylinder(mat4(1),spindleRadius,2.*(size+gap),xyz+vec3(0,0,2));
+  dielectric+=cylinder(mat4(1),spindleRadius,2.*(size+gap),xyz-vec3(0,0,dielectricHeight-4.));
+  // This next step is important... we don't want any dielectric material wherever
+  // the metal is located, so we just subtract the metal out of the dielectric.
+  dielectric-=metal;
+  
+  return vec2(metal,dielectric);
+}
+
+void mainModel4(out vec4 materials,in vec3 xyz){
+  xyz.z+=60.;
+  materials.xy=arBifilarElectromagnet(10,3.,.85,.15,122,xyz);
+}
+```
+
+* Try loading [axial-radial-bifilar-electromagnet-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/012-bifilar-electromagnet/axial-radial-bifilar-electromagnet-1.irmf) now in the experimental IRMF editor!
+
 ----------------------------------------------------------------------
 
 # License
