@@ -191,6 +191,16 @@ and use IRMF files to generate physical objects with one or more materials...
 thereby completely eliminating the need for STL files, software slicers,
 and G-Code files.
 
+## OpenSCAD export to IRMF
+
+[OpenSCAD](https://www.openscad.org/) has the ability to export its designs
+in a lossless format called [CSG (constructive solid geometry)](
+https://github.com/openscad/openscad/wiki/CSG-File-Format).
+
+I've written a converter that reads `.csg` files and writes `.irmf` files
+called [csg2irmf](https://github.com/gmlewis/go-csg/tree/master/cmd/csg2irmf)
+that is available to use.
+
 ## Who created IRMF?
 
 The IRMF specification, editor, and slicer were created and are maintained by Glenn M. Lewis.
