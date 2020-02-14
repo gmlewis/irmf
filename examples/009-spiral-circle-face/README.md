@@ -11,40 +11,43 @@ to round the edges.
 /*{
   irmf: "1.0",
   materials: ["PLA"],
-  max: [20,20,0.5],
-  min: [-20,-20,-0.5],
+  max: [5.5,5.5,0.5],
+  min: [-5.5,-5.5,-0.5],
   units: "mm",
 }*/
 
 #define M_PI 3.1415926535897932384626433832795
 
-float spiralCircleFace(in mat4 xfm, float size, float gap, float nTurns, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float spiralCircleFace(float startRadius, float size, float gap, float nTurns, in vec3 xyz) {
   // First, trivial reject above and below the spiral.
   if (xyz.z < -0.5 * size || xyz.z > 0.5 * size) { return 0.0; }
   
   float r = length(xyz.xy);
-  if (r < 2.0 * M_PI - 0.5 * size || r > 2.0 * M_PI + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
+  if (r < startRadius - 0.5 * size || r > startRadius + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
   
   // If the current point is between the spirals, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
-  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between spirals
-  float dr = mod(r - 2.0 * M_PI, size + gap); // 0 <= dr <= (size+gap) between spirals.
+  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between spirals from center to center.
+  float dr = mod(r - startRadius, size + gap); // 0 <= dr <= (size+gap) between spirals.
   
+  float coilNum = 0.0;
   float lastSpiralR = angle * (size + gap);
-  if (lastSpiralR > dr) { lastSpiralR -= (size + gap); }
-  float nextSpiralR = lastSpiralR + (size + gap);
+  if (lastSpiralR > dr) {
+    lastSpiralR -= (size + gap);  // center of current coil.
+    coilNum = -1.0;
+  }
+  float nextSpiralR = lastSpiralR + (size + gap);  // center of next outer coil.
   
+  // If the current point is within the gap between the two coils, reject it.
   if (dr > lastSpiralR + 0.5 * size && dr < nextSpiralR - 0.5 * size) { return 0.0; }
   
-  // If the current point is within start of the first spiral, stop it at angle < 0.
-  if (r < 2.0 * M_PI + 0.5 * size && angle > 0.5) { return 0.0; }
-  // If the current point is with the end of the last spiral, stop it at angle > PI.
-  if (r > 2.0 * M_PI + nTurns * (size + gap) - 0.5 * size && angle < 0.5) { return 0.0; }
-  
-  // At this point, we are within the circle cross-section face, so let's round the edge.
-  lastSpiralR = floor((r - 2.0 * M_PI) / (size + gap)) * (size + gap) + 2.0 * M_PI + angle * (size + gap);
+  coilNum += floor((r - startRadius + (0.5 * size) - lastSpiralR) / (size + gap));
+
+  // If the current point is in a coil numbered outside the current range, reject it.
+  if (coilNum < 0.0 || coilNum >= nTurns) { return 0.0; }
+
+    // At this point, we are within the circle cross-section face, so let's round the edge.
+  lastSpiralR = floor((r - startRadius) / (size + gap)) * (size + gap) + startRadius + angle * (size + gap);
   if (lastSpiralR > r) { lastSpiralR -= (size + gap); }
   nextSpiralR = lastSpiralR + size + gap;
   angle *= 2.0 * M_PI;
@@ -58,7 +61,7 @@ float spiralCircleFace(in mat4 xfm, float size, float gap, float nTurns, in vec3
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = spiralCircleFace(mat4(1), 1.0, 2.0, 2.0, xyz);
+  materials[0] = spiralCircleFace(3.0, 0.85, 0.15, 2.0, xyz);
 }
 ```
 
