@@ -217,6 +217,12 @@ axial direction!
 Here is the start of such a design. It is a work-in-progress and still needs
 wiring up at the endpoints.
 
+![axial-radial-bifilar-electromagnet-1.png](axial-radial-bifilar-electromagnet-1.png)
+
+Here's a single rotation of 10 pairs of coils:
+
+![one revolution](axial-radial-bifilar-one-revolution.png)
+
 ```glsl
 /*{
   irmf: "1.0",
