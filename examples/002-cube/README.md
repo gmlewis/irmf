@@ -77,6 +77,12 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 more general-purpose cube-like object that can be translated, scaled,
 and rotated.
 
+I have mixed feelings about this version, though, since it is common
+for shader writers to always render a shader about its origin and
+then externally manipulate that shader's coordinate space outside of
+its code. That certainly makes each individual shader much easier to
+understand.
+
 ![cube-3.png](cube-3.png)
 
 ```glsl
@@ -102,6 +108,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Try loading [cube-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-3.irmf) now in the experimental IRMF editor!
 
 ## cube-csg.irmf
+
+This model is the "Hello World" of CSG. It is a boolean difference
+between a cube and in inscribed sphere. IRMF makes this model pretty trivial
+to write.
 
 ![cube-csg.png](cube-csg.png)
 

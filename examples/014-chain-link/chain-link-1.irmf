@@ -33,9 +33,7 @@ float torus(in vec3 pos, float majorRadius, float minorRadius, float fromDeg, fl
   return 1.0;
 }
 
-float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float cylinder(float radius, float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the cylinder.
   if (xyz.x < 0.0 || xyz.x > height) { return 0.0; }
   
@@ -50,8 +48,8 @@ float chainLink(in vec3 pos, float majorRadius, float minorRadius, float separat
   xyz -= pos;
   float result = torus(vec3(0), majorRadius, minorRadius, 90.0, 270.0, xyz);
   result += torus(vec3(separator, 0, 0), majorRadius, minorRadius, 270.0, 90.0, xyz);
-  result += cylinder(mat4(1), minorRadius, separator, xyz - vec3(0, majorRadius, 0));
-  result += cylinder(mat4(1), minorRadius, separator, xyz + vec3(0, majorRadius, 0));
+  result += cylinder(minorRadius, separator, xyz - vec3(0, majorRadius, 0));
+  result += cylinder(minorRadius, separator, xyz + vec3(0, majorRadius, 0));
   return result;
 }
 

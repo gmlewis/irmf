@@ -16,9 +16,7 @@ radius and an outer radius.
   units: "mm",
 }*/
 
-float tube(in mat4 xfm, float innerRadius, float outerRadius, float height, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float tube(float innerRadius, float outerRadius, float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the tube.
   if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
   
@@ -31,7 +29,7 @@ float tube(in mat4 xfm, float innerRadius, float outerRadius, float height, in v
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 5.0;
-  materials[0] = tube(mat4(1), 4.0, 5.0, 10.0, xyz);
+  materials[0] = tube(4.0, 5.0, 10.0, xyz);
 }
 ```
 

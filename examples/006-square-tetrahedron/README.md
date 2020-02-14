@@ -16,9 +16,7 @@ cube, then it could be scaled to any size independently along each axis.
   units: "mm",
 }*/
 
-float squareTetrahedron(in mat4 xfm, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float squareTetrahedron(in vec3 xyz) {
   // Trivially reject above and below the tetrahedron.
   if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
   
@@ -32,7 +30,7 @@ float squareTetrahedron(in mat4 xfm, in vec3 xyz) {
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 0.5;
-  materials[0] = squareTetrahedron(mat4(1), xyz);
+  materials[0] = squareTetrahedron(xyz);
 }
 ```
 

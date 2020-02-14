@@ -15,9 +15,7 @@ It is time to make some Platonic solids for building blocks.
   units: "mm",
 }*/
 
-float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float cylinder(float radius, float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the cylinder.
   if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
   
@@ -30,7 +28,7 @@ float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 2.5;
-  materials[0] = cylinder(mat4(1), 2.5, 5.0, xyz);
+  materials[0] = cylinder(2.5, 5.0, xyz);
 }
 ```
 

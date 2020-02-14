@@ -15,9 +15,7 @@ Here is a unit cone.
   units: "mm",
 }*/
 
-float cone(in mat4 xfm, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float cone(in vec3 xyz) {
   // Trivially reject above and below the cone.
   if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
   
@@ -32,7 +30,7 @@ float cone(in mat4 xfm, in vec3 xyz) {
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 0.5;
-  materials[0] = cone(mat4(1), xyz);
+  materials[0] = cone(xyz);
 }
 ```
 
