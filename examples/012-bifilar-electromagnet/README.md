@@ -40,10 +40,8 @@ Here's a cut-away view of the same model showing the inner winding structure:
 
 #define M_PI 3.1415926535897932384626433832795
 
-float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, float trimEndAngle, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
-  // First, trivial reject on the two ends of the coil.
+float coilSquareFace(float radius, float size, float gap, float nTurns, float trimEndAngle, in vec3 xyz) {
+  // First, trivial reject on the two vertical ends of the coil.
   if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
   
   // Then, constrain the coil to the cylinder with wall thickness "size":
@@ -52,23 +50,28 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
   
   // If the current point is between the coils, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
-  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between coils
-  float dz = mod(xyz.z, size + gap); // 0 <= dz <= (size+gap) between coils.
+  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between coils from center to center.
+  // 0 <= dz <= (size+gap) between coils from center to center.
+  float dz = mod(xyz.z, size + gap);
   
   float lastHelixZ = angle * (size + gap);
-  if (lastHelixZ > dz) { lastHelixZ -= (size + gap); }
-  float nextHelixZ = lastHelixZ + (size + gap);
+  float coilNum = 0.0;
+  if (lastHelixZ > dz) {
+    lastHelixZ -= (size + gap);  // center of current coil.
+    coilNum = -1.0;
+  }
+  float nextHelixZ = lastHelixZ + (size + gap);  // center of next higher vertical coil.
   
+  // If the current point is within the gap between the two coils, reject it.
   if (dz > lastHelixZ + 0.5 * size && dz < nextHelixZ - 0.5 * size) { return 0.0; }
   
-  // If the current point is within the start of the first coil, stop it at angle < 0 (angle>0.5 due to wraparound).
-  if (xyz.z < 0.5 * size && angle > 0.5) { return 0.0; }
-  // If the current point is within the end of the last coil, stop it at angle > PI (angle<0.5 due to wraparound).
-  // Additionally, chop off the trimEndAngle. As a result, switch back to radians.
-  angle *= 2.0 * M_PI;
-  if (xyz.z > nTurns * (size + gap) - 0.5 * size &&
-  (angle < M_PI || angle >= 2.0 * M_PI - trimEndAngle)) { return 0.0; }
-  
+  coilNum += floor((xyz.z + (0.5 * size) - lastHelixZ) / (size + gap));
+
+  // If the current point is in a coil numbered outside the current range, reject it.
+  if (coilNum < 0.0 || coilNum >= nTurns) { return 0.0; }
+
+  // TODO: Incorporate the trimEndAngle.
+
   return 1.0;
 }
 
@@ -112,9 +115,8 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   } else if (coilNum == numCoils - 1) {
     trimEndAngle = 3.0 * inc;
   }
-  float coil = coilSquareFace(xfm, coilRadius, size, gap, nTurns, trimEndAngle, xyz);
-  
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
+  float coil = coilSquareFace(coilRadius, size, gap, nTurns, trimEndAngle, xyz);
   
   float bz = -(size + gap);
   float tz = nTurns * (size + gap);
@@ -172,6 +174,8 @@ vec3 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap
     metal1 += coilPlusConnectorWires(i, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
     metal2 += coilPlusConnectorWires(i+1, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
   }
+  metal1 = clamp(metal1, 0.0, 1.0);
+  metal2 = clamp(metal2, 0.0, 1.0);
   
   float dielectric = 0.0;
   float dielectricRadius = 2.0 * float(numPairs) * (size + gap) + innerRadius + gap;
@@ -181,17 +185,19 @@ vec3 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap
   float spindleRadius = 2.0 * float(numPairs + 1) * (size + gap) + innerRadius;
   dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
   dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
+  dielectric = clamp(dielectric, 0.0, 1.0);
   // This next step is important... we don't want any dielectric material wherever
   // the metal is located, so we just subtract the metal out of the dielectric.
   dielectric -= clamp(metal1+metal2, 0.0, 1.0);
   
   return vec3(metal1, metal2, dielectric);
- }
+}
 
- void mainModel4(out vec4 materials, in vec3 xyz) {
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  int numTurns = 122;
   xyz.z += 60.0;
-  materials.xyz = bifilarElectromagnet(10, 3.0, 0.85, 0.15, 122, xyz);
- }
+  materials.xyz = bifilarElectromagnet(10, 3.0, 0.85, 0.15, numTurns, xyz);
+}
 ```
 
 * Try loading [bifilar-electromagnet-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/012-bifilar-electromagnet/bifilar-electromagnet-1.irmf) now in the experimental IRMF editor!
