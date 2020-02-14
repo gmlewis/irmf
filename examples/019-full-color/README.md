@@ -27,9 +27,7 @@ information about color spaces.)
 
 #define M_PI 3.1415926535897932384626433832795
 
-float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTurns, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float coilSquareFace(float radius, float size, float gap, float nTurns, in vec3 xyz) {
   // First, trivial reject on the two ends of the coil.
   if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
   
@@ -58,7 +56,7 @@ float coilSquareFace(in mat4 xfm, float radius, float size, float gap, float nTu
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 3.0;
-  float coil = coilSquareFace(mat4(1), 4.0, 1.0, 2.0, 2.0, xyz);
+  float coil = coilSquareFace(4.0, 1.0, 2.0, 2.0, xyz);
   materials = vec4(xyz.z/7.0,coil,coil,1);
 }
 ```
