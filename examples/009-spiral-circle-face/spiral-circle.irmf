@@ -20,12 +20,14 @@ float spiralCircleFace(float startRadius, float size, float gap, float nTurns, i
   if (xyz.z < -0.5 * size || xyz.z > 0.5 * size) { return 0.0; }
   
   float r = length(xyz.xy);
-  if (r < startRadius - 0.5 * size || r > startRadius + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
+  if (r < startRadius - 0.5 * size ||
+      r > startRadius + 0.5 * size + (size + gap) * nTurns) { return 0.0; }
   
   // If the current point is between the spirals, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
   if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between spirals from center to center.
-  float dr = mod(r - startRadius, size + gap); // 0 <= dr <= (size+gap) between spirals.
+  // 0 <= dr <= (size+gap) between spirals from center to center.
+  float dr = mod(r - startRadius, size + gap);
   
   float coilNum = 0.0;
   float lastSpiralR = angle * (size + gap);
@@ -44,7 +46,8 @@ float spiralCircleFace(float startRadius, float size, float gap, float nTurns, i
   if (coilNum < 0.0 || coilNum >= nTurns) { return 0.0; }
 
     // At this point, we are within the circle cross-section face, so let's round the edge.
-  lastSpiralR = floor((r - startRadius) / (size + gap)) * (size + gap) + startRadius + angle * (size + gap);
+  lastSpiralR = floor((r - startRadius) / (size + gap)) * (size + gap) +
+    startRadius + angle * (size + gap);
   if (lastSpiralR > r) { lastSpiralR -= (size + gap); }
   nextSpiralR = lastSpiralR + size + gap;
   angle *= 2.0 * M_PI;
