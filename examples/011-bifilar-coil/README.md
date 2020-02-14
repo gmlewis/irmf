@@ -2,8 +2,7 @@
 
 ## bifilar-coil-1.irmf
 
-Another surprisingly-simple model is a bifilar-coil which is a cylinder with an inner
-radius and an outer radius.
+Another surprisingly-simple model is a bifilar-coil which is two spirals.
 
 ![bifilar-coil-1.png](bifilar-coil-1.png)
 
@@ -77,7 +76,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 ## bifilar-coil-2.irmf
 
-Let's take bifilar-coil-1 above and add in dielectric between the metal wires.
+Let's take bifilar-coil-1 above and add in a dielectric between the metal wires.
 
 ![bifilar-coil-2.png](bifilar-coil-2.png)
 
