@@ -18,7 +18,7 @@ to round the edges.
 
 #define M_PI 3.1415926535897932384626433832795
 
-float coilSquareFace(float radius, float size, float gap, float nTurns, in vec3 xyz) {
+float coilCircleFace(float radius, float size, float gap, float nTurns, in vec3 xyz) {
   // First, trivial reject on the two ends of the coil.
   if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
   
@@ -60,7 +60,7 @@ float coilSquareFace(float radius, float size, float gap, float nTurns, in vec3 
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 1.0;
-  materials[0] = coilSquareFace(3.0, 0.85, 0.15, 2.0, xyz);
+  materials[0] = coilCircleFace(3.0, 0.85, 0.15, 2.0, xyz);
 }
 ```
 

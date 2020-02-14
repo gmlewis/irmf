@@ -32,7 +32,7 @@ Here's a cut-away view of the same model showing the inner winding structure:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","dielectric"],
+  materials: ["33CrMoV12","33CrMoV12","dielectric"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
@@ -148,9 +148,7 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   return coil;
 }
 
-float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
-  xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  
+float cylinder(float radius, float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the cylinder.
   if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
   
@@ -161,36 +159,38 @@ float cylinder(in mat4 xfm, float radius, float height, in vec3 xyz) {
   return 1.0;
 }
 
-vec2 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap, int numTurns, in vec3 xyz) {
+vec3 bifilarElectromagnet(int numPairs, float innerRadius, float size, float gap, int numTurns, in vec3 xyz) {
   float nTurns = float(numTurns);
   int numCoils = 2*numPairs;
   float inc = 2.0 * M_PI / float(numCoils);
   float connectorRadius = innerRadius + float(numCoils) * (size + gap);
   
-  float metal = 0.0;
+  float metal1 = 0.0;
+  float metal2 = 0.0;
   
-  for(int i = 1; i <= numCoils; i ++ ) {
-    metal += coilPlusConnectorWires(i, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+  for(int i = 1; i <= numCoils; i+=2) {
+    metal1 += coilPlusConnectorWires(i, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
+    metal2 += coilPlusConnectorWires(i+1, numCoils, inc, innerRadius, connectorRadius, size, gap, nTurns, xyz);
   }
   
   float dielectric = 0.0;
   float dielectricRadius = 2.0 * float(numPairs) * (size + gap) + innerRadius + gap;
   float dielectricHeight = (nTurns + 4.0) * (size + gap);
-  dielectric += cylinder(mat4(1), dielectricRadius, dielectricHeight, xyz + vec3(0, 0, 2));
+  dielectric += cylinder(dielectricRadius, dielectricHeight, xyz + vec3(0, 0, 2));
   
   float spindleRadius = 2.0 * float(numPairs + 1) * (size + gap) + innerRadius;
-  dielectric += cylinder(mat4(1), spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
-  dielectric += cylinder(mat4(1), spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
+  dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
+  dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
   // This next step is important... we don't want any dielectric material wherever
   // the metal is located, so we just subtract the metal out of the dielectric.
-  dielectric -= metal;
+  dielectric -= clamp(metal1+metal2, 0.0, 1.0);
   
-  return vec2(metal, dielectric);
+  return vec3(metal1, metal2, dielectric);
  }
 
  void mainModel4(out vec4 materials, in vec3 xyz) {
   xyz.z += 60.0;
-  materials.xy = bifilarElectromagnet(10, 3.0, 0.85, 0.15, 122, xyz);
+  materials.xyz = bifilarElectromagnet(10, 3.0, 0.85, 0.15, 122, xyz);
  }
 ```
 
