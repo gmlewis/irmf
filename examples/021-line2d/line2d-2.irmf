@@ -1,0 +1,50 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2020-02-14",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [3,3,0.1],
+  "min": [-3,-3,-0.1],
+  "notes": "This is a 2D line that can be extruded.",
+  "options": {},
+  "title": "line2d with start and end points",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float line2d(in float lineLength, in float width, in bool startRoundCap, in bool endRoundCap, in vec3 xyz) {
+  if (xyz.x < 0.0) {
+    if (startRoundCap) {
+      float r = length(xyz.xy);
+      if (r > 0.5 * width) { return 0.0; }
+    } else { return 0.0; }
+  }
+
+  if (xyz.x > lineLength) {
+    if (endRoundCap) {
+      float r = length(xyz.xy - vec2(lineLength,0));
+      if (r > 0.5 * width) { return 0.0; }
+    } else { return 0.0; }
+  }
+
+  float r = length(xyz.y);
+  if (r > 0.5 * width) { return 0.0; }
+
+  return 1.0;
+}
+
+float line2d(in vec2 start, in vec2 end, in float width, in bool startRoundCap, in bool endRoundCap, in vec3 xyz) {
+  xyz.xy -= start;
+  vec2 diff = end - start;
+  float lineLength = length(diff);
+  float angle = atan(diff.y, diff.x);
+  float c = cos(angle);
+  float s = sin(angle);
+  xyz.xy = mat2(c,-s,s,c) * xyz.xy;
+  return line2d(lineLength, width, startRoundCap, endRoundCap, xyz);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = line2d(vec2(-1,-1), vec2(1,1), 0.5, true, true, xyz);
+}
