@@ -237,6 +237,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [018-rodin-coil](examples/018-rodin-coil)
 * [019-full-color](examples/019-full-color)
 * [020-quadratic-bezier](examples/020-quadratic-bezier)
+* [021-line2d](examples/021-line2d)
 
 ----------------------------------------------------------------------
 
