@@ -1,0 +1,63 @@
+# 021-line2d
+
+## line2d-1.irmf
+
+2D primitives can be useful for extruding. Let's start with a simple 2D line.
+
+![line2d-1.png](line2d-1.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [1.5,1,0.1],
+  min: [-1.5,-1,-0.1],
+  units: "mm",
+}*/
+
+float line2d(in float lineLength, in float width, in bool startRoundCap, in bool endRoundCap, in vec3 xyz) {
+  if (xyz.x < 0.0) {
+    if (startRoundCap) {
+      float r = length(xyz.xy);
+      if (r > 0.5 * width) { return 0.0; }
+    } else { return 0.0; }
+  }
+
+  if (xyz.x > lineLength) {
+    if (endRoundCap) {
+      float r = length(xyz.xy - vec2(lineLength,0));
+      if (r > 0.5 * width) { return 0.0; }
+    } else { return 0.0; }
+  }
+
+  float r = length(xyz.y);
+  if (r > 0.5 * width) { return 0.0; }
+
+  return 1.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz.x += 1.0;
+  materials[0] = line2d(2.0, 0.5, true, true, xyz);
+}
+```
+
+* Try loading [line2d-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/021-line2d/line2d-1.irmf) now in the experimental IRMF editor!
+
+----------------------------------------------------------------------
+
+# License
+
+Copyright 2019 Glenn M. Lewis. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
