@@ -1,14 +1,14 @@
 /*{
   "author": "Glenn M. Lewis",
   "copyright": "Apache-2.0",
-  "date": "2020-02-13",
+  "date": "2020-03-04",
   "irmf": "1.0",
   "materials": ["33CrMoV12","33CrMoV12"],
-  "max": [25,25,71],
-  "min": [-25,-25,-61],
+  "max": [13,13,15],
+  "min": [-13,-13,-3],
   "notes": "The IRMF shader that started it all... the bifilar electromagnet.",
   "options": {
-    "resolution": 2048,
+    "resolution": 256,
     "color1": [255,0,0,1],
     "color2": [0,255,0,1]
   },
@@ -21,7 +21,7 @@
 
 float coilSquareFace(float radius, float size, float gap, float nTurns, float trimEndAngle, in vec3 xyz) {
   // First, trivial reject on the two vertical ends of the coil.
-  if (xyz.z < -0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
+  if (xyz.z <- 0.5 * size || xyz.z > nTurns * (size + gap) + 0.5 * size) { return 0.0; }
   
   // Then, constrain the coil to the cylinder with wall thickness "size":
   float rxy = length(xyz.xy);
@@ -29,83 +29,83 @@ float coilSquareFace(float radius, float size, float gap, float nTurns, float tr
   
   // If the current point is between the coils, return no material:
   float angle = atan(xyz.y, xyz.x) / (2.0 * M_PI);
-  if (angle < 0.0) { angle += 1.0; } // 0 <= angle <= 1 between coils from center to center.
+  if (angle < 0.0) {angle += 1.0; }// 0 <= angle <= 1 between coils from center to center.
   // 0 <= dz <= (size+gap) between coils from center to center.
   float dz = mod(xyz.z, size + gap);
   
   float lastHelixZ = angle * (size + gap);
   float coilNum = 0.0;
   if (lastHelixZ > dz) {
-    lastHelixZ -= (size + gap);  // center of current coil.
-    coilNum = -1.0;
+    lastHelixZ -= (size + gap); // center of current coil.
+    coilNum =- 1.0;
   }
-  float nextHelixZ = lastHelixZ + (size + gap);  // center of next higher vertical coil.
+  float nextHelixZ = lastHelixZ + (size + gap); // center of next higher vertical coil.
   
   // If the current point is within the gap between the two coils, reject it.
   if (dz > lastHelixZ + 0.5 * size && dz < nextHelixZ - 0.5 * size) { return 0.0; }
   
   coilNum += floor((xyz.z + (0.5 * size) - lastHelixZ) / (size + gap));
-
+  
   // If the current point is in a coil numbered outside the current range, reject it.
   if (coilNum < 0.0 || coilNum >= nTurns) { return 0.0; }
-
+  
   // TODO: Incorporate the trimEndAngle.
-
+  
   return 1.0;
 }
 
-float box(vec3 start,vec3 end,float size,in vec3 xyz){
-  vec3 ll=min(start,end)-vec3(.5*size);
-  vec3 ur=max(start,end)+vec3(.5*size);
-  if(any(lessThan(xyz,ll))||any(greaterThan(xyz,ur))){return 0.;}
-  return 1.;
+float box(vec3 start, vec3 end, float size, in vec3 xyz) {
+  vec3 ll = min(start, end) - vec3(0.5 * size);
+  vec3 ur = max(start, end) + vec3(0.5 * size);
+  if (any(lessThan(xyz, ll))|| any(greaterThan(xyz, ur))) { return 0.0; }
+  return 1.0;
 }
 
-mat3 rotAxis(vec3 axis,float a){
+mat3 rotAxis(vec3 axis, float a) {
   // This is from: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
-  float s=sin(a);
-  float c=cos(a);
-  float oc=1.-c;
-  vec3 as=axis*s;
-  mat3 p=mat3(axis.x*axis,axis.y*axis,axis.z*axis);
-  mat3 q=mat3(c,-as.z,as.y,as.z,c,-as.x,-as.y,as.x,c);
-  return p*oc+q;
+  float s = sin(a);
+  float c = cos(a);
+  float oc = 1.0 - c;
+  vec3 as = axis * s;
+  mat3 p = mat3(axis.x * axis, axis.y * axis, axis.z * axis);
+  mat3 q = mat3(c, - as.z, as.y, as.z, c, - as.x, - as.y, as.x, c);
+  return p * oc + q;
 }
 
-mat4 rotZ(float angle){
-  return mat4(rotAxis(vec3(0,0,1),angle));
+mat4 rotZ(float angle) {
+  return mat4(rotAxis(vec3(0, 0, 1), angle));
 }
 
-float wire(vec3 start,vec3 end,float size,in vec3 xyz){
-  vec3 v=end-start;
-  float angle=dot(v,vec3(1,0,0));
-  xyz-=start;
-  xyz=(vec4(xyz,1)*rotZ(angle)).xyz;
-  return box(vec3(0),vec3(length(v),0,0),size,xyz);
+float wire(vec3 start, vec3 end, float size, in vec3 xyz) {
+  vec3 v = end - start;
+  float angle = dot(v, vec3(1, 0, 0));
+  xyz -= start;
+  xyz = (vec4(xyz, 1) * rotZ(angle)).xyz;
+  return box(vec3(0), vec3(length(v), 0, 0), size, xyz);
 }
 
-float coilPlusConnectorWires(int coilNum,int numCoils,float inc,float innerRadius,float connectorRadius,float size,float gap,float nTurns,in vec3 xyz){
-  float radiusOffset=float(coilNum-1);
-  mat4 xfm=mat4(1)*rotZ(radiusOffset*inc);
-  float coilRadius=radiusOffset+innerRadius;
-  float trimEndAngle=2.*inc;
-  if(coilNum==numCoils){
-    trimEndAngle=.5*inc;// Special case to access the exit wire.
-  }else if(coilNum==numCoils-1){
-    trimEndAngle=3.*inc;
+float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
+  float radiusOffset = float(coilNum - 1);
+  mat4 xfm = mat4(1) * rotZ(M_PI * radiusOffset); // radiusOffset*inc);
+  float coilRadius = radiusOffset + innerRadius;
+  float trimEndAngle = 2.0 * inc;
+  if (coilNum == numCoils) {
+    trimEndAngle = 0.5 * inc; // Special case to access the exit wire.
+  } else if (coilNum == numCoils - 1) {
+    trimEndAngle = 3.0 * inc;
   }
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
-  float coil=coilSquareFace(coilRadius,size,gap,nTurns,trimEndAngle,xyz);
-    
+  float coil = coilSquareFace(coilRadius, size, gap, nTurns, trimEndAngle, xyz);
+  
   //   float bz = -(size + gap);
-  //   float tz = nTurns * (size + gap);
+  float tz = nTurns * (size + gap);
   //   float tzp1 = (nTurns + 1.0) * (size + gap);
   
   //   coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, xyz);
   //   coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
   //   coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
   
-  //   float zexit = (nTurns + 10.0) * (size + gap);
+  float zexit = (nTurns + 10.0) * (size + gap);
   //   if (coilNum >= 3) { // Connect the start of this coil to the end of two coils prior.
     //     float lastCoilRadius = radiusOffset - 2.0 + innerRadius;
     //     coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
@@ -119,62 +119,70 @@ float coilPlusConnectorWires(int coilNum,int numCoils,float inc,float innerRadiu
     //     coil += box(vec3(connectorRadius, 0.0, tz), vec3(connectorRadius, 0.0, zexit), size, xyz);
   //   }
   
-  //   if (coilNum == numCoils) { // Special case to access the exit wire.
-    //     // End of coil 'numCoils':
-    //     xfm = mat4(1) * rotZ(0.5 * inc);
-    //     xyz = (vec4(xyz, 1.0) * xfm).xyz;
-    //     coil += box(vec3(connectorRadius - (size + gap), 0.0, tz), vec3(connectorRadius - (size + gap), 0.0, zexit), size, xyz);
-  //   }
+  if (coilNum == numCoils) {
+    // Special case to access the exit wires.
+    coil += box(vec3(coilRadius, 0, tz), vec3(coilRadius, 0, zexit), size, xyz);
+    // bottom connectors
+    coil += box(vec3(coilRadius, 0, 0), vec3(coilRadius, 0, - size), size, xyz);
+    coil += box(vec3(coilRadius, 0, - size), vec3(coilRadius, - connectorRadius, - size), size, xyz);
+  } else {
+    // top connectors
+    coil += box(vec3(coilRadius, 0, tz), vec3(coilRadius, 0, tz + size), size, xyz);
+    coil += box(vec3(coilRadius, 0, tz + size), vec3(coilRadius, connectorRadius, tz + size), size, xyz);
+    // bottom connectors
+    coil += box(vec3(coilRadius, 0, 0), vec3(coilRadius, 0, - size), size, xyz);
+    coil += box(vec3(coilRadius, 0, - size), vec3(coilRadius, - connectorRadius, - size), size, xyz);
+  }
   
-  return coil;
+  return clamp(coil, 0.0, 1.0);
 }
 
-float cylinder(float radius,float height,in vec3 xyz){
+float cylinder(float radius, float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the cylinder.
-  if(xyz.z<0.||xyz.z>height){return 0.;}
+  if (xyz.z < 0.0 || xyz.z > height) { return 0.0; }
   
   // Then, constrain radius of the cylinder:
-  float rxy=length(xyz.xy);
-  if(rxy>radius){return 0.;}
+  float rxy = length(xyz.xy);
+  if (rxy > radius) { return 0.0; }
   
-  return 1.;
+  return 1.0;
 }
 
-vec3 arBifilarElectromagnet(int numPairs,float innerRadius,float size,float gap,int numTurns,in vec3 xyz){
-  float nTurns=float(numTurns);
-  float inc=2.*M_PI/float(numPairs);
-  float connectorRadius=innerRadius+float(numPairs)*(size+gap);
+vec3 arBifilarElectromagnet(int numPairs, float innerRadius, float size, float gap, int numTurns, in vec3 xyz) {
+  float nTurns = float(numTurns);
+  float inc = 0.0; // 2.*M_PI/float(numPairs);
+  float connectorRadius = innerRadius + float(numPairs) * (size + gap);
   
-  float metal1=0.;
-  float metal2=0.;
+  float metal1 = 0.0;
+  float metal2 = 0.0;
   
-  mat4 xfm=mat4(1)*rotZ(M_PI);
-  vec3 xyz180Z=(vec4(xyz,1.)*xfm).xyz;
+  mat4 xfm = mat4(1) * rotZ(M_PI);
+  vec3 xyz180Z = (vec4(xyz, 1.0) * xfm).xyz;
   
-  for(int i=1;i<=numPairs;i++){
-    metal1+=coilPlusConnectorWires(i,numPairs,inc,innerRadius,connectorRadius,size,size+2.*gap,nTurns,xyz);
-    metal2+=coilPlusConnectorWires(i,numPairs,inc,innerRadius,connectorRadius,size,size+2.*gap,nTurns,xyz180Z);
+  for(int i = 1; i <= numPairs; i ++ ) {
+    metal1 += coilPlusConnectorWires(i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz);
+    metal2 += coilPlusConnectorWires(i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz180Z);
   }
   metal1 = clamp(metal1, 0.0, 1.0);
   metal2 = clamp(metal2, 0.0, 1.0);
   
-  float dielectric=0.;
-  float dielectricRadius=2.*float(numPairs)*(size+gap)+innerRadius+gap;
-  float dielectricHeight=(nTurns+4.)*(size+gap);
-  dielectric+=cylinder(dielectricRadius,dielectricHeight,xyz+vec3(0,0,2));
+  float dielectric = 0.0;
+  float dielectricRadius = 2.0 * float(numPairs) * (size + gap) + innerRadius + gap;
+  float dielectricHeight = (nTurns + 4.0) * (size + gap);
+  dielectric += cylinder(dielectricRadius, dielectricHeight, xyz + vec3(0, 0, 2));
   
-  float spindleRadius=2.*float(numPairs+1)*(size+gap)+innerRadius;
-  dielectric+=cylinder(spindleRadius,2.*(size+gap),xyz+vec3(0,0,2));
-  dielectric+=cylinder(spindleRadius,2.*(size+gap),xyz-vec3(0,0,dielectricHeight-4.));
+  float spindleRadius = 2.0 * float(numPairs + 1) * (size + gap) + innerRadius;
+  dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
+  dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
   dielectric = clamp(dielectric, 0.0, 1.0);
   // This next step is important... we don't want any dielectric material wherever
   // the metal is located, so we just subtract the metal out of the dielectric.
-  dielectric-=clamp(metal1+metal2, 0.0, 1.0);
+  dielectric -= clamp(metal1 + metal2, 0.0, 1.0);
   
   return vec3(metal1, metal2, dielectric);
 }
 
-void mainModel4(out vec4 materials,in vec3 xyz){
-  xyz.z+=60.;
-  materials.xyz=arBifilarElectromagnet(10,3.,.85,.15,122,xyz);
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  // xyz.z+=60.;
+  materials.xyz = arBifilarElectromagnet(10, 3.0, 0.85, 0.15, 2, xyz);
 }
