@@ -8,7 +8,7 @@
   "min": [-13,-13,-3],
   "notes": "The IRMF shader that started it all... the bifilar electromagnet.",
   "options": {
-    "resolution": 512,
+    "resolution": 1024,
     "color1": [255,0,0,1],
     "color2": [0,255,0,1]
   },
@@ -84,7 +84,7 @@ float wire(vec3 start, vec3 end, float size, in vec3 xyz) {
   return box(vec3(0), vec3(length(v), 0, 0), size, xyz);
 }
 
-float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
+float coilPlusConnectorWires(int wireNum, int coilNum, int numCoils, float inc, float innerRadius, float connectorRadius, float size, float gap, float nTurns, in vec3 xyz) {
   float radiusOffset = float(coilNum - 1);
   mat4 xfm = mat4(1) * rotZ(radiusOffset * inc);
   float coilRadius = radiusOffset + innerRadius;
@@ -97,31 +97,23 @@ float coilPlusConnectorWires(int coilNum, int numCoils, float inc, float innerRa
   xyz = (vec4(xyz, 1.0) * xfm).xyz;
   float coil = coilSquareFace(coilRadius, size, gap, nTurns, trimEndAngle, xyz);
   
-  //   float bz = -(size + gap);
   float tz = nTurns * (size + gap);
-  //   float tzp1 = (nTurns + 1.0) * (size + gap);
-  
-  //   coil += box(vec3(coilRadius, 0.0, 0.0), vec3(coilRadius, 0.0, bz), size, xyz);
-  //   coil += box(vec3(coilRadius, 0.0, bz), vec3(connectorRadius, 0.0, bz), size, xyz);
-  //   coil += box(vec3(connectorRadius, 0.0, bz), vec3(connectorRadius, 0.0, tzp1), size, xyz);
-  
   float zexit = (nTurns + 10.0) * (size + gap);
-  //   if (coilNum >= 3) { // Connect the start of this coil to the end of two coils prior.
-    //     float lastCoilRadius = radiusOffset - 2.0 + innerRadius;
-    //     coil += box(vec3(lastCoilRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
-    //     coil += box(vec3(lastCoilRadius, 0.0, tz), vec3(lastCoilRadius, 0.0, tzp1), size, xyz);
-  //   } else if (coilNum == 2) { // Connect the start of 2 to the end of the last odd coil.
-    //     float endOddRadius = float(numCoils - 2) + innerRadius;
-    //     coil += box(vec3(endOddRadius, 0.0, tzp1), vec3(connectorRadius, 0.0, tzp1), size, xyz);
-    //     coil += box(vec3(endOddRadius, 0.0, tz), vec3(endOddRadius, 0.0, tzp1), size, xyz);
-  //   } else if (coilNum == 1) { // Bring out the exit wires.
-    //     // Start of coil1:
-    //     coil += box(vec3(connectorRadius, 0.0, tz), vec3(connectorRadius, 0.0, zexit), size, xyz);
-  //   }
   
   if (coilNum == numCoils) {
     // Special case to access the exit wires.
-    coil += box(vec3(coilRadius, 0, tz), vec3(coilRadius, 0, zexit), size, xyz);
+    if (wireNum == 1) {
+      coil += box(vec3(coilRadius, 0, tz), vec3(coilRadius, 0, zexit), size, xyz);
+    } else {
+      coil += box(vec3(coilRadius, 0, tz), vec3(connectorRadius, 0, tz), size, xyz);
+      coil += box(vec3(connectorRadius, 0, - size), vec3(connectorRadius, 0, tz), size, xyz);
+      coil += box(vec3(connectorRadius, 0, - size), vec3(innerRadius, 0, - size), size, xyz);
+      coil += box(vec3(innerRadius, 0, - size), vec3(innerRadius, 0, 0), size, xyz);
+      // Now the other exit wire
+      coil += box(vec3(-innerRadius, 0, - size), vec3(-innerRadius, 0, 0), size, xyz);
+      coil += box(vec3(-connectorRadius, 0, - size), vec3(-innerRadius, 0, - size), size, xyz);
+      coil += box(vec3(-connectorRadius, 0, - size), vec3(-connectorRadius, 0, zexit), size, xyz);
+    }
   } else {
     coil += box(vec3(coilRadius, 0, tz), vec3(coilRadius, 0, tz + size), size, xyz);
     coil += box(vec3(coilRadius, 0, tz + size), vec3(connectorRadius, 0, tz + size), size, xyz);
@@ -157,11 +149,11 @@ vec3 arBifilarElectromagnet(int numPairs, float innerRadius, float size, float g
   vec3 xyz180Z = (vec4(xyz, 1.0) * xfm).xyz;
   
   for(int i = 1; i <= numPairs; i ++ ) {
-    metal1 += coilPlusConnectorWires(i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz);
-    metal2 += coilPlusConnectorWires(i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz180Z);
+    metal1 += coilPlusConnectorWires(1, i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz);
+    metal2 += coilPlusConnectorWires(2, i, numPairs, inc, innerRadius, connectorRadius, size, size + 2.0 * gap, nTurns, xyz180Z);
   }
   metal1 = clamp(metal1, 0.0, 1.0);
-  metal2 = clamp(metal2, 0.0, 1.0);
+  metal2 = clamp(metal2 - metal1, 0.0, 1.0); // Don't double the metals on overlap.
   
   float dielectric = 0.0;
   float dielectricRadius = 2.0 * float(numPairs) * (size + gap) + innerRadius + gap;
@@ -181,5 +173,5 @@ vec3 arBifilarElectromagnet(int numPairs, float innerRadius, float size, float g
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   // xyz.z+=60.;
-  materials.xyz = arBifilarElectromagnet(3, 3.0, 0.85, 0.15, 2, xyz);
+  materials.xyz = arBifilarElectromagnet(10, 3.0, 0.85, 0.15, 2, xyz);
 }
