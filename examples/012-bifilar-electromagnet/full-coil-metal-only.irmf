@@ -161,18 +161,17 @@ vec3 arBifilarElectromagnet(int numPairs, float innerRadius, float size, float g
   metal1 = clamp(metal1, 0.0, 1.0);
   metal2 = clamp(metal2 - metal1, 0.0, 1.0); // Don't double the metals on overlap.
   
-  float dielectric = 0.0;
-  float dielectricRadius = 2.0 * float(numPairs) * (size + gap) + innerRadius + gap;
-  float dielectricHeight = (nTurns + 4.0) * (size + gap);
-  dielectric += cylinder(dielectricRadius, dielectricHeight, xyz + vec3(0, 0, 2));
+  float dielectricRadius = float(numPairs) * (size + gap) + innerRadius + gap;
+  float dielectricHeight = 2.0 * (nTurns + 2.0) * (size + gap);
+  float dielectric = cylinder(dielectricRadius, dielectricHeight, xyz + vec3(0, 0, 2));
   
-  float spindleRadius = 2.0 * float(numPairs + 1) * (size + gap) + innerRadius;
+  float spindleRadius = float(numPairs + 1) * (size + gap) + innerRadius;
   dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz + vec3(0, 0, 2));
   dielectric += cylinder(spindleRadius, 2.0 * (size + gap), xyz - vec3(0, 0, dielectricHeight - 4.0));
-  dielectric = clamp(dielectric, 0.0, 1.0);
+  dielectric -= 2.0 * cylinder(innerRadius - 0.5 * size - gap, dielectricHeight, xyz + vec3(0, 0, 2));
   // This next step is important... we don't want any dielectric material wherever
   // the metal is located, so we just subtract the metal out of the dielectric.
-  dielectric -= clamp(metal1 + metal2, 0.0, 1.0);
+  dielectric = clamp(dielectric - metal1 - metal2, 0.0, 1.0);
   
   return vec3(metal1, metal2, dielectric);
 }
