@@ -118,25 +118,96 @@ to write.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["AISI 1018 steel"],
+  materials: ["AISI1018steel"],
   max: [5,5,5],
   min: [-5,-5,-5],
   units: "mm",
 }*/
 
-float sphere(in vec3 pos, in float radius, in vec3 xyz) {
-  xyz -= pos; // Move sphere into place.
+float sphere(in float radius, in vec3 xyz) {
   float r = length(xyz);
   return r <= radius ? 1.0 : 0.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 6.0; // 12mm diameter sphere.
-  materials[0] = 1.0 - sphere(vec3(0), radius, xyz); // 1.0 is a cube.
+  materials[0] = 1.0 - sphere(radius, xyz); // 1.0 is a cube.
 }
 ```
 
 * Try loading [cube-csg.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-csg.irmf) now in the experimental IRMF editor!
+
+## irmf-logo-model-1.irmf
+
+While `cube-csg.irmf` above was the basis of the original IRMF logo,
+if you 3D printed it, it would have super-sharp edges that would be
+perfect for a cheese grater, but not a very human-friendly object otherwise.
+
+So here is a safer model to print that would make a good IRMF logo.
+
+![irmf-logo-model-1.png](irmf-logo-model-1.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["AISI1018steel"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float sphere(in float radius, in vec3 xyz) {
+  float r = length(xyz);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+float cyl(in float radius, in vec2 uv) {
+  float r = length(uv);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float radius = 5.6;
+  const float r2 = 3.3;
+  materials[0] = 1.0 - sphere(radius, xyz) - cyl(r2, xyz.yz) - cyl(r2, xyz.xz) - cyl(r2, xyz.xy);
+}
+```
+
+* Try loading [irmf-logo-model-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/irmf-logo-model-1.irmf) now in the experimental IRMF editor!
+
+## irmf-logo-model-2.irmf
+
+Here is a second option with mostly rounded edges that would also make
+a nice IRMF logo.
+
+![irmf-logo-model-2.png](irmf-logo-model-2.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["AISI1018steel"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float sphere(in float radius, in vec3 xyz) {
+  float r = length(xyz);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+float cyl(in float radius, in vec2 uv) {
+  float r = length(uv);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  const float r2 = 3.3;
+  materials[0] = sphere(6.3, xyz) - sphere(5.6, xyz) - cyl(r2, xyz.yz) - cyl(r2, xyz.xz) - cyl(r2, xyz.xy);
+}
+```
+
+* Try loading [irmf-logo-model-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/irmf-logo-model-2.irmf) now in the experimental IRMF editor!
 
 ----------------------------------------------------------------------
 

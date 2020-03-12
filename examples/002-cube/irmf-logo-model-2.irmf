@@ -1,12 +1,12 @@
 /*{
   "author": "Glenn M. Lewis",
   "copyright": "Apache-2.0",
-  "date": "2019-06-30",
+  "date": "2020-03-11",
   "irmf": "1.0",
   "materials": ["AISI1018steel"],
   "max": [5,5,5],
   "min": [-5,-5,-5],
-  "notes": "Simple CSG IRMF shader - cube less sphere.",
+  "notes": "Simple CSG IRMF shader - IRMF logo model 2.",
   "options": {},
   "title": "Constructive Solid Geometry example",
   "units": "mm",
@@ -18,7 +18,12 @@ float sphere(in float radius, in vec3 xyz) {
   return r <= radius ? 1.0 : 0.0;
 }
 
+float cyl(in float radius, in vec2 uv) {
+  float r = length(uv);
+  return r <= radius ? 1.0 : 0.0;
+}
+
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  const float radius = 6.0; // 12mm diameter sphere.
-  materials[0] = 1.0 - sphere(radius, xyz); // 1.0 is a cube.
+  const float r2 = 3.3;
+  materials[0] = sphere(6.3, xyz) - sphere(5.6, xyz) - cyl(r2, xyz.yz) - cyl(r2, xyz.xz) - cyl(r2, xyz.xy);
 }
