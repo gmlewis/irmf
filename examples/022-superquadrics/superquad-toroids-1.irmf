@@ -1,0 +1,48 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2020-03-17",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "Figure 10 from: https://authors.library.caltech.edu/9756.",
+  "options": {},
+  "title": "Superquadric toroids",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float superquad(in float e1, in float e2, in float a4, in vec3 xyz) {
+  xyz.xyz *= 2.5;
+  float angle = -1.3;
+  float c = cos(angle);
+  float s = sin(angle);
+  xyz.yz = mat2(c, - s, s, c) * xyz.yz;
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / 2.0) - a4, 2.0 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? 1.0 : 0.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  float u = 1.2;
+  float v = 3.4;
+  float a4 = 1.25;
+  materials[0] =
+  superquad(0.3, 0.3, a4, xyz - vec3(-v, 0, v))
+  + superquad(0.3, 0.1, a4, xyz - vec3(-u, 0, v))
+  + superquad(0.3, 1.0, a4, xyz - vec3(u, 0, v))
+  + superquad(0.3, 3.0, a4, xyz - vec3(v, 0, v))
+  + superquad(0.1, 0.3, a4, xyz - vec3(-v, 0, u))
+  + superquad(0.1, 0.1, a4, xyz - vec3(-u, 0, u))
+  + superquad(0.1, 1.0, a4, xyz - vec3(u, 0, u))
+  + superquad(0.1, 3.0, a4, xyz - vec3(v, 0, u))
+  + superquad(1.0, 0.3, a4, xyz - vec3(-v, 0, - u))
+  + superquad(1.0, 0.1, a4, xyz - vec3(-u, 0, - u))
+  + superquad(1.0, 1.0, a4, xyz - vec3(u, 0, - u))
+  + superquad(1.0, 3.0, a4, xyz - vec3(v, 0, - u))
+  + superquad(3.0, 0.3, a4, xyz - vec3(-v, 0, - v))
+  + superquad(3.0, 0.1, a4, xyz - vec3(-u, 0, - v))
+  + superquad(3.0, 1.0, a4, xyz - vec3(u, 0, - v))
+  + superquad(3.0, 3.0, a4, xyz - vec3(v, 0, - v));
+}

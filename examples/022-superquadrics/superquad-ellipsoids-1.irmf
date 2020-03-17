@@ -15,7 +15,6 @@
 
 float superquad(in float e1, in float e2, in vec3 xyz) {
   xyz = abs(xyz); // Due to GLSL 'pow' definition.
-  if (any(greaterThan(xyz, vec3(1)))) { return 0.0; }
   float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
   return f <= 1.0 ? 1.0 : 0.0;
 }

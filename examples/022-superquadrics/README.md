@@ -28,7 +28,6 @@ This is a replication of Figure 7 in Al Barr's article linked above.
 
 float superquad(in float e1, in float e2, in vec3 xyz) {
   xyz = abs(xyz); // Due to GLSL 'pow' definition.
-  if (any(greaterThan(xyz, vec3(1)))) { return 0.0; }
   float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
   return f <= 1.0 ? 1.0 : 0.0;
 }
@@ -61,6 +60,62 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
   - [superquad-ellipsoids-1-mat01-PLA.stl](superquad-ellipsoids-1-mat01-PLA.stl) (32153684 bytes)
+
+## superquad-toroids-1.irmf
+
+This is a replication of Figure 10 in Al Barr's article linked above.
+
+![superquad-toroids-1.png](superquad-toroids-1.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float superquad(in float e1, in float e2, in float a4, in vec3 xyz) {
+  xyz.xyz *= 2.5;
+  float angle = -1.3;
+  float c = cos(angle);
+  float s = sin(angle);
+  xyz.yz = mat2(c, - s, s, c) * xyz.yz;
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / 2.0) - a4, 2.0 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? 1.0 : 0.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  float u = 1.2;
+  float v = 3.4;
+  float a4 = 1.25;
+  materials[0] =
+  superquad(0.3, 0.3, a4, xyz - vec3(-v, 0, v))
+  + superquad(0.3, 0.1, a4, xyz - vec3(-u, 0, v))
+  + superquad(0.3, 1.0, a4, xyz - vec3(u, 0, v))
+  + superquad(0.3, 3.0, a4, xyz - vec3(v, 0, v))
+  + superquad(0.1, 0.3, a4, xyz - vec3(-v, 0, u))
+  + superquad(0.1, 0.1, a4, xyz - vec3(-u, 0, u))
+  + superquad(0.1, 1.0, a4, xyz - vec3(u, 0, u))
+  + superquad(0.1, 3.0, a4, xyz - vec3(v, 0, u))
+  + superquad(1.0, 0.3, a4, xyz - vec3(-v, 0, - u))
+  + superquad(1.0, 0.1, a4, xyz - vec3(-u, 0, - u))
+  + superquad(1.0, 1.0, a4, xyz - vec3(u, 0, - u))
+  + superquad(1.0, 3.0, a4, xyz - vec3(v, 0, - u))
+  + superquad(3.0, 0.3, a4, xyz - vec3(-v, 0, - v))
+  + superquad(3.0, 0.1, a4, xyz - vec3(-u, 0, - v))
+  + superquad(3.0, 1.0, a4, xyz - vec3(u, 0, - v))
+  + superquad(3.0, 3.0, a4, xyz - vec3(v, 0, - v));
+}
+```
+
+* Try loading [superquad-toroids-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/022-superquadrics/superquad-toroids-1.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [superquad-toroids-1-mat01-PLA.stl](superquad-toroids-1-mat01-PLA.stl) (48618084 bytes)
 
 ----------------------------------------------------------------------
 
