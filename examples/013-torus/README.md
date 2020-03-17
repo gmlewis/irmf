@@ -17,8 +17,7 @@ It turns out that a torus is also relatively easy to model:
 
 #define M_PI 3.1415926535897932384626433832795
 
-float torus(in vec3 pos, float majorRadius, float minorRadius, in vec3 xyz) {
-  xyz -= pos; // Move torus into place.
+float torus(float majorRadius, float minorRadius, in vec3 xyz) {
   float r = length(xyz);
   if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
   
@@ -33,7 +32,7 @@ float torus(in vec3 pos, float majorRadius, float minorRadius, in vec3 xyz) {
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 5.0;
-  materials[0] = torus(vec3(0), 9.0, 3.0, xyz);
+  materials[0] = torus(9.0, 3.0, xyz);
 }
 ```
 
@@ -62,8 +61,7 @@ made the parameters degrees in this case.
 
 #define M_PI 3.1415926535897932384626433832795
 
-float torus(in vec3 pos, float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
-  xyz -= pos; // Move torus into place.
+float torus(float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
   float r = length(xyz);
   if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
   
@@ -82,8 +80,8 @@ float torus(in vec3 pos, float majorRadius, float minorRadius, float fromDeg, fl
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 5.0;
-  materials[0] = torus(vec3(0), 9.0, 3.0, 45.0, 315.0, xyz);
-  materials[1] = torus(vec3(2, 0, 0), 9.0, 3.0, 315.0, 45.0, xyz);
+  materials[0] = torus(9.0, 3.0, 45.0, 315.0, xyz);
+  materials[1] = torus(9.0, 3.0, 315.0, 45.0, xyz - vec3(2,0,0));
 }
 ```
 

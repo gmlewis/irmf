@@ -51,9 +51,9 @@ mat4 rotZ(float angle){
   return mat4(rotAxis(vec3(0,0,1),angle));
 }
 
-float cube(in mat4 xfm,float size,in vec3 xyz){
+float cube(in mat4 xfm,in float size, in vec3 xyz){
   xyz=(vec4(xyz,1)*xfm).xyz;
-  if(any(lessThan(abs(xyz),vec3(0)))||any(greaterThan(abs(xyz),vec3(size)))){return 0.;}
+  if(any(greaterThan(abs(xyz),vec3(size)))){return 0.;}
   return 1.;
 }
 

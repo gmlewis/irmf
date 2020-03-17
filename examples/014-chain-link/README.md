@@ -18,8 +18,7 @@ link out of a couple partial toroids and a couple cylinders:
 
 #define M_PI 3.1415926535897932384626433832795
 
-float torus(in vec3 pos, float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
-  xyz -= pos; // Move torus into place.
+float torus(float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
   float r = length(xyz);
   if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
   
@@ -47,9 +46,8 @@ float cylinder(float radius, float height, in vec3 xyz) {
   return 1.0;
 }
 
-float chainLink(in vec3 pos, float majorRadius, float minorRadius, float separator, in vec3 xyz) {
-  xyz -= pos;
-  float result = torus(vec3(0), majorRadius, minorRadius, 90.0, 270.0, xyz);
+float chainLink(float majorRadius, float minorRadius, float separator, in vec3 xyz) {
+  float result = torus(majorRadius, minorRadius, 90.0, 270.0, xyz);
   result += torus(vec3(separator, 0, 0), majorRadius, minorRadius, 270.0, 90.0, xyz);
   result += cylinder(minorRadius, separator, xyz - vec3(0, majorRadius, 0));
   result += cylinder(minorRadius, separator, xyz + vec3(0, majorRadius, 0));
@@ -57,7 +55,7 @@ float chainLink(in vec3 pos, float majorRadius, float minorRadius, float separat
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = chainLink(vec3(0), 9.0, 3.0, 6.0, xyz);
+  materials[0] = chainLink(9.0, 3.0, 6.0, xyz);
 }
 ```
 

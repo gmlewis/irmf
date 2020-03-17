@@ -52,15 +52,14 @@ one or more spheres. Let's make a `sphere` function that is reusable.
   units: "mm",
 }*/
 
-float sphere(in vec3 pos, in float radius, in vec3 xyz) {
-  xyz -= pos; // Move sphere into place.
+float sphere(in float radius, in vec3 xyz) {
   float r = length(xyz);
   return r <= radius ? 1.0 : 0.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 5.0; // 10mm diameter sphere.
-  materials[0] = sphere(vec3(0), radius, xyz); // vec3(0) is [0,0,0] - the origin.
+  materials[0] = sphere(radius, xyz);
 }
 ```
 
@@ -89,8 +88,7 @@ made the parameters degrees in this case.
 
 #define M_PI 3.1415926535897932384626433832795
 
-float sphere(in vec3 pos, in float radius, float fromDeg, float toDeg, in vec3 xyz) {
-  xyz -= pos; // Move sphere into place.
+float sphere(in float radius, float fromDeg, float toDeg, in vec3 xyz) {
   float r = length(xyz);
   if (r > radius) { return 0.0; }
   
@@ -103,8 +101,8 @@ float sphere(in vec3 pos, in float radius, float fromDeg, float toDeg, in vec3 x
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
   const float radius = 5.0;
-  materials[0] = sphere(vec3(0), radius, 45.0, 315.0, xyz);
-  materials[1] = sphere(vec3(0), radius, 315.0, 45.0, xyz - vec3(2, 0, 0));
+  materials[0] = sphere(radius, 45.0, 315.0, xyz);
+  materials[1] = sphere(radius, 315.0, 45.0, xyz - vec3(2, 0, 0));
 }
 ```
 

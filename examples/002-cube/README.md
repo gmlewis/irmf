@@ -57,15 +57,14 @@ own local coordinate system. Here's an example of this:
   units: "mm",
 }*/
 
-float cube(in vec3 pos, in float size, in vec3 xyz) {
-  xyz -= pos; // Move local coordinate system.
+float cube(in float size, in vec3 xyz) {
   xyz /= size; // Scale local coordinate system.
   if (any(greaterThan(abs(xyz), vec3(0.5)))) { return 0.0; }
   return 1.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = cube(vec3(0), 10.0, xyz);
+  materials[0] = cube(10.0, xyz);
 }
 ```
 
@@ -94,14 +93,12 @@ understand.
   units: "mm",
 }*/
 
-float cube(in mat4 xfm, in vec4 xyz) {
-  xyz = xyz * xfm;
-  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) { return 0.0; }
-  return 1.0;
+float cube(in float size, in vec3 xyz) {
+  return (any(greaterThan(abs(xyz), vec3(size)))) ? 0.0 : 1.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = cube(mat4(1), vec4(xyz, 1.0)); // mat4(1) is the identity matrix.
+  materials[0] = cube(0.5, xyz);
 }
 ```
 
