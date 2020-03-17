@@ -238,6 +238,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [019-full-color](examples/019-full-color)
 * [020-quadratic-bezier](examples/020-quadratic-bezier)
 * [021-line2d](examples/021-line2d)
+* [022-superquadrics](examples/022-superquadrics)
 
 ----------------------------------------------------------------------
 
