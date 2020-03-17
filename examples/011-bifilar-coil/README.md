@@ -74,6 +74,12 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [bifilar-coil-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/011-bifilar-coil/bifilar-coil-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
+  (one STL file per material):
+  - [bifilar-coil-1-mat01-metal.stl](bifilar-coil-1-mat01-metal.stl) (17030284 bytes)
+  - [bifilar-coil-1-mat02-metal.stl](bifilar-coil-1-mat02-metal.stl) (17030284 bytes)
+
 ## bifilar-coil-2.irmf
 
 Let's take bifilar-coil-1 above and add in a dielectric between the metal wires.
@@ -160,6 +166,13 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [bifilar-coil-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/011-bifilar-coil/bifilar-coil-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
+  (one STL file per material):
+  - [bifilar-coil-2-mat01-metal.stl](bifilar-coil-2-mat01-metal.stl) (17030284 bytes)
+  - [bifilar-coil-2-mat02-metal.stl](bifilar-coil-2-mat02-metal.stl) (17030284 bytes)
+  - [bifilar-coil-2-mat03-dielectric.stl](bifilar-coil-2-mat03-dielectric.stl) (24876484 bytes)
 
 ----------------------------------------------------------------------
 

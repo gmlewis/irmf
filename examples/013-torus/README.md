@@ -39,6 +39,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [torus-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/013-torus/torus-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [torus-1-mat01-PLA1.stl](torus-1-mat01-PLA1.stl) (27428884 bytes)
+
 ## torus-2.irmf
 
 Sometimes you just want a slice of a torus, and I find it easier to think
@@ -84,6 +88,12 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [torus-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/013-torus/torus-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
+  (one STL file per material):
+  - [torus-2-mat01-PLA1.stl](torus-2-mat01-PLA1.stl) (49489084 bytes)
+  - [torus-2-mat02-PLA2.stl](torus-2-mat02-PLA2.stl) (18641284 bytes)
 
 ----------------------------------------------------------------------
 

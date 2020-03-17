@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -18,20 +19,17 @@ var (
 	h2RE = regexp.MustCompile(`\n##\s+`)
 )
 
-type irmfFile struct {
-	name     string
-	contents string
-}
-
 func main() {
 	readmeByPath := map[string]string{}
 	irmfByPath := map[string]map[string]string{}
+	stlFileSizesByPath := map[string]map[string]int64{}
 	if err := filepath.Walk("examples", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Fatalf("path=%q, err=%v", path, err)
 		}
 		if info.IsDir() {
 			irmfByPath[path] = map[string]string{}
+			stlFileSizesByPath[path] = map[string]int64{}
 			return nil
 		}
 		if info.Name() == "README.md" {
@@ -40,6 +38,12 @@ func main() {
 				return fmt.Errorf("ReadFile(%q): %v", path, err)
 			}
 			readmeByPath[filepath.Dir(path)] = string(buf)
+			return nil
+		}
+		if strings.HasSuffix(path, ".stl") {
+			dir := filepath.Dir(path)
+			base := filepath.Base(path)
+			stlFileSizesByPath[dir][base] = info.Size()
 			return nil
 		}
 		if strings.HasSuffix(path, ".irmf") {
@@ -57,7 +61,7 @@ func main() {
 	}
 
 	for k, v := range readmeByPath {
-		processReadme(k, v, irmfByPath[k])
+		processReadme(k, v, irmfByPath[k], stlFileSizesByPath[k])
 	}
 }
 
@@ -91,9 +95,12 @@ func removeExtraFields(s string) string {
 	return strings.Join(out, "\n")
 }
 
-func processReadme(path, buf string, irmfs map[string]string) {
-	log.Printf("Processing %v/README.md...", path)
+func processReadme(path, buf string, irmfs map[string]string, stlFileSizes map[string]int64) {
+	log.Printf("Processing %v/README.md ...", path)
 	log.Printf("Found %v .irmf files...", len(irmfs))
+	log.Printf("Found %v .stl files...", len(stlFileSizes))
+
+	licenseText := newLicenseText
 
 	parts := h2RE.Split(buf, -1)
 	log.Printf("Found %v ## sections...", len(parts))
@@ -111,7 +118,16 @@ func processReadme(path, buf string, irmfs map[string]string) {
 		if glslIndex < 0 {
 			log.Fatalf("Unable to find ```glsl...``` in %v", v)
 		}
+
+		if j := strings.Index(v, "-----"); j >= 0 {
+			licenseText = v[j:] // Preserve year of original license text.
+		}
+
 		parts[i] = "## " + v[0:glslIndex+8] + glsl + "```\n\n" + tryMessage(path, filename)
+
+		if len(stlFileSizes) > 0 {
+			parts[i] += addSTLs(filename, stlFileSizes)
+		}
 	}
 	parts = append(parts, licenseText)
 
@@ -119,6 +135,31 @@ func processReadme(path, buf string, irmfs map[string]string) {
 	if err := ioutil.WriteFile(path+"/README.md", outbuf, 0644); err != nil {
 		log.Fatalf("WriteFile: %v", err)
 	}
+}
+
+func addSTLs(filename string, stlFileSizes map[string]int64) string {
+	var lines []string
+
+	// Strip off the ".irmf"
+	filename = strings.TrimSuffix(filename, ".irmf")
+
+	for k, v := range stlFileSizes {
+		if strings.HasPrefix(k, filename+"-mat") {
+			lines = append(lines, fmt.Sprintf("  - [%v](%v) (%v bytes)", k, k, v))
+		}
+	}
+
+	if len(lines) == 0 {
+		return ""
+	}
+
+	header := "* Here is a crude STL approximation of this model\n  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)"
+	if len(lines) > 1 {
+		sort.Strings(lines)
+		header += "\n  (one STL file per material)"
+	}
+
+	return "\n" + header + ":\n" + strings.Join(lines, "\n") + "\n"
 }
 
 func tryMessage(path, filename string) string {
@@ -133,7 +174,7 @@ var fieldsToKeep = []string{
 	"units",
 }
 
-var licenseText = `----------------------------------------------------------------------
+var newLicenseText = `----------------------------------------------------------------------
 
 # License
 

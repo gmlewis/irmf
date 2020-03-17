@@ -70,6 +70,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [spiral-circle.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/009-spiral-circle-face/spiral-circle.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [spiral-circle-mat01-PLA.stl](spiral-circle-mat01-PLA.stl) (11009484 bytes)
+
 ----------------------------------------------------------------------
 
 # License

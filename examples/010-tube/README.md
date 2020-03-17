@@ -35,6 +35,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [tube-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/010-tube/tube-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [tube-1-mat01-PLA.stl](tube-1-mat01-PLA.stl) (43949684 bytes)
+
 ----------------------------------------------------------------------
 
 # License

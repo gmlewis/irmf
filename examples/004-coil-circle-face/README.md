@@ -66,6 +66,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [coil-circle.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/004-coil-circle-face/coil-circle.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [coil-circle-mat01-PLA.stl](coil-circle-mat01-PLA.stl) (8339484 bytes)
+
 ----------------------------------------------------------------------
 
 # License

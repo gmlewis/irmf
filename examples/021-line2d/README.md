@@ -48,6 +48,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [line2d-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/021-line2d/line2d-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [line2d-1-mat01-PLA.stl](line2d-1-mat01-PLA.stl) (14372084 bytes)
+
 ## line2d-2.irmf
 
 Sometimes you just want to specify the start and end points.
@@ -106,6 +110,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [line2d-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/021-line2d/line2d-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [line2d-2-mat01-PLA.stl](line2d-2-mat01-PLA.stl) (20852084 bytes)
 
 ----------------------------------------------------------------------
 

@@ -391,6 +391,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [axial-radial-bifilar-electromagnet-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/012-bifilar-electromagnet/axial-radial-bifilar-electromagnet-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [axial-radial-bifilar-electromagnet-1-mat01-33CrMoV12.stl](axial-radial-bifilar-electromagnet-1-mat01-33CrMoV12.stl) (38613084 bytes)
+
 ## full-coil-metal-only.irmf
 
 Here is the full model only showing the metal:

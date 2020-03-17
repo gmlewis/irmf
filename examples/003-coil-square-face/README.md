@@ -59,6 +59,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [coil-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/003-coil-square-face/coil-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [coil-1-mat01-PLA.stl](coil-1-mat01-PLA.stl) (8588884 bytes)
+
 ## coil-2.irmf
 
 It can be useful to add a `trimStartAngle` and `trimEndAngle`:
@@ -123,6 +127,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [coil-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/003-coil-square-face/coil-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [coil-2-mat01-PLA.stl](coil-2-mat01-PLA.stl) (8572284 bytes)
 
 ----------------------------------------------------------------------
 

@@ -31,6 +31,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [sphere-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [sphere-1-mat01-AISI-1018-steel.stl](sphere-1-mat01-AISI-1018-steel.stl) (26712884 bytes)
+
 ## sphere-2.irmf
 
 `sphere-1.irmf` above is fine if your entire model is a sphere, but is not
@@ -61,6 +65,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [sphere-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [sphere-2-mat01-AISI-1018-steel.stl](sphere-2-mat01-AISI-1018-steel.stl) (26712884 bytes)
 
 ## sphere-3.irmf
 
@@ -101,6 +109,12 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [sphere-3.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/001-sphere/sphere-3.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
+  (one STL file per material):
+  - [sphere-3-mat01-PLA1.stl](sphere-3-mat01-PLA1.stl) (26304884 bytes)
+  - [sphere-3-mat02-PLA2.stl](sphere-3-mat02-PLA2.stl) (12982884 bytes)
 
 ----------------------------------------------------------------------
 

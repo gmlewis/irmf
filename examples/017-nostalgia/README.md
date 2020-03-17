@@ -35,6 +35,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [cos125.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/017-nostalgia/cos125.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [cos125-mat01-PLA.stl](cos125-mat01-PLA.stl) (46652084 bytes)
+
 ----------------------------------------------------------------------
 
 # License

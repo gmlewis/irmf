@@ -137,6 +137,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [cube-csg.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/cube-csg.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [cube-csg-mat01-AISI1018steel.stl](cube-csg-mat01-AISI1018steel.stl) (42352084 bytes)
+
 ## irmf-logo-model-1.irmf
 
 While `cube-csg.irmf` above was the basis of the original IRMF logo,
@@ -175,6 +179,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [irmf-logo-model-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/irmf-logo-model-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [irmf-logo-model-1-mat01-AISI1018steel.stl](irmf-logo-model-1-mat01-AISI1018steel.stl) (41924084 bytes)
+
 ## irmf-logo-model-2.irmf
 
 Here is a second option with mostly rounded edges that would also make
@@ -208,6 +216,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [irmf-logo-model-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/002-cube/irmf-logo-model-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [irmf-logo-model-2-mat01-AISI1018steel.stl](irmf-logo-model-2-mat01-AISI1018steel.stl) (41080884 bytes)
 
 ----------------------------------------------------------------------
 

@@ -41,6 +41,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [soapdish-step-01.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-01.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-01-mat01-PLA1.stl](soapdish-step-01-mat01-PLA1.stl) (26332884 bytes)
+
 ## soapdish-step-02.irmf
 
 Let's hollow out the dish with another identical cone slide up vertically by
@@ -80,6 +84,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-02.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-02.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-02-mat01-PLA1.stl](soapdish-step-02-mat01-PLA1.stl) (33051284 bytes)
 
 ## soapdish-step-03.irmf
 
@@ -136,6 +144,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-03.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-03.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-03-mat01-PLA1.stl](soapdish-step-03-mat01-PLA1.stl) (35281684 bytes)
 
 ## soapdish-step-04.irmf
 
@@ -196,6 +208,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-04.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-04.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-04-mat01-PLA1.stl](soapdish-step-04-mat01-PLA1.stl) (41440084 bytes)
 
 ## soapdish-step-05.irmf
 
@@ -259,6 +275,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-05.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-05.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-05-mat01-PLA1.stl](soapdish-step-05-mat01-PLA1.stl) (41580484 bytes)
 
 ## soapdish-step-06.irmf
 
@@ -327,6 +347,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-06.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-06.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-06-mat01-PLA1.stl](soapdish-step-06-mat01-PLA1.stl) (41900484 bytes)
 
 ## soapdish-step-07.irmf
 
@@ -402,6 +426,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-07.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-07.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-07-mat01-PLA1.stl](soapdish-step-07-mat01-PLA1.stl) (42153284 bytes)
 
 ## soapdish-step-08.irmf
 
@@ -488,6 +516,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-08.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-08.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-08-mat01-PLA1.stl](soapdish-step-08-mat01-PLA1.stl) (47881284 bytes)
 
 ## soapdish-step-09.irmf
 
@@ -584,6 +616,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-09.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-09.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-09-mat01-PLA1.stl](soapdish-step-09-mat01-PLA1.stl) (48265284 bytes)
 
 ## soapdish-step-10.irmf
 
@@ -703,6 +739,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 ```
 
 * Try loading [soapdish-step-10.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/015-soapdish/soapdish-step-10.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [soapdish-step-10-mat01-PLA1.stl](soapdish-step-10-mat01-PLA1.stl) (42768484 bytes)
 
 ----------------------------------------------------------------------
 

@@ -36,6 +36,10 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Try loading [cone-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/007-cone/cone-1.irmf) now in the experimental IRMF editor!
 
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [cone-1-mat01-PLA.stl](cone-1-mat01-PLA.stl) (10172884 bytes)
+
 ----------------------------------------------------------------------
 
 # License
