@@ -117,6 +117,47 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
   - [superquad-toroids-1-mat01-PLA.stl](superquad-toroids-1-mat01-PLA.stl) (48618084 bytes)
 
+## sphericon-1.irmf
+
+A [sphericon](https://en.wikipedia.org/wiki/Sphericon) is easy to make
+out of two half-superquadrics.
+
+![sphericon-1.png](sphericon-1.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["PLA"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float superquad(in float e1, in float e2, in vec3 xyz) {
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? 1.0 : 0.0;
+}
+
+float sphericon(in vec3 xyz) {
+  if (xyz.x <= 0.0) {
+    return superquad(2.0, 1.0, xyz);
+  }
+  return superquad(2.0, 1.0, xyz.xzy);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz /= 5.0;
+  materials[0] = sphericon(xyz);
+}
+```
+
+* Try loading [sphericon-1.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/022-superquadrics/sphericon-1.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [sphericon-1-mat01-PLA.stl](sphericon-1-mat01-PLA.stl) (32787084 bytes)
+
 ----------------------------------------------------------------------
 
 # License
