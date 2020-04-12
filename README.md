@@ -239,6 +239,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [020-quadratic-bezier](examples/020-quadratic-bezier)
 * [021-line2d](examples/021-line2d)
 * [022-superquadrics](examples/022-superquadrics)
+* [023-infill](examples/023-infill)
 
 ----------------------------------------------------------------------
 
