@@ -240,6 +240,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [021-line2d](examples/021-line2d)
 * [022-superquadrics](examples/022-superquadrics)
 * [023-infill](examples/023-infill)
+* [024-oloid](examples/024-oloid)
 
 ----------------------------------------------------------------------
 
