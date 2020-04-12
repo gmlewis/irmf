@@ -1,0 +1,45 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2020-04-12",
+  "irmf": "1.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "https://en.wikipedia.org/wiki/Oloid",
+  "options": {},
+  "title": "Oloid",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+#define M_PI 3.1415926535897932384626433832795
+
+float oloid(in vec3 xyz) {
+  if (xyz.x >= 0.0) {
+    float r = length(xyz.xy - vec2(0.5, 0));
+    if (r > 1.0) { return 0.0; }
+    float a = abs(atan(xyz.y, xyz.x - 0.5));
+    float y = abs(xyz.y);
+    float h = sin(120.0 * M_PI / 180.0) * (1.0 - xyz.x / 1.5);
+    float sy = sqrt((1.0 - (xyz.x - 0.5) * (xyz.x - 0.5)));
+    float sz = mix(h, 0.0, y / sy);
+    float z = abs(xyz.z);
+    if (z > sz) { return 0.0; }
+  } else {
+    float r = length(xyz.xz + vec2(0.5, 0));
+    if (r > 1.0) { return 0.0; }
+    float a = abs(atan(xyz.z, xyz.x + 0.5));
+    float z = abs(xyz.z);
+    float h = sin(120.0 * M_PI / 180.0) * (1.0 + xyz.x / 1.5);
+    float sz = sqrt((1.0 - (xyz.x + 0.5) * (xyz.x + 0.5)));
+    float sy = mix(h, 0.0, z / sz);
+    float y = abs(xyz.y);
+    if (y > sy) { return 0.0; }
+  }
+  return 1.0;
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = oloid(xyz / (5.0 / 1.5));
+}

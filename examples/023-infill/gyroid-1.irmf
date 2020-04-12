@@ -8,7 +8,7 @@
   "min": [-5,-5,-5],
   "notes": "Simple IRMF shader - gyroid infill.",
   "options": {},
-  "title": "Constructive Solid Geometry example",
+  "title": "Gyroid infill example",
   "units": "mm",
   "version": "1.0"
 }*/
