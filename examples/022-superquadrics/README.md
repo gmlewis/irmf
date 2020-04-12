@@ -158,6 +158,53 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
   - [sphericon-1-mat01-PLA.stl](sphericon-1-mat01-PLA.stl) (32787084 bytes)
 
+## sphericon-2.irmf
+
+It turns out that it is much easier to visualize a sphericon in two colors
+(at least in the IRMF editor), which translates to using two materials.
+
+![sphericon-2.png](sphericon-2.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["Red","Green"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+float superquad(in float e1, in float e2, in vec3 xyz) {
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? 1.0 : 0.0;
+}
+
+vec2 sphericon2(in float slices, in vec3 xyz) {
+  if (xyz.x <= 0.0) {
+    float v = superquad(2.0, 1.0, xyz);
+    if (mod(abs(xyz.z) * slices, 1.0) <= 0.5) { return vec2(v, 0); }
+    return vec2(0, v);
+  }
+  float v = superquad(2.0, 1.0, xyz.xzy);
+  if (mod(-abs(xyz.y) * slices, 1.0) <= 0.5) { return vec2(v, 0); }
+  return vec2(0, v);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz /= 5.0;
+  materials.xy = sphericon2(6.0, xyz);
+}
+```
+
+* Try loading [sphericon-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/022-superquadrics/sphericon-2.irmf) now in the experimental IRMF editor!
+
+* Here is a crude STL approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
+  (one STL file per material):
+  - [sphericon-2-mat01-Red.stl](sphericon-2-mat01-Red.stl) (42254484 bytes)
+  - [sphericon-2-mat02-Green.stl](sphericon-2-mat02-Green.stl) (42251284 bytes)
+
 ----------------------------------------------------------------------
 
 # License

@@ -1,0 +1,40 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2020-04-12",
+  "irmf": "1.0",
+  "materials": ["Red","Green"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "notes": "Sphericon using two half superquadrics.",
+  "options": {
+    "resolution": 2048,
+    "color1": [255,0,0,1],
+    "color2": [0,255,0,1]
+  },
+  "title": "Sphericon",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float superquad(in float e1, in float e2, in vec3 xyz) {
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? 1.0 : 0.0;
+}
+
+vec2 sphericon2(in float slices, in vec3 xyz) {
+  if (xyz.x <= 0.0) {
+    float v = superquad(2.0, 1.0, xyz);
+    if (mod(abs(xyz.z) * slices, 1.0) <= 0.5) { return vec2(v, 0); }
+    return vec2(0, v);
+  }
+  float v = superquad(2.0, 1.0, xyz.xzy);
+  if (mod(-abs(xyz.y) * slices, 1.0) <= 0.5) { return vec2(v, 0); }
+  return vec2(0, v);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  xyz /= 5.0;
+  materials.xy = sphericon2(6.0, xyz);
+}
