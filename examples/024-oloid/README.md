@@ -101,7 +101,7 @@ vec2 oloid2(in float slices, in vec3 xyz) {
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials.xy = oloid2(5.85, xyz / (5.0 / 1.5));
+  materials.xy = oloid2(5.79, xyz / (5.0 / 1.5));
 }
 ```
 
@@ -110,8 +110,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [oloid-2-mat01-Red.stl](oloid-2-mat01-Red.stl) (33740284 bytes)
-  - [oloid-2-mat02-Green.stl](oloid-2-mat02-Green.stl) (33744284 bytes)
+  - [oloid-2-mat01-Red.stl](oloid-2-mat01-Red.stl) (33472684 bytes)
+  - [oloid-2-mat02-Green.stl](oloid-2-mat02-Green.stl) (33475684 bytes)
 
 ----------------------------------------------------------------------
 
