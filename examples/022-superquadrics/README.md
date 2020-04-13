@@ -154,6 +154,48 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
   - [superquad-toroids-1-mat01-PLA.stl](superquad-toroids-1-mat01-PLA.stl) (48618084 bytes)
 
+## superquad-toroids-2.irmf
+
+This version is sliced into two materials to make it easier to visualize.
+
+![superquad-toroids-2.png](superquad-toroids-2.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["Red","Green"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+vec2 superquad2(in float slices, in float e1, in float e2, in float a4, in vec3 xyz) {
+  xyz.xyz *= 2.5;
+  vec2 result = (mod(abs(xyz.z) * 6.0, 1.0) <= 0.5) ? vec2(1, 0) : vec2(0, 1);
+  float angle = -1.3;
+  float c = cos(angle);
+  float s = sin(angle);
+  xyz.yz = mat2(c, - s, s, c) * xyz.yz;
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / 2.0) - a4, 2.0 / e1) + pow(xyz.z, 2.0 / e1);
+  return f <= 1.0 ? result : vec2(0);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials.xy = vec2(0);
+  
+  vec4 e = vec4(0.1, 0.3, 1.0, 3.0);
+  vec4 o = vec4(-3.4, - 1.2, 1.2, 3.4);
+  for(int i = 0; i < 4; i ++ ) {
+    for(int j = 0; j < 4; j ++ ) {
+      materials.xy += superquad2(6.0, e[i], e[j], 1.5, xyz - vec3(o[j], 0, o[3 - i]));
+    }
+  }
+}
+```
+
+* Try loading [superquad-toroids-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/022-superquadrics/superquad-toroids-2.irmf) now in the experimental IRMF editor!
+
 ## sphericon-1.irmf
 
 A [sphericon](https://en.wikipedia.org/wiki/Sphericon) is easy to make
