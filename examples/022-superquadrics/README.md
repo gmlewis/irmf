@@ -61,6 +61,43 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
   - [superquad-ellipsoids-1-mat01-PLA.stl](superquad-ellipsoids-1-mat01-PLA.stl) (32153684 bytes)
 
+## superquad-ellipsoids-2.irmf
+
+This version is sliced into two materials to make it easier to visualize.
+
+![superquad-ellipsoids-2.png](superquad-ellipsoids-2.png)
+
+```glsl
+/*{
+  irmf: "1.0",
+  materials: ["Red","Green"],
+  max: [5,5,5],
+  min: [-5,-5,-5],
+  units: "mm",
+}*/
+
+vec2 superquad2(in float slices, in float e1, in float e2, in vec3 xyz) {
+  xyz = abs(xyz); // Due to GLSL 'pow' definition.
+  float f = pow(pow(xyz.x, 2.0 / e2) + pow(xyz.y, 2.0 / e2), e2 / e1) + pow(xyz.z, 2.0 / e1);
+  if (f > 1.0) { return vec2(0); }
+  return (mod(abs(xyz.z) * slices, 1.0) <= 0.5) ? vec2(1, 0) : vec2(0, 1);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials.xy = vec2(0);
+  
+  vec4 e = vec4(0.1, 1.0, 2.0, 3.0);
+  vec4 o = vec4(-3.4, - 1.2, 1.2, 3.4);
+  for(int i = 0; i < 4; i ++ ) {
+    for(int j = 0; j < 4; j ++ ) {
+      materials.xy += superquad2(6.0, e[i], e[j], xyz - vec3(o[j], 0, o[3 - i]));
+    }
+  }
+}
+```
+
+* Try loading [superquad-ellipsoids-2.irmf](https://gmlewis.github.io/irmf-editor/?s=github.com/gmlewis/irmf/blob/master/examples/022-superquadrics/superquad-ellipsoids-2.irmf) now in the experimental IRMF editor!
+
 ## superquad-toroids-1.irmf
 
 This is a replication of Figure 10 in Al Barr's article linked above.
