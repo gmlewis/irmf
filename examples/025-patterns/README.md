@@ -42,8 +42,9 @@ float cyl(in float radius, in vec2 uv) {
 }
 
 vec2 cubed(in float value, in vec3 xyz) {
-  xyz = mod(xyz, 1.0);
-  return all(lessThan(xyz, vec3(0.5))) ? vec2(value, 0) : vec2(0, value);
+  vec3 v = step(0.5, mod(xyz, 1.0));
+  int count = int(v.x + v.y + v.z);
+  return count == 0 || count == 2 ? vec2(value, 0) : vec2(0, value);
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
