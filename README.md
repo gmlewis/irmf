@@ -4,7 +4,7 @@
 
 IRMF is a file format used to describe [GLSL
 ES](https://en.wikipedia.org/wiki/OpenGL_ES) shaders that define the
-materials in a 3D object with infinite resolution. IRMF completely
+materials in a 3D object with infinite resolution. IRMF
 eliminates the need for [software
 slicers](https://en.wikipedia.org/wiki/Slicer_(3D_printing)),
 [STL](https://en.wikipedia.org/wiki/STL_(file_format)), and
@@ -15,8 +15,8 @@ I believe that IRMF shaders will revolutionize the 3D-printing industry.
 
 ## Introduction
 
-This article is about a revolutionary computational technique,
-infinite resolution materials format (IRMF) shaders, that takes
+This article is about a computational technique,
+_"infinite resolution materials format"_ (IRMF) shaders, that takes
 digitally-generated 3D models to the next level. You can think of it
 as the equivalent of Gutenberg’s press for the creation of 3D
 physical objects. Perhaps a more modern analogy would be to think of
@@ -183,13 +183,15 @@ See the [examples](#examples) below for models that display in the IRMF editor.
 
 I'm also working on an [IRMF slicer](https://github.com/gmlewis/irmf-slicer)
 that will provide a bridge from IRMF shaders to 3D printers that can accept
-voxel image slices as input, until the time when all 3D printers natively
+STL or voxel image slices as input, until the time when all 3D printers natively
 support `*.irmf` files as an alternative input format to `*.gcode` files.
 
 Eventually, firmware for 3D printers will be written that natively read, parse,
-and use IRMF files to generate physical objects with one or more materials...
-thereby completely eliminating the need for STL files, software slicers,
-and G-Code files.
+and process IRMF files to generate physical objects with one or more materials...
+thereby mostly eliminating the need for STL files, software slicers, and G-Code files.
+It turns out that not everything is easy to model in IRMF, and there may always be
+a need for mesh models (preferably spline-based), which will hopefully be shared
+using more modern formats such as [3MF](https://3mf.io).
 
 ## OpenSCAD export to IRMF
 
@@ -241,6 +243,7 @@ Please see the [IRMF Spec](spec) and [provided examples](#examples) for more inf
 * [022-superquadrics](examples/022-superquadrics)
 * [023-infill](examples/023-infill)
 * [024-oloid](examples/024-oloid)
+* [025-patterns](examples/025-patterns)
 
 ----------------------------------------------------------------------
 
