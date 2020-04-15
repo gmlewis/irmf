@@ -16,7 +16,7 @@
 float gyroid(in float scale, in vec3 xyz) {
   xyz /= scale;
   float v = sin(xyz.x) * cos(xyz.y) + sin(xyz.y) * cos(xyz.z) + sin(xyz.z) * cos(xyz.x);
-  return v < 0.001 ? 1.0 : 0.0;
+  return abs(v) < 0.2 ? 1.0 : 0.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {

@@ -22,7 +22,7 @@ This is a gyroid structure as defined on [Wikipedia](https://en.wikipedia.org/wi
 float gyroid(in float scale, in vec3 xyz) {
   xyz /= scale;
   float v = sin(xyz.x) * cos(xyz.y) + sin(xyz.y) * cos(xyz.z) + sin(xyz.z) * cos(xyz.x);
-  return v < 0.001 ? 1.0 : 0.0;
+  return abs(v) < 0.2 ? 1.0 : 0.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
@@ -34,7 +34,11 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [gyroid-1-mat01-PLA.stl](gyroid-1-mat01-PLA.stl) (45790884 bytes)
+  - [gyroid-1-mat01-PLA.stl](gyroid-1-mat01-PLA.stl) (48215484 bytes)
+
+* Here is a voxel approximation of this model
+  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
+  - [gyroid-1-mat01-PLA.cbddlp](gyroid-1-mat01-PLA.cbddlp) (6287748 bytes)
 
 ----------------------------------------------------------------------
 

@@ -23,6 +23,7 @@ func main() {
 	readmeByPath := map[string]string{}
 	irmfByPath := map[string]map[string]string{}
 	stlFileSizesByPath := map[string]map[string]int64{}
+	dlpFileSizesByPath := map[string]map[string]int64{}
 	if err := filepath.Walk("examples", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Fatalf("path=%q, err=%v", path, err)
@@ -30,6 +31,7 @@ func main() {
 		if info.IsDir() {
 			irmfByPath[path] = map[string]string{}
 			stlFileSizesByPath[path] = map[string]int64{}
+			dlpFileSizesByPath[path] = map[string]int64{}
 			return nil
 		}
 		if info.Name() == "README.md" {
@@ -44,6 +46,12 @@ func main() {
 			dir := filepath.Dir(path)
 			base := filepath.Base(path)
 			stlFileSizesByPath[dir][base] = info.Size()
+			return nil
+		}
+		if strings.HasSuffix(path, ".cbddlp") {
+			dir := filepath.Dir(path)
+			base := filepath.Base(path)
+			dlpFileSizesByPath[dir][base] = info.Size()
 			return nil
 		}
 		if strings.HasSuffix(path, ".irmf") {
@@ -61,7 +69,7 @@ func main() {
 	}
 
 	for k, v := range readmeByPath {
-		processReadme(k, v, irmfByPath[k], stlFileSizesByPath[k])
+		processReadme(k, v, irmfByPath[k], stlFileSizesByPath[k], dlpFileSizesByPath[k])
 	}
 }
 
@@ -95,10 +103,11 @@ func removeExtraFields(s string) string {
 	return strings.Join(out, "\n")
 }
 
-func processReadme(path, buf string, irmfs map[string]string, stlFileSizes map[string]int64) {
+func processReadme(path, buf string, irmfs map[string]string, stlFileSizes map[string]int64, dlpFileSizes map[string]int64) {
 	log.Printf("Processing %v/README.md ...", path)
 	log.Printf("Found %v .irmf files...", len(irmfs))
 	log.Printf("Found %v .stl files...", len(stlFileSizes))
+	log.Printf("Found %v .cbddlp files...", len(dlpFileSizes))
 
 	licenseText := newLicenseText
 
@@ -127,6 +136,10 @@ func processReadme(path, buf string, irmfs map[string]string, stlFileSizes map[s
 
 		if len(stlFileSizes) > 0 {
 			parts[i] += addSTLs(filename, stlFileSizes)
+		}
+
+		if len(dlpFileSizes) > 0 {
+			parts[i] += addDLPs(filename, dlpFileSizes)
 		}
 	}
 	parts = append(parts, licenseText)
@@ -157,6 +170,31 @@ func addSTLs(filename string, stlFileSizes map[string]int64) string {
 	if len(lines) > 1 {
 		sort.Strings(lines)
 		header += "\n  (one STL file per material)"
+	}
+
+	return "\n" + header + ":\n" + strings.Join(lines, "\n") + "\n"
+}
+
+func addDLPs(filename string, dlpFileSizes map[string]int64) string {
+	var lines []string
+
+	// Strip off the ".irmf"
+	filename = strings.TrimSuffix(filename, ".irmf")
+
+	for k, v := range dlpFileSizes {
+		if strings.HasPrefix(k, filename+"-mat") {
+			lines = append(lines, fmt.Sprintf("  - [%v](%v) (%v bytes)", k, k, v))
+		}
+	}
+
+	if len(lines) == 0 {
+		return ""
+	}
+
+	header := "* Here is a voxel approximation of this model\n  using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)"
+	if len(lines) > 1 {
+		sort.Strings(lines)
+		header += "\n  (one .cbddlp file per material)"
 	}
 
 	return "\n" + header + ":\n" + strings.Join(lines, "\n") + "\n"
