@@ -18,7 +18,7 @@ link out of a couple partial toroids and a couple cylinders:
 
 #define M_PI 3.1415926535897932384626433832795
 
-float torus(float majorRadius, float minorRadius, float fromDeg, float toDeg, in vec3 xyz) {
+float torus(in float majorRadius, in float minorRadius, in float fromDeg, in float toDeg, in vec3 xyz) {
   float r = length(xyz);
   if (r > majorRadius + minorRadius || r < majorRadius - minorRadius) { return 0.0; }
   
@@ -35,7 +35,7 @@ float torus(float majorRadius, float minorRadius, float fromDeg, float toDeg, in
   return 1.0;
 }
 
-float cylinder(float radius, float height, in vec3 xyz) {
+float cylinder(in float radius, in float height, in vec3 xyz) {
   // First, trivial reject on the two ends of the cylinder.
   if (xyz.x < 0.0 || xyz.x > height) { return 0.0; }
   
@@ -46,9 +46,9 @@ float cylinder(float radius, float height, in vec3 xyz) {
   return 1.0;
 }
 
-float chainLink(float majorRadius, float minorRadius, float separator, in vec3 xyz) {
+float chainLink(in float majorRadius, in float minorRadius, in float separator, in vec3 xyz) {
   float result = torus(majorRadius, minorRadius, 90.0, 270.0, xyz);
-  result += torus(vec3(separator, 0, 0), majorRadius, minorRadius, 270.0, 90.0, xyz);
+  result += torus(majorRadius, minorRadius, 270.0, 90.0, xyz-vec3(separator, 0, 0));
   result += cylinder(minorRadius, separator, xyz - vec3(0, majorRadius, 0));
   result += cylinder(minorRadius, separator, xyz + vec3(0, majorRadius, 0));
   return result;
@@ -63,7 +63,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [chain-link-1-mat01-PLA1.stl](chain-link-1-mat01-PLA1.stl) (32548884 bytes)
+  - [chain-link-1-mat01-PLA1.stl](chain-link-1-mat01-PLA1.stl) (48978484 bytes)
 
 ----------------------------------------------------------------------
 

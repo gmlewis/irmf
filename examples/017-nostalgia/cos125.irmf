@@ -20,5 +20,5 @@ float cos125(in float thickness, in vec3 xyz) {
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = cos125(0.1, xyz);
+  materials[0] = cos125(0.4, xyz);
 }

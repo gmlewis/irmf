@@ -120,7 +120,7 @@ void mainModel4(out vec4 materials,in vec3 xyz){
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [rodin-coil-1-mat01-metal.stl](rodin-coil-1-mat01-metal.stl) (46804884 bytes)
+  - [rodin-coil-1-mat01-metal.stl](rodin-coil-1-mat01-metal.stl) (49929684 bytes)
 
 ----------------------------------------------------------------------
 

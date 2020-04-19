@@ -29,7 +29,7 @@ float cos125(in float thickness, in vec3 xyz) {
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = cos125(0.1, xyz);
+  materials[0] = cos125(0.4, xyz);
 }
 ```
 
@@ -37,7 +37,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [cos125-mat01-PLA.stl](cos125-mat01-PLA.stl) (46652084 bytes)
+  - [cos125-mat01-PLA.stl](cos125-mat01-PLA.stl) (49560084 bytes)
 
 ----------------------------------------------------------------------
 

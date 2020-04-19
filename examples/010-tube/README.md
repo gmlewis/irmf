@@ -37,7 +37,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [tube-1-mat01-PLA.stl](tube-1-mat01-PLA.stl) (43949684 bytes)
+  - [tube-1-mat01-PLA.stl](tube-1-mat01-PLA.stl) (49291284 bytes)
 
 ----------------------------------------------------------------------
 

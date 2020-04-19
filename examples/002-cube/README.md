@@ -136,7 +136,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [cube-csg-mat01-AISI1018steel.stl](cube-csg-mat01-AISI1018steel.stl) (42352084 bytes)
+  - [cube-csg-mat01-AISI1018steel.stl](cube-csg-mat01-AISI1018steel.stl) (48950484 bytes)
 
 ## irmf-logo-model-1.irmf
 
@@ -178,7 +178,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [irmf-logo-model-1-mat01-AISI1018steel.stl](irmf-logo-model-1-mat01-AISI1018steel.stl) (41924084 bytes)
+  - [irmf-logo-model-1-mat01-AISI1018steel.stl](irmf-logo-model-1-mat01-AISI1018steel.stl) (49615284 bytes)
 
 ## irmf-logo-model-2.irmf
 
@@ -216,7 +216,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [irmf-logo-model-2-mat01-AISI1018steel.stl](irmf-logo-model-2-mat01-AISI1018steel.stl) (41080884 bytes)
+  - [irmf-logo-model-2-mat01-AISI1018steel.stl](irmf-logo-model-2-mat01-AISI1018steel.stl) (48638484 bytes)
 
 ----------------------------------------------------------------------
 

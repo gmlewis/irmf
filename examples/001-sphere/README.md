@@ -33,7 +33,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [sphere-1-mat01-AISI-1018-steel.stl](sphere-1-mat01-AISI-1018-steel.stl) (26712884 bytes)
+  - [sphere-1-mat01-AISI-1018-steel.stl](sphere-1-mat01-AISI-1018-steel.stl) (48218484 bytes)
 
 ## sphere-2.irmf
 
@@ -67,7 +67,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [sphere-2-mat01-AISI-1018-steel.stl](sphere-2-mat01-AISI-1018-steel.stl) (26712884 bytes)
+  - [sphere-2-mat01-AISI-1018-steel.stl](sphere-2-mat01-AISI-1018-steel.stl) (48218484 bytes)
 
 ## sphere-3.irmf
 
@@ -111,8 +111,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [sphere-3-mat01-PLA1.stl](sphere-3-mat01-PLA1.stl) (26304884 bytes)
-  - [sphere-3-mat02-PLA2.stl](sphere-3-mat02-PLA2.stl) (12982884 bytes)
+  - [sphere-3-mat01-PLA1.stl](sphere-3-mat01-PLA1.stl) (49849284 bytes)
+  - [sphere-3-mat02-PLA2.stl](sphere-3-mat02-PLA2.stl) (25656084 bytes)
 
 ----------------------------------------------------------------------
 
