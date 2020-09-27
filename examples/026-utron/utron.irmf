@@ -1,0 +1,42 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "copyright": "Apache-2.0",
+  "date": "2020-09-27",
+  "irmf": "1.0",
+  "materials": ["steel"],
+  "max": [36,36,36],
+  "min": [-36,-36,0],
+  "notes": "Simple IRMF shader - utron.",
+  "options": {},
+  "title": "utron",
+  "units": "mm",
+  "version": "1.0"
+}*/
+
+float cone(in vec3 xyz) {
+  // Trivially reject above and below the cone.
+  if (xyz.z < 0.0 || xyz.z > 1.0) { return 0.0; }
+  
+  // Calculate the new size based on the height.
+  float zsize = mix(1.0, 0.0, xyz.z);
+  float r = length(xyz.xy);
+  
+  if (r > zsize) { return 0.0; }
+  
+  return 1.0;
+}
+
+float sphere(in float radius, in vec3 xyz) {
+  float r = length(xyz);
+  return r <= radius ? 1.0 : 0.0;
+}
+
+float utron(in float sphereDiam, in float edgeLen, in vec3 xyz) {
+    float h = sqrt(edgeLen*edgeLen/2.0);
+    float r = sphereDiam/2.0;
+    return cone(xyz/h) - sphere(1.0, xyz/r);
+}
+
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = utron(44.0, 50.0, xyz);
+}
