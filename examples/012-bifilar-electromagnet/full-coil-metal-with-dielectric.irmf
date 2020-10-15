@@ -3,7 +3,7 @@
   "copyright": "Apache-2.0",
   "date": "2020-03-05",
   "irmf": "1.0",
-  "materials": ["33CrMoV12","33CrMoV12","dielectric"],
+  "materials": ["copper","copper","dielectric"],
   "max": [25,25,71],
   "min": [-25,-25,-61],
   "notes": "The IRMF shader that started it all... the bifilar electromagnet.",

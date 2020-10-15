@@ -32,7 +32,7 @@ Here's a cut-away view of the same model showing the inner winding structure:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12","dielectric"],
+  materials: ["copper","copper","dielectric"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
@@ -219,7 +219,7 @@ axial direction!
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12"],
+  materials: ["copper","copper"],
   max: [13,13,15],
   min: [-13,-13,-3],
   units: "mm",
@@ -410,7 +410,7 @@ Here is the full model only showing the metal:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12"],
+  materials: ["copper","copper"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
@@ -592,7 +592,7 @@ Here is the full model with metal and dielectric:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12","dielectric"],
+  materials: ["copper","copper","dielectric"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
@@ -774,7 +774,7 @@ Here is the full model with metal, dielectric, and solid core:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12","dielectric"],
+  materials: ["copper","copper","dielectric"],
   max: [25,25,71],
   min: [-25,-25,-61],
   units: "mm",
@@ -957,7 +957,7 @@ Here is the same model, rotated to the horizontal:
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["33CrMoV12","33CrMoV12","dielectric"],
+  materials: ["copper","copper","dielectric"],
   max: [71,25,25],
   min: [-61,-25,-25],
   units: "mm",

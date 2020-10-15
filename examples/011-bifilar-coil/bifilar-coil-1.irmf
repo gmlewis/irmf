@@ -3,7 +3,7 @@
   "copyright": "Apache-2.0",
   "date": "2020-02-13",
   "irmf": "1.0",
-  "materials": ["metal","metal"],
+  "materials": ["copper","copper"],
   "max": [22,22,0.425],
   "min": [-22,-22,-0.425],
   "notes": "Simple IRMF shader - bifilar-coil.",

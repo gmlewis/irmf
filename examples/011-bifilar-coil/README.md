@@ -9,7 +9,7 @@ Another surprisingly-simple model is a bifilar-coil which is two spirals.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal","metal"],
+  materials: ["copper","copper"],
   max: [22,22,0.425],
   min: [-22,-22,-0.425],
   units: "mm",
@@ -89,7 +89,7 @@ Let's take bifilar-coil-1 above and add in a dielectric between the metal wires.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal","metal","dielectric"],
+  materials: ["copper","copper","dielectric"],
   max: [22,22,0.425],
   min: [-22,-22,-0.425],
   units: "mm",

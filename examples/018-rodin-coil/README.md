@@ -18,7 +18,7 @@ point to make "start" and "end" wires.
 ```glsl
 /*{
   irmf: "1.0",
-  materials: ["metal"],
+  materials: ["copper"],
   max: [170,150,50],
   min: [-150,-150,-50],
   units: "mm",

@@ -3,7 +3,7 @@
   "copyright": "Apache-2.0",
   "date": "2019-06-30",
   "irmf": "1.0",
-  "materials": ["metal"],
+  "materials": ["copper"],
   "max": [170,150,50],
   "min": [-150,-150,-50],
   "notes": "1st order Rodin coil.",
