@@ -30,9 +30,11 @@ Here's a cut-away view of the same model showing the inner winding structure:
 ![cut-away](cutaway.png)
 
 Here's a video describing the process of how I came up with this model:
+
 [![Axial plus Radial Bifilar Electromagnet](https://img.youtube.com/vi/CV303dJUbq0/0.jpg)](https://www.youtube.com/watch?v=CV303dJUbq0)
 
-and here's an animation of the slices of the electromagent:
+and here's an animation of the slices of the electromagnet:
+
 [![MRI of Axial plus Radial Bifilar Electromagnet](https://img.youtube.com/vi/pV56Pq2dErc/0.jpg)](https://www.youtube.com/watch?v=pV56Pq2dErc)
 
 ```glsl
