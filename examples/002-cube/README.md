@@ -93,12 +93,14 @@ understand.
   units: "mm",
 }*/
 
-float cube(in float size, in vec3 xyz) {
-  return (any(greaterThan(abs(xyz), vec3(size)))) ? 0.0 : 1.0;
+float cube(in mat4 xfm, in vec4 xyz) {
+  xyz = xyz * xfm;
+  if (any(greaterThan(abs(xyz), vec4(0.5, 0.5, 0.5, 1.0)))) { return 0.0; }
+  return 1.0;
 }
 
 void mainModel4(out vec4 materials, in vec3 xyz) {
-  materials[0] = cube(0.5, xyz);
+  materials[0] = cube(mat4(1), vec4(xyz, 1.0)); // mat4(1) is the identity matrix.
 }
 ```
 
