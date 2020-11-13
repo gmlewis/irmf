@@ -51,7 +51,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [oloid-1-mat01-PLA.stl](oloid-1-mat01-PLA.stl) (48446684 bytes)
+  - [oloid-1-mat01-PLA.stl](oloid-1-mat01-PLA.stl) (8117484 bytes)
 
 ## oloid-2.irmf
 
@@ -110,8 +110,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [oloid-2-mat01-Red.stl](oloid-2-mat01-Red.stl) (47604484 bytes)
-  - [oloid-2-mat02-Green.stl](oloid-2-mat02-Green.stl) (47541684 bytes)
+  - [oloid-2-mat01-Red.stl](oloid-2-mat01-Red.stl) (14287884 bytes)
+  - [oloid-2-mat02-Green.stl](oloid-2-mat02-Green.stl) (14287884 bytes)
 
 ----------------------------------------------------------------------
 

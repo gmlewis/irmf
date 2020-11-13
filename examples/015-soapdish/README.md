@@ -43,7 +43,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-01-mat01-PLA1.stl](soapdish-step-01-mat01-PLA1.stl) (49622484 bytes)
+  - [soapdish-step-01-mat01-PLA1.stl](soapdish-step-01-mat01-PLA1.stl) (14828884 bytes)
 
 ## soapdish-step-02.irmf
 
@@ -87,7 +87,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-02-mat01-PLA1.stl](soapdish-step-02-mat01-PLA1.stl) (49894884 bytes)
+  - [soapdish-step-02-mat01-PLA1.stl](soapdish-step-02-mat01-PLA1.stl) (19574084 bytes)
 
 ## soapdish-step-03.irmf
 
@@ -147,7 +147,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-03-mat01-PLA1.stl](soapdish-step-03-mat01-PLA1.stl) (49602084 bytes)
+  - [soapdish-step-03-mat01-PLA1.stl](soapdish-step-03-mat01-PLA1.stl) (21269884 bytes)
 
 ## soapdish-step-04.irmf
 
@@ -211,7 +211,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-04-mat01-PLA1.stl](soapdish-step-04-mat01-PLA1.stl) (49616084 bytes)
+  - [soapdish-step-04-mat01-PLA1.stl](soapdish-step-04-mat01-PLA1.stl) (19651084 bytes)
 
 ## soapdish-step-05.irmf
 
@@ -278,7 +278,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-05-mat01-PLA1.stl](soapdish-step-05-mat01-PLA1.stl) (49828884 bytes)
+  - [soapdish-step-05-mat01-PLA1.stl](soapdish-step-05-mat01-PLA1.stl) (16316684 bytes)
 
 ## soapdish-step-06.irmf
 
@@ -350,7 +350,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-06-mat01-PLA1.stl](soapdish-step-06-mat01-PLA1.stl) (49805684 bytes)
+  - [soapdish-step-06-mat01-PLA1.stl](soapdish-step-06-mat01-PLA1.stl) (16451884 bytes)
 
 ## soapdish-step-07.irmf
 
@@ -429,7 +429,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-07-mat01-PLA1.stl](soapdish-step-07-mat01-PLA1.stl) (49868084 bytes)
+  - [soapdish-step-07-mat01-PLA1.stl](soapdish-step-07-mat01-PLA1.stl) (16549484 bytes)
 
 ## soapdish-step-08.irmf
 
@@ -519,7 +519,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-08-mat01-PLA1.stl](soapdish-step-08-mat01-PLA1.stl) (49922884 bytes)
+  - [soapdish-step-08-mat01-PLA1.stl](soapdish-step-08-mat01-PLA1.stl) (18838684 bytes)
 
 ## soapdish-step-09.irmf
 
@@ -619,7 +619,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-09-mat01-PLA1.stl](soapdish-step-09-mat01-PLA1.stl) (49968084 bytes)
+  - [soapdish-step-09-mat01-PLA1.stl](soapdish-step-09-mat01-PLA1.stl) (18974684 bytes)
 
 ## soapdish-step-10.irmf
 
@@ -742,7 +742,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [soapdish-step-10-mat01-PLA1.stl](soapdish-step-10-mat01-PLA1.stl) (49744884 bytes)
+  - [soapdish-step-10-mat01-PLA1.stl](soapdish-step-10-mat01-PLA1.stl) (20267484 bytes)
 
 ----------------------------------------------------------------------
 

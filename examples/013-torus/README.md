@@ -40,7 +40,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [torus-1-mat01-PLA1.stl](torus-1-mat01-PLA1.stl) (48867284 bytes)
+  - [torus-1-mat01-PLA1.stl](torus-1-mat01-PLA1.stl) (15428084 bytes)
 
 ## torus-2.irmf
 
@@ -90,8 +90,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [torus-2-mat01-PLA1.stl](torus-2-mat01-PLA1.stl) (49904684 bytes)
-  - [torus-2-mat02-PLA2.stl](torus-2-mat02-PLA2.stl) (18676284 bytes)
+  - [torus-2-mat01-PLA1.stl](torus-2-mat01-PLA1.stl) (12363284 bytes)
+  - [torus-2-mat02-PLA2.stl](torus-2-mat02-PLA2.stl) (4666284 bytes)
 
 ----------------------------------------------------------------------
 

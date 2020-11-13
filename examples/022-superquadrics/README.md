@@ -59,7 +59,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [superquad-ellipsoids-1-mat01-PLA.stl](superquad-ellipsoids-1-mat01-PLA.stl) (46437284 bytes)
+  - [superquad-ellipsoids-1-mat01-PLA.stl](superquad-ellipsoids-1-mat01-PLA.stl) (11154484 bytes)
 
 ## superquad-ellipsoids-2.irmf
 
@@ -152,7 +152,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [superquad-toroids-1-mat01-PLA.stl](superquad-toroids-1-mat01-PLA.stl) (49549684 bytes)
+  - [superquad-toroids-1-mat01-PLA.stl](superquad-toroids-1-mat01-PLA.stl) (7559284 bytes)
 
 ## superquad-toroids-2.irmf
 
@@ -235,7 +235,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [sphericon-1-mat01-PLA.stl](sphericon-1-mat01-PLA.stl) (49020084 bytes)
+  - [sphericon-1-mat01-PLA.stl](sphericon-1-mat01-PLA.stl) (14132684 bytes)
 
 ## sphericon-2.irmf
 
@@ -281,8 +281,8 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [sphericon-2-mat01-Red.stl](sphericon-2-mat01-Red.stl) (48951684 bytes)
-  - [sphericon-2-mat02-Green.stl](sphericon-2-mat02-Green.stl) (48856884 bytes)
+  - [sphericon-2-mat01-Red.stl](sphericon-2-mat01-Red.stl) (29781084 bytes)
+  - [sphericon-2-mat02-Green.stl](sphericon-2-mat02-Green.stl) (29781084 bytes)
 
 ----------------------------------------------------------------------
 

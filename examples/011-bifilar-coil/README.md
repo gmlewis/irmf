@@ -77,12 +77,12 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [bifilar-coil-1-mat01-metal.stl](bifilar-coil-1-mat01-metal.stl) (49786284 bytes)
-  - [bifilar-coil-1-mat02-metal.stl](bifilar-coil-1-mat02-metal.stl) (49786084 bytes)
+  - [bifilar-coil-1-mat01-copper.stl](bifilar-coil-1-mat01-copper.stl) (27065484 bytes)
+  - [bifilar-coil-1-mat02-copper.stl](bifilar-coil-1-mat02-copper.stl) (27065484 bytes)
 
 ## bifilar-coil-2.irmf
 
-Let's take bifilar-coil-1 above and add in a dielectric between the metal wires.
+Let's take bifilar-coil-1 above and add in a dielectric between the copper wires.
 
 ![bifilar-coil-2.png](bifilar-coil-2.png)
 
@@ -170,9 +170,9 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer)
   (one STL file per material):
-  - [bifilar-coil-2-mat01-metal.stl](bifilar-coil-2-mat01-metal.stl) (49786284 bytes)
-  - [bifilar-coil-2-mat02-metal.stl](bifilar-coil-2-mat02-metal.stl) (49786084 bytes)
-  - [bifilar-coil-2-mat03-dielectric.stl](bifilar-coil-2-mat03-dielectric.stl) (46127484 bytes)
+  - [bifilar-coil-2-mat01-copper.stl](bifilar-coil-2-mat01-copper.stl) (27065484 bytes)
+  - [bifilar-coil-2-mat02-copper.stl](bifilar-coil-2-mat02-copper.stl) (27065484 bytes)
+  - [bifilar-coil-2-mat03-dielectric.stl](bifilar-coil-2-mat03-dielectric.stl) (39685884 bytes)
 
 ----------------------------------------------------------------------
 

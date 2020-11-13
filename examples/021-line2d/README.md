@@ -50,7 +50,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [line2d-1-mat01-PLA.stl](line2d-1-mat01-PLA.stl) (44218084 bytes)
+  - [line2d-1-mat01-PLA.stl](line2d-1-mat01-PLA.stl) (3595084 bytes)
 
 ## line2d-2.irmf
 
@@ -113,7 +113,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [line2d-2-mat01-PLA.stl](line2d-2-mat01-PLA.stl) (41057284 bytes)
+  - [line2d-2-mat01-PLA.stl](line2d-2-mat01-PLA.stl) (5235084 bytes)
 
 ----------------------------------------------------------------------
 

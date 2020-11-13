@@ -36,7 +36,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [cylinder-1-mat01-PLA.stl](cylinder-1-mat01-PLA.stl) (48160084 bytes)
+  - [cylinder-1-mat01-PLA.stl](cylinder-1-mat01-PLA.stl) (5571884 bytes)
 
 ----------------------------------------------------------------------
 

@@ -5,12 +5,12 @@
 The Rodin coil is an interesting structure with some fairly unusual
 electromagnetic properties. Search YouTube for more information.
 
-In order to work our way up to a full coil with metal wires, let's
+In order to work our way up to a full coil with copper wires, let's
 first model the wire bundles as a single massive wire, then in the
 next version, we will model the individual wires within each bundle.
 
 One really cool property about these models is that the resulting
-metal wire is a single very long wire that can be tapped at one
+copper wire is a single very long wire that can be tapped at one
 point to make "start" and "end" wires.
 
 ![rodin-coil-1.png](rodin-coil-1.png)
@@ -120,7 +120,7 @@ void mainModel4(out vec4 materials,in vec3 xyz){
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [rodin-coil-1-mat01-metal.stl](rodin-coil-1-mat01-metal.stl) (49929684 bytes)
+  - [rodin-coil-1-mat01-copper.stl](rodin-coil-1-mat01-copper.stl) (37804284 bytes)
 
 ----------------------------------------------------------------------
 

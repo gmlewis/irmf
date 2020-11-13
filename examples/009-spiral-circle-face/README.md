@@ -72,7 +72,7 @@ void mainModel4(out vec4 materials, in vec3 xyz) {
 
 * Here is a crude STL approximation of this model
   using [irmf-slicer](https://github.com/gmlewis/irmf-slicer):
-  - [spiral-circle-mat01-PLA.stl](spiral-circle-mat01-PLA.stl) (47967684 bytes)
+  - [spiral-circle-mat01-PLA.stl](spiral-circle-mat01-PLA.stl) (7559484 bytes)
 
 ----------------------------------------------------------------------
 
