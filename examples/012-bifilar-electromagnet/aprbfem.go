@@ -4,7 +4,7 @@
 // STL file using Go. It is based on 30x30x132mm-vert.irmf.
 //
 // Usage:
-//   go run aprbfem.go -out aprbfem.stl -n 120
+//   go run aprbfem.go -out aprbfem.stl -n 36
 package main
 
 import (
@@ -18,7 +18,7 @@ import (
 
 var (
 	filename = flag.String("out", "aprbfem.stl", "Output filename")
-	numDiv   = flag.Int("n", 120, "Number of divisions per rotation")
+	numDiv   = flag.Int("n", 36, "Number of divisions per rotation")
 )
 
 // TriWriter is a writer that accepts STL triangles.
@@ -82,14 +82,14 @@ func (m *arBifilarElectromagnet) render() {
 
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	radiusOffset := float64(coilNum - 1)
-	// spacingAngle := float64(m.numPairs-4) * m.inc * math.Atan(2.0*radiusOffset/float64(m.numPairs-1))
+	spacingAngle := float64(m.numPairs-4) * m.inc * math.Atan(2.0*radiusOffset/float64(m.numPairs-1))
 	coilRadius := radiusOffset + m.innerRadius
 	trimStartAngle := 0.05
 
-	m.coilSquareFace(wireNum, coilRadius, trimStartAngle, 0.0)
+	m.coilSquareFace(wireNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
 }
 
-func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle float64) {
+func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 	delta := 2.0 * math.Pi / float64(*numDiv)
 	angle := 0.0
 	endAngle := float64(m.numTurns)*2.0*math.Pi + angle
@@ -99,7 +99,7 @@ func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAn
 	firstFace := true
 	for ; angle <= endAngle-delta; angle += delta {
 		lastFace := (angle+delta > endAngle-delta)
-		m.coilWireSegment(firstFace, lastFace, wireNum, angle, angle+delta, ri, ro)
+		m.coilWireSegment(firstFace, lastFace, wireNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
 		firstFace = false
 	}
 }
