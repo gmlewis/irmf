@@ -72,6 +72,15 @@ type arBifilarElectromagnet struct {
 	inc             float64
 	connectorRadius float64
 	doubleGap       float64
+
+	lowerConnectors []*connector
+	upperConnectors []*connector
+}
+
+type connector struct {
+	inwardN        *vec3.T
+	center         *vec3.T
+	p1, p2, p3, p4 *vec3.T
 }
 
 func (m *arBifilarElectromagnet) render() {
@@ -176,28 +185,36 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			V3: [3]float32{v3[0], v3[1], v3[2]},
 		})
 	}
+	quad := func(n, v1, v2, v3, v4 *vec3.T) {
+		write(n, v1, v2, v3)
+		write(n, v1, v3, v4)
+	}
+
 	if firstFace {
 		n := vec3.Cross(cp(p1di).Sub(p1do), cp(p1ui).Sub(p1do))
 		n.Normalize()
-		write(&n, p1do, p1di, p1ui)
-		write(&n, p1do, p1ui, p1uo)
+		// quad(&n, p1do, p1di, p1ui, p1uo)
+		uc := &connector{
+			inwardN: &ni,
+			// center: ,
+			// p1: ,
+			// p2: ,
+			// p3: ,
+			// p4: ,
+		}
+		m.upperConnectors = append(m.upperConnectors, uc)
 	}
 	// outer-facing
-	write(&no, p1uo, p2do, p1do)
-	write(&no, p1uo, p2uo, p2do)
+	quad(&no, p1uo, p2uo, p2do, p1do)
 	// upward-facing
-	write(&nu, p1uo, p1ui, p2ui)
-	write(&nu, p1uo, p2ui, p2uo)
+	quad(&nu, p1uo, p1ui, p2ui, p2uo)
 	// inner-facing
-	write(&ni, p1ui, p1di, p2di)
-	write(&ni, p1ui, p2di, p2ui)
+	quad(&ni, p1ui, p1di, p2di, p2ui)
 	// downward-facing
-	write(&nd, p1do, p2do, p2di)
-	write(&nd, p1do, p2di, p1di)
+	quad(&nd, p1do, p2do, p2di, p1di)
 	if lastFace {
 		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
 		n.Normalize()
-		write(&n, p2do, p2uo, p2ui)
-		write(&n, p2do, p2ui, p2di)
+		quad(&n, p2do, p2uo, p2ui, p2di)
 	}
 }
