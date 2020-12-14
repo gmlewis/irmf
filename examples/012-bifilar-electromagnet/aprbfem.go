@@ -193,14 +193,23 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	if firstFace {
 		n := vec3.Cross(cp(p1di).Sub(p1do), cp(p1ui).Sub(p1do))
 		n.Normalize()
+		edge := cp(&n).Scale(float32(m.size))
+		p3uo := cp(p1uo).Add(edge)
+		p3ui := cp(p1ui).Add(edge)
+		p3do := cp(p1do).Add(edge)
+		p3di := cp(p1di).Add(edge)
 		// quad(&n, p1do, p1di, p1ui, p1uo)
+		quad(&n, p3do, p3di, p3ui, p3uo) // end-cap
+		quad(&n, p3uo, p1uo, p1do, p3do) // outer
+		quad(&n, p3ui, p3di, p1di, p1ui) // inner
+		quad(&n, p3do, p1do, p1di, p3di) // downward
 		uc := &connector{
 			inwardN: &ni,
-			// center: ,
-			// p1: ,
-			// p2: ,
-			// p3: ,
-			// p4: ,
+			center:  cp(p3uo).Add(p1ui).Scale(0.5),
+			p1:      p3uo,
+			p2:      p3ui,
+			p3:      p1ui,
+			p4:      p1uo,
 		}
 		m.upperConnectors = append(m.upperConnectors, uc)
 	}
@@ -215,6 +224,24 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	if lastFace {
 		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
 		n.Normalize()
-		quad(&n, p2do, p2uo, p2ui, p2di)
+		edge := cp(&n).Scale(float32(m.size))
+		p3uo := cp(p2uo).Add(edge)
+		p3ui := cp(p2ui).Add(edge)
+		p3do := cp(p2do).Add(edge)
+		p3di := cp(p2di).Add(edge)
+		// quad(&n, p2do, p2uo, p2ui, p2di)
+		quad(&n, p3di, p3do, p3uo, p3ui) // end-cap
+		quad(&n, p2uo, p3uo, p3do, p2do) // outer
+		quad(&n, p2ui, p2di, p3di, p3ui) // inner
+		quad(&n, p3ui, p3uo, p2uo, p2ui) // upward
+		lc := &connector{
+			inwardN: &ni,
+			center:  cp(p3uo).Add(p2ui).Scale(0.5),
+			p1:      p3ui,
+			p2:      p3uo,
+			p3:      p2uo,
+			p4:      p2ui,
+		}
+		m.lowerConnectors = append(m.lowerConnectors, lc)
 	}
 }
