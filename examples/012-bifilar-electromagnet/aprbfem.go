@@ -96,12 +96,15 @@ func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAn
 
 	ri := radius - 0.5*m.size
 	ro := radius + 0.5*m.size
+	firstFace := true
 	for ; angle <= endAngle-delta; angle += delta {
-		m.coilWireSegment(wireNum, angle, angle+delta, ri, ro)
+		lastFace := (angle+delta > endAngle-delta)
+		m.coilWireSegment(firstFace, lastFace, wireNum, angle, angle+delta, ri, ro)
+		firstFace = false
 	}
 }
 
-func (m *arBifilarElectromagnet) coilWireSegment(wireNum int, a1, a2, ri, ro float64) {
+func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireNum int, a1, a2, ri, ro float64) {
 	z1 := a1 / math.Pi
 	z2 := a2 / math.Pi
 	if wireNum%2 == 0 {
@@ -118,27 +121,22 @@ func (m *arBifilarElectromagnet) coilWireSegment(wireNum int, a1, a2, ri, ro flo
 	cp := func(v *vec3.T) *vec3.T { return &vec3.T{v[0], v[1], v[2]} }
 
 	p1uo := pu(ro, a1, z1)
-	// p1ui := pu(ri, a1, z1)
+	p1ui := pu(ri, a1, z1)
 	p1do := pd(ro, a1, z1)
-	// p1di := pd(ri, a1, z1)
+	p1di := pd(ri, a1, z1)
 	p2uo := pu(ro, a2, z2)
-	// p2ui := pu(ri, a2, z2)
+	p2ui := pu(ri, a2, z2)
 	p2do := pd(ro, a2, z2)
-	// p2di := pd(ri, a2, z2)
+	p2di := pd(ri, a2, z2)
 
-	n1o := vec3.T{float32(math.Cos(a1)), float32(math.Sin(a1)), 0}
-	n1u := vec3.Cross(pu(ro, a1, z1-1.0).Sub(p1uo), cp(p2uo).Sub(p1uo))
-	n1u.Normalize()
-	// n1i := vec3.T{float32(math.Cos(a1 + math.Pi)), float32(math.Sin(a1 + math.Pi)), 0}
-	n1d := vec3.Cross(pd(ro, a1, z1+1.0).Sub(p1do), cp(p2do).Sub(p1do))
-	n1d.Normalize()
+	ma := 0.5 * (a1 + a2)
 
-	// n2o := vec3.T{float32(math.Cos(a2)), float32(math.Sin(a2)), 0}
-	n2u := vec3.Cross(pu(ro, a2, z2-1.0).Sub(p2uo), cp(p2uo).Sub(p2uo))
-	n2u.Normalize()
-	// n2i := vec3.T{float32(math.Cos(a2 + math.Pi)), float32(math.Sin(a2 + math.Pi)), 0}
-	n2d := vec3.Cross(pd(ro, a2, z2+1.0).Sub(p2do), cp(p2do).Sub(p2do))
-	n2d.Normalize()
+	no := vec3.T{float32(math.Cos(ma)), float32(math.Sin(ma)), 0}
+	nu := vec3.Cross(cp(p2ui).Sub(p1uo), cp(p2uo).Sub(p1uo))
+	nu.Normalize()
+	ni := vec3.T{float32(math.Cos(ma + math.Pi)), float32(math.Sin(ma + math.Pi)), 0}
+	nd := vec3.Cross(cp(p2do).Sub(p1do), cp(p2di).Sub(p1do))
+	nd.Normalize()
 
 	write := func(n, v1, v2, v3 *vec3.T) {
 		m.w.Write(&stl.Tri{
@@ -148,6 +146,28 @@ func (m *arBifilarElectromagnet) coilWireSegment(wireNum int, a1, a2, ri, ro flo
 			V3: [3]float32{v3[0], v3[1], v3[2]},
 		})
 	}
-	write(&n1o, p1uo, p2do, p1do)
-	write(&n1o, p1uo, p2uo, p2do)
+	if firstFace {
+		n := vec3.Cross(cp(p1di).Sub(p1do), cp(p1ui).Sub(p1do))
+		n.Normalize()
+		write(&n, p1do, p1di, p1ui)
+		write(&n, p1do, p1ui, p1uo)
+	}
+	// outer-facing
+	write(&no, p1uo, p2do, p1do)
+	write(&no, p1uo, p2uo, p2do)
+	// upward-facing
+	write(&nu, p1uo, p1ui, p2ui)
+	write(&nu, p1uo, p2ui, p2uo)
+	// inner-facing
+	write(&ni, p1ui, p1di, p2di)
+	write(&ni, p1ui, p2di, p2ui)
+	// downward-facing
+	write(&nd, p1do, p2do, p2di)
+	write(&nd, p1do, p2di, p1di)
+	if lastFace {
+		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
+		n.Normalize()
+		write(&n, p2do, p2uo, p2ui)
+		write(&n, p2do, p2ui, p2di)
+	}
 }
