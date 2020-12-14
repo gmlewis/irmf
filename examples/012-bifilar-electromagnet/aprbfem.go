@@ -104,13 +104,13 @@ func (m *arBifilarElectromagnet) coilConnectorWires(wireNum, coilNum int, coilRa
 	m.coilConnectorWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
 }
 
-func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 }
 
-func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 }
 
-func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 }
 
 func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
