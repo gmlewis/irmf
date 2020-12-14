@@ -87,6 +87,30 @@ func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	trimStartAngle := 0.05
 
 	m.coilSquareFace(wireNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+
+	m.coilConnectorWires(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+}
+
+func (m *arBifilarElectromagnet) coilConnectorWires(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+	if coilNum == m.numPairs {
+		if wireNum == 1 {
+			m.innerExitWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+			return
+		}
+		m.outerExitWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+		return
+	}
+
+	m.coilConnectorWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+}
+
+func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+}
+
+func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+}
+
+func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 }
 
 func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
