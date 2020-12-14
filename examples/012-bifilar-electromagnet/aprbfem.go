@@ -1,10 +1,11 @@
-// -*- compile-command: "go run aprbfem.go -n 36"; -*-
+// -*- compile-command: "go run aprbfem.go"; -*-
 
 // aprbfem creates an axial-plus-radial-bi-filar-electro-magnet
 // STL file using Go. It is based on 30x30x132mm-vert.irmf.
 //
 // Usage:
-//   go run aprbfem.go -out aprbfem.stl -n 36
+//   go run aprbfem.go -h
+//   go run aprbfem.go -out aprbfem.stl
 package main
 
 import (
@@ -18,7 +19,12 @@ import (
 
 var (
 	filename = flag.String("out", "aprbfem.stl", "Output filename")
-	numDiv   = flag.Int("n", 36, "Number of divisions per rotation")
+	innerR   = flag.Float64("inner_radius", 3.0, "Inner radius in millimeters")
+	numDivs  = flag.Int("num_divs", 36, "Number of divisions per rotation")
+	numPairs = flag.Int("num_pairs", 11, "Number of coil pairs")
+	numTurns = flag.Int("num_turns", 61, "Total number of turns per coil")
+	wireGap  = flag.Float64("wire_gap", 0.15, "Gap between wires in millimeters")
+	wireSize = flag.Float64("wire_size", 0.85, "Width of (square) wire in millimeters")
 )
 
 // TriWriter is a writer that accepts STL triangles.
@@ -35,11 +41,11 @@ func main() {
 	}
 
 	m := &arBifilarElectromagnet{
-		numPairs:    11,
-		innerRadius: 3.0,
-		size:        0.85,
-		singleGap:   0.15,
-		numTurns:    61,
+		numPairs:    *numPairs,
+		innerRadius: *innerR,
+		size:        *wireSize,
+		singleGap:   *wireGap,
+		numTurns:    *numTurns,
 		w:           w,
 	}
 
@@ -114,7 +120,7 @@ func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, coilRad
 }
 
 func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
-	delta := 2.0 * math.Pi / float64(*numDiv)
+	delta := 2.0 * math.Pi / float64(*numDivs)
 	angle := 0.0
 	endAngle := float64(m.numTurns)*2.0*math.Pi + angle
 
