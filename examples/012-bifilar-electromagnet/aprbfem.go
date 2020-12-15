@@ -277,16 +277,32 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	if lastFace {
 		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
 		n.Normalize()
+		nb := cp(&n).Invert()
+
 		edge := cp(&n).Scale(float32(m.size))
 		p3uo := cp(p2uo).Add(edge)
 		p3ui := cp(p2ui).Add(edge)
 		p3do := cp(p2do).Add(edge)
 		p3di := cp(p2di).Add(edge)
 		// quad(&n, p2do, p2uo, p2ui, p2di)
-		quad(&n, p3di, p3do, p3uo, p3ui) // end-cap
-		quad(&n, p2uo, p3uo, p3do, p2do) // outer
-		quad(&n, p2ui, p2di, p3di, p3ui) // inner
-		quad(&n, p3ui, p3uo, p2uo, p2ui) // upward
+		quad(&n, p3di, p3do, p3uo, p3ui)  // end-cap
+		quad(&no, p2uo, p3uo, p3do, p2do) // outer
+		quad(&ni, p2ui, p2di, p3di, p3ui) // inner
+		quad(&nu, p3ui, p3uo, p2uo, p2ui) // upward
+
+		if coilNum == *numPairs && wireNum == 2 {
+			h := float32(*leadLen)
+			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
+			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
+			botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
+			botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
+
+			quad(&n, botP3ui, botP3uo, p3do, p3di)  // forward
+			quad(&no, botP3uo, botP2uo, p2do, p3do) // outer
+			quad(nb, botP2uo, botP2ui, p2di, p2do)  // backface
+			quad(&ni, botP2ui, botP3ui, p3di, p2di) // inner
+		}
+
 		lc := &connector{
 			inwardN: &ni,
 			center:  cp(p3uo).Add(p2ui).Scale(0.5),
