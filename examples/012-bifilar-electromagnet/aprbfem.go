@@ -98,40 +98,48 @@ func (m *arBifilarElectromagnet) render() {
 	}
 }
 
+func (m *arBifilarElectromagnet) radiusOffset(coilNum int) float64 {
+	return (m.size + m.singleGap) * float64(coilNum-1)
+}
+
+func (m *arBifilarElectromagnet) spacingAngle(coilNum int) float64 {
+	return float64(m.numPairs-4) * m.inc * math.Atan(2.0*m.radiusOffset(coilNum)/float64(m.numPairs-1))
+}
+
+func (m *arBifilarElectromagnet) coilRadius(coilNum int) float64 {
+	return m.radiusOffset(coilNum) + m.innerRadius
+}
+
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
-	radiusOffset := (m.size + m.singleGap) * float64(coilNum-1)
-	spacingAngle := float64(m.numPairs-4) * m.inc * math.Atan(2.0*radiusOffset/float64(m.numPairs-1))
-	coilRadius := radiusOffset + m.innerRadius
-	trimStartAngle := 0.05
-
-	m.coilSquareFace(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
-
-	m.coilConnectorWires(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+	m.coilSquareFace(wireNum, coilNum)
+	// m.coilConnectorWires(wireNum, coilNum)
 }
 
-func (m *arBifilarElectromagnet) coilConnectorWires(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
-	if coilNum == m.numPairs {
-		if wireNum == 1 {
-			m.innerExitWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
-			return
-		}
-		m.outerExitWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
-		return
-	}
+// func (m *arBifilarElectromagnet) coilConnectorWires(wireNum, coilNum int) {
+// 	if coilNum == m.numPairs {
+// 		if wireNum == 1 {
+// 			m.innerExitWire(wireNum, coilNum)
+// 			return
+// 		}
+// 		m.outerExitWire(wireNum, coilNum)
+// 		return
+// 	}
+//
+// 	m.coilConnectorWire(wireNum, coilNum)
+// }
+//
+// func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int) {
+// }
+//
+// func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int) {
+// }
+//
+// func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int) {
+// }
 
-	m.coilConnectorWire(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
-}
-
-func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
-}
-
-func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
-}
-
-func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
-}
-
-func (m *arBifilarElectromagnet) coilSquareFace(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+func (m *arBifilarElectromagnet) coilSquareFace(wireNum, coilNum int) {
+	radius := m.coilRadius(coilNum)
+	spacingAngle := m.spacingAngle(coilNum)
 	delta := 2.0 * math.Pi / float64(*numDivs)
 	angle := 0.0
 	endAngle := float64(m.numTurns)*2.0*math.Pi + angle
