@@ -192,7 +192,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	}
 
 	if firstFace {
-		da := m.size / (0.5 * (ro + ri))
+		da := m.size / ro
 		a0 := a1 - da
 		z0 := (origA1 - da) / math.Pi
 		p0uo := pu(ro, a0, z0)
@@ -203,13 +203,21 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		n.Normalize()
 
 		quad(&n, p0do, p0di, p0ui, p0uo) // end-cap
-		quad(&n, p0uo, p1uo, p1do, p0do) // outer
-		quad(&n, p0ui, p0di, p1di, p1ui) // inner
-		quad(&n, p0do, p1do, p1di, p0di) // downward
+		// quad(&no, p0uo, p1uo, p1do, p0do) // outer
+		quad(&nu, p0uo, p0ui, p1ui, p1uo) // upward
+		quad(&ni, p0ui, p0di, p1di, p1ui) // inner
+		quad(&nd, p0do, p1do, p1di, p0di) // downward
 
 		ma01 := 0.5 * (a1 + a0)
 		ni01 := vec3.T{float32(math.Cos(ma01 + math.Pi)), float32(math.Sin(ma01 + math.Pi)), 0}
-		ni01p := vec3.T{float32(math.Cos(ma01 + 0.5*math.Pi)), float32(math.Sin(ma01 + 0.5*math.Pi)), 0}
+
+		vlen := m.connectorRadius + 0.5*m.size - ro
+		outP0uo := cp(&ni01).Scale(-float32(vlen)).Add(p0uo)
+		outP0ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0uo)
+		outP0do := cp(&ni01).Scale(-float32(vlen)).Add(p0do)
+		outP0di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0do)
+
+		quad(&n, outP0do, outP0di, outP0ui, outP0uo) // end-cap
 
 		uc := &connector{
 			inwardN: &ni01,
@@ -220,26 +228,6 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			p4:      p1uo,
 		}
 		m.upperConnectors = append(m.upperConnectors, uc)
-
-		hsi := cp(&ni01).Scale(float32(0.5 * m.size))
-		hsip := cp(&ni01p).Scale(float32(0.5 * m.size))
-		cu := cp(uc.center).Add(&vec3.T{0, 0, -float32(m.singleGap + m.size)})
-		cui := cp(cu).Add(hsi)
-		cuo := cp(cu).Sub(hsi)
-		cd := cp(uc.center).Add(&vec3.T{0, 0, -float32(m.singleGap)})
-		cdi := cp(cd).Add(hsi)
-		cdo := cp(cd).Sub(hsi)
-
-		c0uo := cp(cuo).Sub(hsip)
-		c0ui := cp(cui).Sub(hsip)
-		c0do := cp(cdo).Sub(hsip)
-		c0di := cp(cdi).Sub(hsip)
-		//	c1uo := cp(cuo).Sub(hsip)
-		//	c1ui := cp(cui).Sub(hsip)
-		//	c1do := cp(cdo).Sub(hsip)
-		//	c1di := cp(cdi).Sub(hsip)
-		quad(&ni01p, c0do, c0di, c0ui, c0uo) // end-cap
-		quad(&ni01p, p0uo, p0ui, c0di, c0do) // end-cap connector
 	}
 
 	// outer-facing
