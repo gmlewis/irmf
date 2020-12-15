@@ -209,16 +209,37 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 		ma01 := 0.5 * (a1 + a0)
 		ni01 := vec3.T{float32(math.Cos(ma01 + math.Pi)), float32(math.Sin(ma01 + math.Pi)), 0}
+		ni01p := vec3.T{float32(math.Cos(ma01 + 0.5*math.Pi)), float32(math.Sin(ma01 + 0.5*math.Pi)), 0}
 
 		uc := &connector{
 			inwardN: &ni01,
-			center:  pu(0.5*(ro+ri), ma01, 0.5*(z0+z1)),
+			center:  pu(0.5*(ro+ri), ma01, 0.5*(z0+z1-m.size)),
 			p1:      p0uo,
 			p2:      p0ui,
 			p3:      p1ui,
 			p4:      p1uo,
 		}
 		m.upperConnectors = append(m.upperConnectors, uc)
+
+		hsi := cp(&ni01).Scale(float32(0.5 * m.size))
+		hsip := cp(&ni01p).Scale(float32(0.5 * m.size))
+		cu := cp(uc.center).Add(&vec3.T{0, 0, -float32(m.singleGap + m.size)})
+		cui := cp(cu).Add(hsi)
+		cuo := cp(cu).Sub(hsi)
+		cd := cp(uc.center).Add(&vec3.T{0, 0, -float32(m.singleGap)})
+		cdi := cp(cd).Add(hsi)
+		cdo := cp(cd).Sub(hsi)
+
+		c0uo := cp(cuo).Sub(hsip)
+		c0ui := cp(cui).Sub(hsip)
+		c0do := cp(cdo).Sub(hsip)
+		c0di := cp(cdi).Sub(hsip)
+		//	c1uo := cp(cuo).Sub(hsip)
+		//	c1ui := cp(cui).Sub(hsip)
+		//	c1do := cp(cdo).Sub(hsip)
+		//	c1di := cp(cdi).Sub(hsip)
+		quad(&ni01p, c0do, c0di, c0ui, c0uo) // end-cap
+		quad(&ni01p, p0uo, p0ui, c0di, c0do) // end-cap connector
 	}
 
 	// outer-facing
