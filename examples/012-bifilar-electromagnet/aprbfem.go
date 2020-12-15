@@ -20,6 +20,7 @@ import (
 var (
 	filename = flag.String("out", "aprbfem.stl", "Output filename")
 	innerR   = flag.Float64("inner_radius", 3.0, "Inner radius in millimeters")
+	leadLen  = flag.Float64("lead_len", 5.0, "Length of two external leads")
 	numDivs  = flag.Int("num_divs", 36, "Number of divisions per rotation")
 	numPairs = flag.Int("num_pairs", 11, "Number of coil pairs")
 	numTurns = flag.Int("num_turns", 61, "Total number of turns per coil")
@@ -43,6 +44,7 @@ func main() {
 	m := &arBifilarElectromagnet{
 		numPairs:    *numPairs,
 		innerRadius: *innerR,
+		leadLen:     *leadLen,
 		size:        *wireSize,
 		singleGap:   *wireGap,
 		numTurns:    *numTurns,
@@ -62,6 +64,7 @@ type arBifilarElectromagnet struct {
 	// initializers:
 	numPairs    int
 	innerRadius float64
+	leadLen     float64
 	size        float64
 	singleGap   float64
 	numTurns    int
@@ -87,7 +90,7 @@ func (m *arBifilarElectromagnet) render() {
 	m.inc = math.Pi / float64(m.numPairs)
 	m.connectorRadius = m.innerRadius + float64(m.numPairs)*(m.size+m.singleGap)
 	m.doubleGap = m.size + 2.0*m.singleGap
-	m.height = float32(m.numTurns*2 + 1)
+	m.height = float32((m.size + m.singleGap) * float64((m.numTurns*2 + 1)))
 
 	for i := 1; i <= m.numPairs; i++ {
 		m.coilPlusConnectorWires(1, i)
@@ -96,12 +99,12 @@ func (m *arBifilarElectromagnet) render() {
 }
 
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
-	radiusOffset := float64(coilNum - 1)
+	radiusOffset := (m.size + m.singleGap) * float64(coilNum-1)
 	spacingAngle := float64(m.numPairs-4) * m.inc * math.Atan(2.0*radiusOffset/float64(m.numPairs-1))
 	coilRadius := radiusOffset + m.innerRadius
 	trimStartAngle := 0.05
 
-	m.coilSquareFace(wireNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
+	m.coilSquareFace(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
 
 	m.coilConnectorWires(wireNum, coilNum, coilRadius, trimStartAngle, 0.0, spacingAngle)
 }
@@ -128,7 +131,7 @@ func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int, coilRadius,
 func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int, coilRadius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 }
 
-func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
+func (m *arBifilarElectromagnet) coilSquareFace(wireNum, coilNum int, radius, trimStartAngle, trimEndAngle, spacingAngle float64) {
 	delta := 2.0 * math.Pi / float64(*numDivs)
 	angle := 0.0
 	endAngle := float64(m.numTurns)*2.0*math.Pi + angle
@@ -138,16 +141,16 @@ func (m *arBifilarElectromagnet) coilSquareFace(wireNum int, radius, trimStartAn
 	firstFace := true
 	for ; angle <= endAngle-delta; angle += delta {
 		lastFace := (angle+delta > endAngle-delta)
-		m.coilWireSegment(firstFace, lastFace, wireNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
+		m.coilWireSegment(firstFace, lastFace, wireNum, coilNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
 		firstFace = false
 	}
 }
 
-func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireNum int, origA1, origA2, ri, ro float64) {
+func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireNum, coilNum int, origA1, origA2, ri, ro float64) {
 	a1, a2 := origA1, origA2
-	z1 := a1 / math.Pi
-	z2 := a2 / math.Pi
-	if wireNum%2 == 0 {
+	z1 := (m.size + m.singleGap) * a1 / math.Pi
+	z2 := (m.size + m.singleGap) * a2 / math.Pi
+	if wireNum == 2 {
 		a1 += math.Pi
 		a2 += math.Pi
 	}
@@ -194,7 +197,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	if firstFace {
 		da := m.size / ro
 		a0 := a1 - da
-		z0 := (origA1 - da) / math.Pi
+		z0 := (m.size + m.singleGap) * (origA1 - da) / math.Pi
 		p0uo := pu(ro, a0, z0)
 		p0ui := pu(ri, a0, z0)
 		p0do := pd(ro, a0, z0)
@@ -213,6 +216,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		ni01 := vec3.T{float32(math.Cos(ma01 + math.Pi)), float32(math.Sin(ma01 + math.Pi)), 0}
 
 		vlen := m.connectorRadius + 0.5*m.size - ro
+
 		outP0uo := cp(&ni01).Scale(-float32(vlen)).Add(p0uo)
 		outP0ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0uo)
 		outP0do := cp(&ni01).Scale(-float32(vlen)).Add(p0do)
@@ -231,14 +235,19 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		quad(nb, outP1do, outP1uo, outP1ui, outP1di)  // backface
 		quad(nb, outP1di, outP1ui, p1uo, p1do)        // backface connector
 
-		botP0uo := cp(&vec3.UnitZ).Scale(m.height).Add(outP0uo)
-		botP0ui := cp(&vec3.UnitZ).Scale(m.height).Add(outP0ui)
-		//	botP0do := cp(&vec3.UnitZ).Scale(m.height).Add(outP0do)
-		//	botP0di := cp(&vec3.UnitZ).Scale(m.height).Add(outP0di)
-		botP1uo := cp(&vec3.UnitZ).Scale(m.height).Add(outP1uo)
-		botP1ui := cp(&vec3.UnitZ).Scale(m.height).Add(outP1ui)
-		//	botP1do := cp(&vec3.UnitZ).Scale(m.height).Add(outP1do)
-		//	botP1di := cp(&vec3.UnitZ).Scale(m.height).Add(outP1di)
+		h := m.height
+		if coilNum == 1 && wireNum == 1 {
+			h += float32(*leadLen)
+		}
+
+		botP0uo := cp(&vec3.UnitZ).Scale(h).Add(outP0uo)
+		botP0ui := cp(&vec3.UnitZ).Scale(h).Add(outP0ui)
+		//	botP0do := cp(&vec3.UnitZ).Scale(h).Add(outP0do)
+		//	botP0di := cp(&vec3.UnitZ).Scale(h).Add(outP0di)
+		botP1uo := cp(&vec3.UnitZ).Scale(h).Add(outP1uo)
+		botP1ui := cp(&vec3.UnitZ).Scale(h).Add(outP1ui)
+		//	botP1do := cp(&vec3.UnitZ).Scale(h).Add(outP1do)
+		//	botP1di := cp(&vec3.UnitZ).Scale(h).Add(outP1di)
 
 		// axial connector
 		quad(&n, botP0uo, botP0ui, outP0di, outP0do)    // forward (end-cap)
