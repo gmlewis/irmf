@@ -68,10 +68,10 @@ type arBifilarElectromagnet struct {
 	w           TriWriter
 
 	// calculated:
-	nTurns          float64
 	inc             float64
 	connectorRadius float64
 	doubleGap       float64
+	height          float32
 
 	lowerConnectors []*connector
 	upperConnectors []*connector
@@ -84,10 +84,10 @@ type connector struct {
 }
 
 func (m *arBifilarElectromagnet) render() {
-	m.nTurns = float64(m.numTurns)
 	m.inc = math.Pi / float64(m.numPairs)
 	m.connectorRadius = m.innerRadius + float64(m.numPairs)*(m.size+m.singleGap)
 	m.doubleGap = m.size + 2.0*m.singleGap
+	m.height = float32(m.numTurns*2 + 1)
 
 	for i := 1; i <= m.numPairs; i++ {
 		m.coilPlusConnectorWires(1, i)
@@ -230,6 +230,21 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		quad(&nd, outP0di, outP1di, p1do, p0do)       // downward
 		quad(nb, outP1do, outP1uo, outP1ui, outP1di)  // backface
 		quad(nb, outP1di, outP1ui, p1uo, p1do)        // backface connector
+
+		botP0uo := cp(&vec3.UnitZ).Scale(m.height).Add(outP0uo)
+		botP0ui := cp(&vec3.UnitZ).Scale(m.height).Add(outP0ui)
+		//	botP0do := cp(&vec3.UnitZ).Scale(m.height).Add(outP0do)
+		//	botP0di := cp(&vec3.UnitZ).Scale(m.height).Add(outP0di)
+		botP1uo := cp(&vec3.UnitZ).Scale(m.height).Add(outP1uo)
+		botP1ui := cp(&vec3.UnitZ).Scale(m.height).Add(outP1ui)
+		//	botP1do := cp(&vec3.UnitZ).Scale(m.height).Add(outP1do)
+		//	botP1di := cp(&vec3.UnitZ).Scale(m.height).Add(outP1di)
+
+		// axial connector
+		quad(&n, botP0uo, botP0ui, outP0di, outP0do)    // forward (end-cap)
+		quad(&no, outP0do, outP1do, botP1uo, botP0uo)   // outer
+		quad(nb, botP1uo, outP1do, outP1di, botP1ui)    // backface
+		quad(&ni01, botP0ui, botP1ui, outP1di, outP0di) // inner
 
 		uc := &connector{
 			inwardN: &ni01,
