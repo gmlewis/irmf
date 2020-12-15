@@ -201,6 +201,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p0di := pd(ri, a0, z0)
 		n := vec3.Cross(cp(p0di).Sub(p0do), cp(p0ui).Sub(p0do))
 		n.Normalize()
+		nb := cp(&n).Invert()
 
 		quad(&n, p0do, p0di, p0ui, p0uo) // end-cap
 		// quad(&no, p0uo, p1uo, p1do, p0do) // outer
@@ -216,8 +217,19 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		outP0ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0uo)
 		outP0do := cp(&ni01).Scale(-float32(vlen)).Add(p0do)
 		outP0di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0do)
+		outP1uo := cp(&ni01).Scale(-float32(vlen)).Add(p1uo)
+		outP1ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p1uo)
+		outP1do := cp(&ni01).Scale(-float32(vlen)).Add(p1do)
+		outP1di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p1do)
 
-		quad(&n, outP0do, outP0di, outP0ui, outP0uo) // end-cap
+		quad(&n, outP0do, outP0di, outP0ui, outP0uo)  // end-cap
+		quad(&n, outP0di, p0do, p0uo, outP0ui)        // end-cap connector
+		quad(&no, outP0uo, outP1uo, outP1do, outP0do) // outer
+		quad(&nu, outP0ui, p0uo, p1uo, outP1ui)       // upward connector
+		quad(&nu, outP0uo, outP0ui, outP1ui, outP1uo) // upward
+		quad(&nd, outP0di, outP1di, p1do, p0do)       // downward
+		quad(nb, outP1do, outP1uo, outP1ui, outP1di)  // backface
+		quad(nb, outP1di, outP1ui, p1uo, p1do)        // backface connector
 
 		uc := &connector{
 			inwardN: &ni01,
