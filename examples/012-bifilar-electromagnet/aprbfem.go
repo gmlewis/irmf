@@ -167,7 +167,6 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 	ma := 0.5 * (a1 + a2)
 
-	// no := vec3.T{float32(math.Cos(ma)), float32(math.Sin(ma)), 0}
 	nu := vec3.Cross(cp(p2ui).Sub(p1uo), cp(p2uo).Sub(p1uo))
 	nu.Normalize()
 	ni := vec3.T{float32(math.Cos(ma + math.Pi)), float32(math.Sin(ma + math.Pi)), 0}
@@ -203,10 +202,8 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p0di := pd(ri, a0, z0)
 		n := vec3.Cross(cp(p0di).Sub(p0do), cp(p0ui).Sub(p0do))
 		n.Normalize()
-		// nb := cp(&n).Invert()
 
 		quad(p0do, p0di, p0ui, p0uo) // end-cap
-		// quad(p0uo, p1uo, p1do, p0do) // outer
 		quad(p0uo, p0ui, p1ui, p1uo) // upward
 		quad(p0ui, p0di, p1di, p1ui) // inner
 		quad(p0do, p1do, p1di, p0di) // downward
@@ -313,28 +310,20 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		m.upperConnectors = append(m.upperConnectors, uc)
 	}
 
-	// outer-facing
-	quad(p1uo, p2uo, p2do, p1do)
-	// upward-facing
-	quad(p1uo, p1ui, p2ui, p2uo)
-	// inner-facing
-	quad(p1ui, p1di, p2di, p2ui)
-	// downward-facing
-	quad(p1do, p2do, p2di, p1di)
+	quad(p1uo, p2uo, p2do, p1do) // outer-facing
+	quad(p1uo, p1ui, p2ui, p2uo) // upward-facing
+	quad(p1ui, p1di, p2di, p2ui) // inner-facing
+	quad(p1do, p2do, p2di, p1di) // downward-facing
+
 	if lastFace {
 		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
 		n.Normalize()
-		// nb := cp(&n).Invert()
 
 		edge := cp(&n).Scale(float32(m.size))
 		p3uo := cp(p2uo).Add(edge)
 		p3ui := cp(p2ui).Add(edge)
 		p3do := cp(p2do).Add(edge)
 		p3di := cp(p2di).Add(edge)
-		// quad(p3di, p3do, p3uo, p3ui) // end-cap
-		// quad(p2uo, p3uo, p3do, p2do) // outer
-		// quad(p2ui, p2di, p3di, p3ui) // inner
-		// quad(p3ui, p3uo, p2uo, p2ui) // upward
 
 		if coilNum == *numPairs && wireNum == 2 { // exit wire
 			h := float32(*leadLen)
