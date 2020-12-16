@@ -119,7 +119,6 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 	if nextCoilNum > *numPairs {
 		nextSpacingAngle = m.spacingAngle(1) + 2.0*math.Pi
 	}
-	log.Printf("endAngle(%v,%v) = %v, spacingAngle=%v, nextSpacingAngle=%v", wireNum, coilNum, endAngle, spacingAngle, nextSpacingAngle)
 	return endAngle + nextSpacingAngle - math.Pi - spacingAngle
 }
 
@@ -332,13 +331,12 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p3ui := cp(p2ui).Add(edge)
 		p3do := cp(p2do).Add(edge)
 		p3di := cp(p2di).Add(edge)
-		// quad(&n, p2do, p2uo, p2ui, p2di)
-		quad(p3di, p3do, p3uo, p3ui) // end-cap
-		quad(p2uo, p3uo, p3do, p2do) // outer
-		quad(p2ui, p2di, p3di, p3ui) // inner
-		quad(p3ui, p3uo, p2uo, p2ui) // upward
+		// quad(p3di, p3do, p3uo, p3ui) // end-cap
+		// quad(p2uo, p3uo, p3do, p2do) // outer
+		// quad(p2ui, p2di, p3di, p3ui) // inner
+		// quad(p3ui, p3uo, p2uo, p2ui) // upward
 
-		if coilNum == *numPairs && wireNum == 2 {
+		if coilNum == *numPairs && wireNum == 2 { // exit wire
 			h := float32(*leadLen)
 			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
 			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
