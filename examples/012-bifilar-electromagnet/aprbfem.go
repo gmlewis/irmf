@@ -125,9 +125,9 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	radius := m.coilRadius(coilNum)
 	spacingAngle := m.spacingAngle(coilNum)
-	delta := 2.0 * math.Pi / float64(*numDivs)
 	angle := 0.0
 	endAngle := m.endAngle(wireNum, coilNum) + angle
+	delta := endAngle / float64(*numDivs**numTurns)
 
 	ri := radius - 0.5*m.size
 	ro := radius + 0.5*m.size
@@ -326,6 +326,11 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p3di := cp(p2di).Add(edge)
 
 		if coilNum == *numPairs && wireNum == 2 { // exit wire
+			quad(p3di, p3do, p3uo, p3ui) // end-cap
+			quad(p2uo, p3uo, p3do, p2do) // outer
+			quad(p2ui, p2di, p3di, p3ui) // inner
+			quad(p3ui, p3uo, p2uo, p2ui) // upward
+
 			h := float32(*leadLen)
 			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
 			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
