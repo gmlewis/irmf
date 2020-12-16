@@ -116,8 +116,11 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 
 	nextCoilNum := coilNum + 1
 	nextSpacingAngle := m.spacingAngle(nextCoilNum)
+	if nextCoilNum > *numPairs {
+		nextSpacingAngle = m.spacingAngle(1) + 2.0*math.Pi
+	}
 	log.Printf("endAngle(%v,%v) = %v, spacingAngle=%v, nextSpacingAngle=%v", wireNum, coilNum, endAngle, spacingAngle, nextSpacingAngle)
-	return endAngle // + nextSpacingAngle - math.Pi - spacingAngle
+	return endAngle + nextSpacingAngle - math.Pi - spacingAngle
 }
 
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
