@@ -122,12 +122,9 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 
 	// Account for the edge of the wire connector
 	ro := radius + 0.5*m.size
-	angleStart := m.size / ro
 	angleEnd := m.size / ro
 
 	result := endAngle + nextSpacingAngle - math.Pi - spacingAngle - angleEnd
-	log.Printf("(wireNum=%v,coilNum=%v): endAngle=%0.2f, nextSpacingAngle=%0.2f, spacingAngle=%0.2f, angleStart=%0.2f, angleEnd=%0.2f, result=%0.2f",
-		wireNum, coilNum, endAngle, nextSpacingAngle, spacingAngle, angleStart, angleEnd, result)
 	return result
 }
 
@@ -141,14 +138,6 @@ func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	angle := 0.5 * m.size / ro // Start at the edge of the wire connector
 	endAngle := m.endAngle(wireNum, coilNum) + angle
 	delta := (endAngle - angle) / float64(*numDivs**numTurns)
-
-	if wireNum == 1 {
-		log.Printf("(wireNum=%v,coilNum=%v): angle=%0.2f, endAngle=%0.2f, delta=%0.2f",
-			wireNum, coilNum, angle, endAngle, delta)
-	} else {
-		log.Printf("(wireNum=%v,coilNum=%v): angle=%0.2f+Pi=%0.2f, endAngle=%0.2f+Pi=%0.2f, delta=%0.2f",
-			wireNum, coilNum, angle, angle+math.Pi, endAngle, endAngle+math.Pi, delta)
-	}
 
 	// The first segment and the last segment are special cases because they connect
 	// up to the wire segments that pair up the coils in the correct sequence.
@@ -355,34 +344,25 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p3do := pd(ro, a3, z3)
 		p3di := pd(ri, a3, z3)
 
-		// n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
-		// n.Normalize()
-		//
-		// edge := cp(&n).Scale(float32(m.size))
-		// p3uo := cp(p2uo).Add(edge)
-		// p3ui := cp(p2ui).Add(edge)
-		// p3do := cp(p2do).Add(edge)
-		// p3di := cp(p2di).Add(edge)
+		if coilNum == *numPairs && wireNum == 2 { // exit wire
+			quad(p3di, p3do, p3uo, p3ui) // end-cap
+			quad(p2uo, p3uo, p3do, p2do) // outer
+			quad(p2ui, p2di, p3di, p3ui) // inner
+			quad(p3ui, p3uo, p2uo, p2ui) // upward
 
-		//TMP		if coilNum == *numPairs && wireNum == 2 { // exit wire
-		quad(p3di, p3do, p3uo, p3ui) // end-cap
-		quad(p2uo, p3uo, p3do, p2do) // outer
-		quad(p2ui, p2di, p3di, p3ui) // inner
-		quad(p3ui, p3uo, p2uo, p2ui) // upward
+			h := float32(*leadLen)
+			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
+			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
+			botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
+			botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
 
-		h := float32(*leadLen)
-		botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
-		botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
-		botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
-		botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
+			quad(botP3ui, botP3uo, p3do, p3di) // forward
+			quad(botP3uo, botP2uo, p2do, p3do) // outer
+			quad(botP2uo, botP2ui, p2di, p2do) // backface
+			quad(botP2ui, botP3ui, p3di, p2di) // inner
 
-		quad(botP3ui, botP3uo, p3do, p3di) // forward
-		quad(botP3uo, botP2uo, p2do, p3do) // outer
-		quad(botP2uo, botP2ui, p2di, p2do) // backface
-		quad(botP2ui, botP3ui, p3di, p2di) // inner
-
-		quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
-		return
-		//TMP		}
+			quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
+			return
+		}
 	}
 }
