@@ -116,21 +116,18 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 
 	nextCoilNum := coilNum + 1
 	nextSpacingAngle := m.spacingAngle(nextCoilNum)
-	nextRadius := m.coilRadius(nextCoilNum)
 	if nextCoilNum > *numPairs {
 		nextSpacingAngle = m.spacingAngle(1) + 2.0*math.Pi
-		nextRadius = m.coilRadius(1)
 	}
 
 	// Account for the edge of the wire connector
 	ro := radius + 0.5*m.size
-	nextRO := nextRadius + 0.5*m.size
 	angleStart := m.size / ro
-	angleEnd := m.size / nextRO
+	angleEnd := m.size / ro
 
-	result := endAngle + nextSpacingAngle - math.Pi - spacingAngle - angleStart + angleEnd
-	log.Printf("(wireNum=%v,coilNum=%v): endAngle=%0.2f, nextSpacingAngle=%0.2f, spacingAngle=%0.2f, result=%0.2f",
-		wireNum, coilNum, endAngle, nextSpacingAngle, spacingAngle, result)
+	result := endAngle + nextSpacingAngle - math.Pi - spacingAngle - angleEnd
+	log.Printf("(wireNum=%v,coilNum=%v): endAngle=%0.2f, nextSpacingAngle=%0.2f, spacingAngle=%0.2f, angleStart=%0.2f, angleEnd=%0.2f, result=%0.2f",
+		wireNum, coilNum, endAngle, nextSpacingAngle, spacingAngle, angleStart, angleEnd, result)
 	return result
 }
 
@@ -149,17 +146,18 @@ func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 		log.Printf("(wireNum=%v,coilNum=%v): angle=%0.2f, endAngle=%0.2f, delta=%0.2f",
 			wireNum, coilNum, angle, endAngle, delta)
 	} else {
-		log.Printf("(wireNum=%v,coilNum=%v): angle=%0.2f, endAngle=%0.2f, delta=%0.2f",
-			wireNum, coilNum, angle+math.Pi, endAngle+math.Pi, delta)
+		log.Printf("(wireNum=%v,coilNum=%v): angle=%0.2f+Pi=%0.2f, endAngle=%0.2f+Pi=%0.2f, delta=%0.2f",
+			wireNum, coilNum, angle, angle+math.Pi, endAngle, endAngle+math.Pi, delta)
 	}
 
 	// The first segment and the last segment are special cases because they connect
 	// up to the wire segments that pair up the coils in the correct sequence.
 	m.coilWireSegment(true, false, wireNum, coilNum, spacingAngle, angle+spacingAngle, ri, ro)
 
-	for ; angle <= endAngle-delta; angle += delta {
-		lastFace := (angle+delta > endAngle-delta)
+	for i := 0; i < *numDivs**numTurns; i++ {
+		lastFace := i == *numDivs**numTurns-1
 		m.coilWireSegment(false, lastFace, wireNum, coilNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
+		angle += delta
 	}
 }
 
@@ -347,33 +345,44 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	quad(p1do, p2do, p2di, p1di) // downward-facing
 
 	if lastFace {
-		n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
-		n.Normalize()
+		// a2 is the end of the spiral
+		da := m.size / ro
+		a3 := a2 + da
+		z3 := (m.size + m.singleGap) * (origA2 + da) / math.Pi
 
-		edge := cp(&n).Scale(float32(m.size))
-		p3uo := cp(p2uo).Add(edge)
-		p3ui := cp(p2ui).Add(edge)
-		p3do := cp(p2do).Add(edge)
-		p3di := cp(p2di).Add(edge)
+		p3uo := pu(ro, a3, z3)
+		p3ui := pu(ri, a3, z3)
+		p3do := pd(ro, a3, z3)
+		p3di := pd(ri, a3, z3)
 
-		if coilNum == *numPairs && wireNum == 2 { // exit wire
-			quad(p3di, p3do, p3uo, p3ui) // end-cap
-			quad(p2uo, p3uo, p3do, p2do) // outer
-			quad(p2ui, p2di, p3di, p3ui) // inner
-			quad(p3ui, p3uo, p2uo, p2ui) // upward
+		// n := vec3.Cross(cp(p2ui).Sub(p2do), cp(p2di).Sub(p2do))
+		// n.Normalize()
+		//
+		// edge := cp(&n).Scale(float32(m.size))
+		// p3uo := cp(p2uo).Add(edge)
+		// p3ui := cp(p2ui).Add(edge)
+		// p3do := cp(p2do).Add(edge)
+		// p3di := cp(p2di).Add(edge)
 
-			h := float32(*leadLen)
-			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
-			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
-			botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
-			botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
+		//TMP		if coilNum == *numPairs && wireNum == 2 { // exit wire
+		quad(p3di, p3do, p3uo, p3ui) // end-cap
+		quad(p2uo, p3uo, p3do, p2do) // outer
+		quad(p2ui, p2di, p3di, p3ui) // inner
+		quad(p3ui, p3uo, p2uo, p2ui) // upward
 
-			quad(botP3ui, botP3uo, p3do, p3di) // forward
-			quad(botP3uo, botP2uo, p2do, p3do) // outer
-			quad(botP2uo, botP2ui, p2di, p2do) // backface
-			quad(botP2ui, botP3ui, p3di, p2di) // inner
+		h := float32(*leadLen)
+		botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
+		botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
+		botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
+		botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
 
-			quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
-		}
+		quad(botP3ui, botP3uo, p3do, p3di) // forward
+		quad(botP3uo, botP2uo, p2do, p3do) // outer
+		quad(botP2uo, botP2ui, p2di, p2do) // backface
+		quad(botP2ui, botP3ui, p3di, p2di) // inner
+
+		quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
+		return
+		//TMP		}
 	}
 }
