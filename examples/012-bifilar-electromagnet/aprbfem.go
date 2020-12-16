@@ -126,6 +126,12 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 	angleEnd := m.size / ro
 
 	result := endAngle + nextSpacingAngle - math.Pi - spacingAngle - angleEnd
+
+	// Special case for exit wire
+	if coilNum == *numPairs && wireNum == 2 {
+		result -= float64(*numPairs) * angleEnd
+	}
+
 	return result
 }
 
@@ -359,11 +365,15 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(p2ui, p2di, p3di, p3ui) // inner
 			quad(p3ui, p3uo, p2uo, p2ui) // upward
 
-			h := float32(*leadLen)
-			botP3uo := cp(&vec3.UnitZ).Scale(h).Add(p3uo)
-			botP3ui := cp(&vec3.UnitZ).Scale(h).Add(p3ui)
-			botP2uo := cp(&vec3.UnitZ).Scale(h).Add(p2uo)
-			botP2ui := cp(&vec3.UnitZ).Scale(h).Add(p2ui)
+			h := m.height + float32(0.5*m.size+*leadLen)
+			botP3uo := cp(&vec3.UnitZ).Add(p3uo)
+			botP3ui := cp(&vec3.UnitZ).Add(p3ui)
+			botP2uo := cp(&vec3.UnitZ).Add(p2uo)
+			botP2ui := cp(&vec3.UnitZ).Add(p2ui)
+			botP3uo[2] = h
+			botP3ui[2] = h
+			botP2uo[2] = h
+			botP2ui[2] = h
 
 			quad(botP3ui, botP3uo, p3do, p3di) // forward
 			quad(botP3uo, botP2uo, p2do, p3do) // outer
