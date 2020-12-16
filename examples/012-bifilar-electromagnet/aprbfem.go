@@ -10,6 +10,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"math"
 
@@ -49,6 +50,8 @@ func main() {
 		singleGap:   *wireGap,
 		numTurns:    *numTurns,
 		w:           w,
+
+		lowerConnectors: map[string]*connector{},
 	}
 
 	m.render()
@@ -76,12 +79,10 @@ type arBifilarElectromagnet struct {
 	doubleGap       float64
 	height          float32
 
-	upperConnectors []*connector
+	lowerConnectors map[string]*connector
 }
 
 type connector struct {
-	inwardN        *vec3.T
-	center         *vec3.T
 	p1, p2, p3, p4 *vec3.T
 }
 
@@ -325,15 +326,13 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(conP1do, conP1uo, extP1uo, extP1do) // backface connector
 			quad(extP0do, extP1do, extP1uo, extP0uo) // end-cap connector
 
-			uc := &connector{
-				inwardN: &ni01,
-				center:  pu(0.5*(ro+ri), a1, 0.5*(z0+z1-m.size)),
-				p1:      extP0uo,
-				p2:      extP0do,
-				p3:      extP1uo,
-				p4:      extP1do,
+			key := fmt.Sprintf("%v,%v", 3-wireNum, coilNum-1)
+			if lc, ok := m.lowerConnectors[key]; ok {
+				quad(conP0uo, extP0uo, lc.p1, lc.p2)
+				quad(extP1uo, conP1uo, lc.p3, lc.p4)
+				quad(conP1uo, conP0uo, lc.p2, lc.p3)
+				quad(extP0uo, extP1uo, lc.p4, lc.p1)
 			}
-			m.upperConnectors = append(m.upperConnectors, uc)
 		}
 		return
 	}
@@ -387,5 +386,14 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		quad(p2uo, p3uo, p3do, p2do) // outer
 		quad(p2ui, p2di, p3di, p3ui) // inner
 		quad(p3ui, p3uo, p2uo, p2ui) // upward
+
+		key := fmt.Sprintf("%v,%v", wireNum, coilNum)
+		lc := &connector{
+			p1: p2di,
+			p2: p2do,
+			p3: p3do,
+			p4: p3di,
+		}
+		m.lowerConnectors[key] = lc
 	}
 }
