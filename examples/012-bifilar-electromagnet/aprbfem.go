@@ -364,5 +364,14 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
 			return
 		}
+
+		if coilNum == *numPairs && wireNum == 1 { // special loop-back case
+			quad(p3di, p3do, p3uo, p3ui) // end-cap
+			quad(p2ui, p2di, p3di, p3ui) // inner
+			quad(p3ui, p3uo, p2uo, p2ui) // upward
+			quad(p2di, p2do, p3do, p3di) // downward
+			return
+		}
+
 	}
 }
