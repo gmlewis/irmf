@@ -315,13 +315,23 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(botP1do, botP1uo, botP1ui, botP1di) // backface
 			quad(botP1di, botP1ui, conP1uo, conP1do) // backface connector
 
+			extP0uo := cp(&ni01).Scale(float32(m.size)).Add(conP0uo)
+			extP0do := cp(&ni01).Scale(float32(m.size)).Add(conP0do)
+			extP1uo := cp(&ni01).Scale(float32(m.size)).Add(conP1uo)
+			extP1do := cp(&ni01).Scale(float32(m.size)).Add(conP1do)
+
+			quad(conP0do, extP0do, extP0uo, conP0uo) // frontface connector
+			quad(conP0do, conP1do, extP1do, extP0do) // downward connector
+			quad(conP1do, conP1uo, extP1uo, extP1do) // backface connector
+			quad(extP0do, extP1do, extP1uo, extP0uo) // end-cap connector
+
 			uc := &connector{
 				inwardN: &ni01,
 				center:  pu(0.5*(ro+ri), a1, 0.5*(z0+z1-m.size)),
-				p1:      conP0uo,
-				p2:      conP0do,
-				p3:      conP1uo,
-				p4:      conP1do,
+				p1:      extP0uo,
+				p2:      extP0do,
+				p3:      extP1uo,
+				p4:      extP1do,
 			}
 			m.upperConnectors = append(m.upperConnectors, uc)
 		}
@@ -373,5 +383,9 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			return
 		}
 
+		quad(p3di, p3do, p3uo, p3ui) // end-cap
+		quad(p2uo, p3uo, p3do, p2do) // outer
+		quad(p2ui, p2di, p3di, p3ui) // inner
+		quad(p3ui, p3uo, p2uo, p2ui) // upward
 	}
 }
