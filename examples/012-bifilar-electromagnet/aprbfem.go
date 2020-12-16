@@ -124,17 +124,21 @@ func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
 func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	radius := m.coilRadius(coilNum)
 	spacingAngle := m.spacingAngle(coilNum)
-	angle := 0.0
-	endAngle := m.endAngle(wireNum, coilNum) + angle
-	delta := endAngle / float64(*numDivs**numTurns)
 
 	ri := radius - 0.5*m.size
 	ro := radius + 0.5*m.size
-	firstFace := true
+
+	angle := 0.5 * m.size / ro // Start at the edge of the wire connector
+	endAngle := m.endAngle(wireNum, coilNum) + angle
+	delta := (endAngle - angle) / float64(*numDivs**numTurns)
+
+	// The first segment and the last segment are special cases because they connect
+	// up to the wire segments that pair up the coils in the correct sequence.
+	m.coilWireSegment(true, false, wireNum, coilNum, spacingAngle, angle+spacingAngle, ri, ro)
+
 	for ; angle <= endAngle-delta; angle += delta {
 		lastFace := (angle+delta > endAngle-delta)
-		m.coilWireSegment(firstFace, lastFace, wireNum, coilNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
-		firstFace = false
+		m.coilWireSegment(false, lastFace, wireNum, coilNum, angle+spacingAngle, angle+delta+spacingAngle, ri, ro)
 	}
 }
 
