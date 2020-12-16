@@ -189,23 +189,32 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	}
 
 	if firstFace {
+		// a1 is the center of the connector
 		da := m.size / ro
-		a0 := a1 - da
-		z0 := (m.size + m.singleGap) * (origA1 - da) / math.Pi
+		a0 := a1 - 0.5*da
+		adja1 := a1 + 0.5*da
+		z0 := (m.size + m.singleGap) * (origA1 - 0.5*da) / math.Pi
+		adjz1 := (m.size + m.singleGap) * (origA1 + 0.5*da) / math.Pi
+
 		p0uo := pu(ro, a0, z0)
 		p0ui := pu(ri, a0, z0)
 		p0do := pd(ro, a0, z0)
 		p0di := pd(ri, a0, z0)
+
+		adjP1uo := pu(ro, adja1, adjz1)
+		// adjP1ui := pu(ri, adja1, adjz1)
+		adjP1do := pd(ro, adja1, adjz1)
+		// adjP1di := pd(ri, adja1, adjz1)
+
 		n := vec3.Cross(cp(p0di).Sub(p0do), cp(p0ui).Sub(p0do))
 		n.Normalize()
 
-		quad(p0do, p0di, p0ui, p0uo) // end-cap
-		quad(p0uo, p0ui, p1ui, p1uo) // upward
-		quad(p0ui, p0di, p1di, p1ui) // inner
-		quad(p0do, p1do, p1di, p0di) // downward
+		// quad(p0do, p0di, p0ui, p0uo) // end-cap
+		// quad(p0uo, p0ui, p1ui, p1uo) // upward
+		// quad(p0ui, p0di, p1di, p1ui) // inner
+		// quad(p0do, p1do, p1di, p0di) // downward
 
-		ma01 := 0.5 * (a1 + a0)
-		ni01 := vec3.T{float32(math.Cos(ma01 + math.Pi)), float32(math.Sin(ma01 + math.Pi)), 0}
+		ni01 := vec3.T{float32(math.Cos(a1 + math.Pi)), float32(math.Sin(a1 + math.Pi)), 0}
 
 		vlen := m.connectorRadius + 0.5*m.size - ro
 
@@ -213,10 +222,10 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		outP0ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0uo)
 		outP0do := cp(&ni01).Scale(-float32(vlen)).Add(p0do)
 		outP0di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p0do)
-		outP1uo := cp(&ni01).Scale(-float32(vlen)).Add(p1uo)
-		outP1ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p1uo)
-		outP1do := cp(&ni01).Scale(-float32(vlen)).Add(p1do)
-		outP1di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(p1do)
+		outP1uo := cp(&ni01).Scale(-float32(vlen)).Add(adjP1uo)
+		outP1ui := cp(&ni01).Scale(-float32(vlen - m.size)).Add(adjP1uo)
+		outP1do := cp(&ni01).Scale(-float32(vlen)).Add(adjP1do)
+		outP1di := cp(&ni01).Scale(-float32(vlen - m.size)).Add(adjP1do)
 
 		zu := 0.5 * (outP0ui[2] + outP1ui[2])
 		zd := 0.5 * (outP0di[2] + outP1di[2])
@@ -232,11 +241,11 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		quad(outP0do, outP0di, outP0ui, outP0uo) // end-cap
 		quad(outP0di, p0do, p0uo, outP0ui)       // end-cap connector
 		quad(outP0uo, outP1uo, outP1do, outP0do) // outer
-		quad(outP0ui, p0uo, p1uo, outP1ui)       // upward connector
+		quad(outP0ui, p0uo, adjP1uo, outP1ui)    // upward connector
 		quad(outP0uo, outP0ui, outP1ui, outP1uo) // upward
-		quad(outP0di, outP1di, p1do, p0do)       // downward
+		quad(outP0di, outP1di, adjP1do, p0do)    // downward
 		quad(outP1do, outP1uo, outP1ui, outP1di) // backface
-		quad(outP1di, outP1ui, p1uo, p1do)       // backface connector
+		quad(outP1di, outP1ui, adjP1uo, adjP1do) // backface connector
 
 		h := m.height
 		if coilNum == 1 && wireNum == 1 {
@@ -296,7 +305,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 			uc := &connector{
 				inwardN: &ni01,
-				center:  pu(0.5*(ro+ri), ma01, 0.5*(z0+z1-m.size)),
+				center:  pu(0.5*(ro+ri), a1, 0.5*(z0+z1-m.size)),
 				p1:      conP0uo,
 				p2:      conP0do,
 				p3:      conP1uo,
@@ -304,6 +313,7 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			}
 			m.upperConnectors = append(m.upperConnectors, uc)
 		}
+		return
 	}
 
 	quad(p1uo, p2uo, p2do, p1do) // outer-facing
