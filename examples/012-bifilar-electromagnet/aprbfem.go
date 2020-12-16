@@ -262,17 +262,17 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 		h := m.height
 		if coilNum == 1 && wireNum == 1 {
-			h += float32(*leadLen)
+			h += float32(*leadLen + m.size)
 		}
 
 		botP0uo := cp(&vec3.UnitZ).Scale(h).Add(outP0uo)
 		botP0ui := cp(&vec3.UnitZ).Scale(h).Add(outP0ui)
-		//	botP0do := cp(&vec3.UnitZ).Scale(h).Add(outP0do)
-		//	botP0di := cp(&vec3.UnitZ).Scale(h).Add(outP0di)
+		botP0do := cp(&vec3.UnitZ).Scale(h).Add(outP0do)
+		botP0di := cp(&vec3.UnitZ).Scale(h).Add(outP0di)
 		botP1uo := cp(&vec3.UnitZ).Scale(h).Add(outP1uo)
 		botP1ui := cp(&vec3.UnitZ).Scale(h).Add(outP1ui)
-		//	botP1do := cp(&vec3.UnitZ).Scale(h).Add(outP1do)
-		//	botP1di := cp(&vec3.UnitZ).Scale(h).Add(outP1di)
+		botP1do := cp(&vec3.UnitZ).Scale(h).Add(outP1do)
+		botP1di := cp(&vec3.UnitZ).Scale(h).Add(outP1di)
 
 		// axial connector
 		quad(botP0uo, botP0ui, outP0di, outP0do) // forward (was end-cap)
@@ -282,6 +282,22 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 		if coilNum == 1 && wireNum == 1 {
 			quad(botP1uo, botP1ui, botP0ui, botP0uo) // end cap of exit wire
+		} else {
+			// angle connector
+			quad(botP0do, botP0di, botP0ui, botP0uo) // forward (was end-cap)
+			quad(botP1do, botP0do, botP0uo, botP1uo) // outer
+			quad(botP1do, botP1uo, botP1ui, botP1di) // backface
+			quad(botP1do, botP1di, botP0di, botP0do) // end cap
+
+			// connector to inner start of next coil
+			nextRing := coilNum - 1
+			if nextRing < 1 {
+				nextRing = *numPairs
+			}
+			nextRadius := m.coilRadius(nextRing)
+			log.Printf("nextRing=%v, nextRadius=%v", nextRing, nextRadius)
+
+			// radial connector
 		}
 
 		uc := &connector{
