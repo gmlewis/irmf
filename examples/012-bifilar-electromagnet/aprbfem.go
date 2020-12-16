@@ -76,7 +76,6 @@ type arBifilarElectromagnet struct {
 	doubleGap       float64
 	height          float32
 
-	lowerConnectors []*connector
 	upperConnectors []*connector
 }
 
@@ -165,11 +164,8 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 	p2do := pd(ro, a2, z2)
 	p2di := pd(ri, a2, z2)
 
-	ma := 0.5 * (a1 + a2)
-
 	nu := vec3.Cross(cp(p2ui).Sub(p1uo), cp(p2uo).Sub(p1uo))
 	nu.Normalize()
-	ni := vec3.T{float32(math.Cos(ma + math.Pi)), float32(math.Sin(ma + math.Pi)), 0}
 	nd := vec3.Cross(cp(p2do).Sub(p1do), cp(p2di).Sub(p1do))
 	nd.Normalize()
 
@@ -297,17 +293,17 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(botP0di, botP1di, conP1do, conP0do) // downward
 			quad(botP1do, botP1uo, botP1ui, botP1di) // backface
 			quad(botP1di, botP1ui, conP1uo, conP1do) // backface connector
-		}
 
-		uc := &connector{
-			inwardN: &ni01,
-			center:  pu(0.5*(ro+ri), ma01, 0.5*(z0+z1-m.size)),
-			p1:      p0uo,
-			p2:      p0ui,
-			p3:      p1ui,
-			p4:      p1uo,
+			uc := &connector{
+				inwardN: &ni01,
+				center:  pu(0.5*(ro+ri), ma01, 0.5*(z0+z1-m.size)),
+				p1:      conP0uo,
+				p2:      conP0do,
+				p3:      conP1uo,
+				p4:      conP1do,
+			}
+			m.upperConnectors = append(m.upperConnectors, uc)
 		}
-		m.upperConnectors = append(m.upperConnectors, uc)
 	}
 
 	quad(p1uo, p2uo, p2do, p1do) // outer-facing
@@ -344,15 +340,5 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 
 			quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
 		}
-
-		lc := &connector{
-			inwardN: &ni,
-			center:  cp(p3uo).Add(p2ui).Scale(0.5),
-			p1:      p3ui,
-			p2:      p3uo,
-			p3:      p2uo,
-			p4:      p2ui,
-		}
-		m.lowerConnectors = append(m.lowerConnectors, lc)
 	}
 }
