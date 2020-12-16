@@ -275,10 +275,14 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		//	botP1di := cp(&vec3.UnitZ).Scale(h).Add(outP1di)
 
 		// axial connector
-		quad(botP0uo, botP0ui, outP0di, outP0do) // forward (end-cap)
+		quad(botP0uo, botP0ui, outP0di, outP0do) // forward (was end-cap)
 		quad(outP0do, outP1do, botP1uo, botP0uo) // outer
 		quad(botP1uo, outP1do, outP1di, botP1ui) // backface
 		quad(botP0ui, botP1ui, outP1di, outP0di) // inner
+
+		if coilNum == 1 && wireNum == 1 {
+			quad(botP1uo, botP1ui, botP0ui, botP0uo) // end cap of exit wire
+		}
 
 		uc := &connector{
 			inwardN: &ni01,
@@ -326,6 +330,8 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 			quad(botP3uo, botP2uo, p2do, p3do) // outer
 			quad(botP2uo, botP2ui, p2di, p2do) // backface
 			quad(botP2ui, botP3ui, p3di, p2di) // inner
+
+			quad(botP3uo, botP3ui, botP2ui, botP2uo) // end cap of exit wire
 		}
 
 		lc := &connector{
