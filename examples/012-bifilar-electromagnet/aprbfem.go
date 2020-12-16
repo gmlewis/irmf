@@ -110,39 +110,22 @@ func (m *arBifilarElectromagnet) coilRadius(coilNum int) float64 {
 	return m.radiusOffset(coilNum) + m.innerRadius
 }
 
-func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
-	m.coilSquareFace(wireNum, coilNum)
-	// m.coilConnectorWires(wireNum, coilNum)
+func (m *arBifilarElectromagnet) endAngle(wireNum, coilNum int) float64 {
+	spacingAngle := m.spacingAngle(coilNum)
+	endAngle := float64(m.numTurns) * 2.0 * math.Pi
+
+	nextCoilNum := coilNum + 1
+	nextSpacingAngle := m.spacingAngle(nextCoilNum)
+	log.Printf("endAngle(%v,%v) = %v, spacingAngle=%v, nextSpacingAngle=%v", wireNum, coilNum, endAngle, spacingAngle, nextSpacingAngle)
+	return endAngle // + nextSpacingAngle - math.Pi - spacingAngle
 }
 
-// func (m *arBifilarElectromagnet) coilConnectorWires(wireNum, coilNum int) {
-// 	if coilNum == m.numPairs {
-// 		if wireNum == 1 {
-// 			m.innerExitWire(wireNum, coilNum)
-// 			return
-// 		}
-// 		m.outerExitWire(wireNum, coilNum)
-// 		return
-// 	}
-//
-// 	m.coilConnectorWire(wireNum, coilNum)
-// }
-//
-// func (m *arBifilarElectromagnet) innerExitWire(wireNum, coilNum int) {
-// }
-//
-// func (m *arBifilarElectromagnet) outerExitWire(wireNum, coilNum int) {
-// }
-//
-// func (m *arBifilarElectromagnet) coilConnectorWire(wireNum, coilNum int) {
-// }
-
-func (m *arBifilarElectromagnet) coilSquareFace(wireNum, coilNum int) {
+func (m *arBifilarElectromagnet) coilPlusConnectorWires(wireNum, coilNum int) {
 	radius := m.coilRadius(coilNum)
 	spacingAngle := m.spacingAngle(coilNum)
 	delta := 2.0 * math.Pi / float64(*numDivs)
 	angle := 0.0
-	endAngle := float64(m.numTurns)*2.0*math.Pi + angle
+	endAngle := m.endAngle(wireNum, coilNum) + angle
 
 	ri := radius - 0.5*m.size
 	ro := radius + 0.5*m.size
@@ -295,7 +278,6 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 				nextRing = *numPairs
 			}
 			nextRadius := m.coilRadius(nextRing)
-			log.Printf("nextRing=%v, nextRadius=%v", nextRing, nextRadius)
 
 			conlen := m.connectorRadius - nextRadius
 			conP0uo := cp(&ni01).Scale(float32(conlen)).Add(outP0uo)
