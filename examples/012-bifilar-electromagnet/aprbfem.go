@@ -206,17 +206,17 @@ func (m *arBifilarElectromagnet) coilWireSegment(firstFace, lastFace bool, wireN
 		p0di := pd(ri, a0, z0)
 
 		adjP1uo := pu(ro, adja1, adjz1)
-		// adjP1ui := pu(ri, adja1, adjz1)
+		adjP1ui := pu(ri, adja1, adjz1)
 		adjP1do := pd(ro, adja1, adjz1)
-		// adjP1di := pd(ri, adja1, adjz1)
+		adjP1di := pd(ri, adja1, adjz1)
 
 		n := vec3.Cross(cp(p0di).Sub(p0do), cp(p0ui).Sub(p0do))
 		n.Normalize()
 
-		// quad(p0do, p0di, p0ui, p0uo) // end-cap
-		// quad(p0uo, p0ui, p1ui, p1uo) // upward
-		// quad(p0ui, p0di, p1di, p1ui) // inner
-		// quad(p0do, p1do, p1di, p0di) // downward
+		quad(p0do, p0di, p0ui, p0uo)       // end-cap
+		quad(p0uo, p0ui, adjP1ui, adjP1uo) // upward
+		quad(p0ui, p0di, adjP1di, adjP1ui) // inner
+		quad(p0do, adjP1do, adjP1di, p0di) // downward
 
 		ni01 := vec3.T{float32(math.Cos(a1 + math.Pi)), float32(math.Sin(a1 + math.Pi)), 0}
 
