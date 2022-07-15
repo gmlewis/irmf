@@ -323,6 +323,10 @@ Note that as of July 14, 2022, all examples have been moved to a [separate repo]
 
 [![025-patterns](https://github.com/gmlewis/irmf-examples/blob/master/examples/025-patterns/sphered-1.png)](https://github.com/gmlewis/irmf-examples/tree/master/examples/025-patterns)
 
+* [027-libfive](https://github.com/gmlewis/irmf-examples/tree/master/examples/027-libfive)
+
+[![027-libfive](https://github.com/gmlewis/irmf-examples/blob/master/examples/027-libfive/libfive-1.png)](https://github.com/gmlewis/irmf-examples/tree/master/examples/027-libfive)
+
 Note that to reduce the size of this repo, STL files are no longer generally
 retained except for exceptional cases. :smile:
 
