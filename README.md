@@ -1,5 +1,7 @@
 # Infinite Resolution Materials Format (IRMF) Shaders
 
+![IRMF logo](https://github.com/gmlewis/irmf-examples/blob/master/examples/002-cube/irmf-logo.png)
+
 ## Summary
 
 IRMF is a file format used to describe [GLSL
