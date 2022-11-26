@@ -327,6 +327,10 @@ Note that as of July 14, 2022, all examples have been moved to a [separate repo]
 
 [![027-libfive](https://github.com/gmlewis/irmf-examples/blob/master/examples/027-libfive/libfive-1.png)](https://github.com/gmlewis/irmf-examples/tree/master/examples/027-libfive)
 
+* [028-lygia](https://github.com/gmlewis/irmf-examples/tree/master/examples/028-lygia)
+
+[![028-lygia](https://github.com/gmlewis/irmf-examples/blob/master/examples/028-lygia/lygia-01.png)](https://github.com/gmlewis/irmf-examples/tree/master/examples/028-lygia)
+
 Note that to reduce the size of this repo, STL files are no longer generally
 retained except for exceptional cases. :smile:
 
