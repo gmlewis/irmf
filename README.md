@@ -215,7 +215,18 @@ or [slicer](https://github.com/gmlewis/irmf-slicer/issues)).
 
 ## What is the status of IRMF?
 
-Currently, IRMF is just an idea that needs fully fleshing out.
+IRMF has evolved from a conceptual framework into a practical ecosystem for 3D printing
+and modeling. A comprehensive suite of converters (including `stl-to-irmf`,
+`obj-to-irmf`, `binvox-to-irmf`, `svx-to-irmf`, and `dlp-to-irmf`) enables the
+conversion of legacy 3D formats into IRMF shaders using techniques like
+lossless cuboid-merging and Fourier series approximation.
+
+Furthermore, the `irmf-cal-cli` tool now provides direct integration with
+Computed Axial Lithography (CAL) and Volumetric Additive Manufacturing (VAM) hardware.
+It streamlines the entire pipeline—from IRMF model slicing and GPU-accelerated
+optimization to hardware-synchronized light projection—enabling high-resolution
+3D printing directly from IRMF shaders without the need for intermediate
+STL or G-code files.
 
 Please see the [IRMF Spec](spec) and [provided examples](#examples) for more information.
 
