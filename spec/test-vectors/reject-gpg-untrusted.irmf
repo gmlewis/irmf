@@ -1,0 +1,13 @@
+/*{
+  "irmf": "1.0",
+  "language": "glsl",
+  "encoding": "gpg",
+  "materials": ["PLA"],
+  "min": [0, 0, 0],
+  "max": [10, 10, 10],
+  "units": "mm"
+}*/
+-----BEGIN PGP MESSAGE-----
+
+dGhpcyBpcyBhIGR1bW15IGVuY3J5cHRlZCBwYXlsb2FkIGZvciB0ZXN0aW5nIG9ubHk=
+-----END PGP MESSAGE-----

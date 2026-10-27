@@ -225,10 +225,66 @@ the same body runs in a browser and in a Node-based compiler without import
 maps.
 
 **Security.** TSL bodies are executable JavaScript. Consumers *MUST* treat
-untrusted `.irmf` files as untrusted code, *MUST* obtain explicit user consent
-before evaluating remote TSL in an interactive host, and *SHOULD* sandbox the
-evaluator (no network, no filesystem, time/memory limits). `encoding: "gpg"`
-protects confidentiality only and is not an execution boundary.
+every `.irmf` file as untrusted code until the user has decided otherwise. A
+consumer that evaluates TSL *MUST* run it in a sandbox that provides no network
+access, no filesystem access outside the consumer's own read-only resources, no
+access to the host environment (including environment variables and
+credentials), and enforced time and memory limits.
+
+In an interactive host, remote TSL *MUST* require explicit per-source consent
+that names the origin (and, ideally, shows a content hash). Consent *MUST NOT*
+be remembered for a different source, and *SHOULD NOT* be remembered across
+sessions without a visible trust decision. A non-interactive host *MUST NOT*
+evaluate remote TSL at all unless the operator has enabled it explicitly.
+
+`encoding: "gpg"` protects confidentiality only: it is not an execution
+boundary, provides no provenance, and hides the body from review. Consumers
+*MUST NOT* automatically decrypt remote models, and *SHOULD* refuse encrypted
+bodies when a restricted "safe" profile is requested.
+
+**Includes.** An `#include` is remote code execution for GLSL/WGSL and plain
+remote code execution for TSL. Therefore:
+
+* A TSL body *MUST NOT* contain `#include`. Consumers *MUST* reject such a file
+  rather than fetching the include.
+* Consumers *MUST NOT* fetch remote includes for a model unless the user (or
+  operator) has explicitly enabled network includes for that model. The default
+  *MUST* be disabled.
+* When enabled, consumers *MUST* use HTTPS and restrict requests and redirects
+  to an explicit host allowlist. For `github.com/` includes, consumers *MUST*
+  require an immutable 40-hex commit hash; branch names and tags are mutable
+  and *MUST* be rejected. For hosts that serve unversioned content (such as
+  `lygia.xyz`), consumers *MUST* verify a content hash when one is supplied,
+  cache by content hash, and warn that the content is mutable. Consumers
+  *MUST* enforce per-include and total byte limits plus an include-count limit
+  and a request timeout, and *MUST* fail closed if an include cannot be fetched
+  or verified. Silently substituting or omitting an include is forbidden.
+* A future revision *SHOULD* define a self-contained bundle that embeds all
+  included sources and their hashes so that rendering requires no network
+  access.
+
+**Resource limits.** Consumers *SHOULD* enforce limits before rendering:
+maximum file size, maximum decoded body size, maximum include bytes and count,
+maximum materials, finite `min`/`max` values with `min < max`, a maximum model
+extent, and a maximum slice/sample count derived from the requested resolution.
+A model *MUST NOT* be able to make a consumer allocate unbounded memory or run
+unbounded work merely by declaring large bounds or by using a compression bomb
+(`encoding: "gzip"`). Consumers *SHOULD* report which limit was exceeded.
+
+**Untrusted header strings.** `materials`, `title`, `author`, `notes`,
+`license`, and `options` are untrusted display data. Consumers *MUST NOT*
+interpret them as HTML, shell code, format strings, or path fragments. In
+particular: material names used in filenames *MUST* be reduced to a safe,
+length-limited character set and *MUST NOT* contain path separators or `..`;
+material names rendered in a user interface *MUST* be set as text, never as
+markup; and header strings written to a terminal or log *MUST* have control
+characters escaped.
+
+**Provenance.** A future revision *SHOULD* define a `sha256` value over the
+canonical file bytes and an optional detached signature, so that hosts can
+show whether a model is signed and whether it has changed since it was
+approved. In the absence of a signature, hosts *SHOULD* display a content hash
+and the origin for any model loaded from a URL.
 
 **Unknown values.** See the `language` key above: a consumer that does not
 support `"tsl"` (or any unknown `language`) *MUST* reject the file with a clear
@@ -261,6 +317,11 @@ voxel; per-sample decisions are expressed in the graph itself.
   key, the TSL entry-point contract, and the execution-model, determinism,
   and security requirements above. `"irmf"` remains `"1.0"`, matching how
   WGSL was added.
+* **1.0 amendment** — clarified the trust model: explicit per-source consent
+  and sandboxing for TSL, no `#include` in TSL bodies, opt-in network includes
+  with host allowlisting/pinning/limits, resource limits, and the rule that
+  header strings are untrusted display data. Added rejection test vectors in
+  [`test-vectors/`](test-vectors/).
 
 ## Canonical example
 

