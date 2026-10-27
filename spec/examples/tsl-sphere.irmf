@@ -1,0 +1,22 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "license": "Apache-2.0",
+  "irmf": "1.0",
+  "language": "tsl",
+  "tslVersion": "0.180.0",
+  "materials": ["PLA"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "units": "mm",
+  "title": "tsl sphere",
+  "version": "1.0"
+}*/
+
+// A single 10mm-diameter sphere.
+const sphere = Fn(([radius, p]) => {
+  return select(length(p).lessThanEqual(radius), float(1.0), float(0.0));
+});
+
+const mainModel4 = Fn(([xyz]) => {
+  return [sphere(float(5.0), xyz)]; // one value per material
+});

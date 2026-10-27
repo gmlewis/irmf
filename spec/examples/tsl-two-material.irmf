@@ -1,0 +1,23 @@
+/*{
+  "author": "Glenn M. Lewis",
+  "license": "Apache-2.0",
+  "irmf": "1.0",
+  "language": "tsl",
+  "tslVersion": "0.180.0",
+  "materials": ["core", "shell"],
+  "max": [5,5,5],
+  "min": [-5,-5,-5],
+  "units": "mm",
+  "title": "tsl two-material sphere",
+  "version": "1.0"
+}*/
+
+// A solid core surrounded by a shell.
+const ball = (radius, p) => {
+  return select(length(p).lessThanEqual(radius), float(1.0), float(0.0));
+};
+
+const mainModel4 = (xyz) => [
+  ball(float(2.5), xyz), // core
+  ball(float(5.0), xyz), // shell (includes the core for simplicity)
+];

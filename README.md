@@ -5,8 +5,9 @@
 ## Summary
 
 IRMF is a file format used to describe
-[GLSL ES](https://en.wikipedia.org/wiki/OpenGL_ES) or
-[WGSL](https://www.w3.org/TR/WGSL/) shaders that define the
+[GLSL ES](https://en.wikipedia.org/wiki/OpenGL_ES),
+[WGSL](https://www.w3.org/TR/WGSL/), or
+[TSL](https://threejs.org/docs/TSL.html) shaders that define the
 materials in a 3D object with infinite resolution. IRMF
 eliminates the need for [software slicers](https://en.wikipedia.org/wiki/Slicer_(3D_printing)),
 [STL](https://en.wikipedia.org/wiki/STL_(file_format)), and
@@ -86,7 +87,8 @@ this scenario.
 The JSON blob is used to describe the physical dimensions (the
 minimum bounding box) of the object, how many materials it uses, and
 other parameters used by the shader. The shader portion itself is a
-standard GLSL ES or WGSL shader.
+standard GLSL ES or WGSL shader, or a TSL JavaScript program that builds a
+three.js node graph.
 
 ## Do IRMF shaders really have infinite resolution?
 
@@ -118,7 +120,7 @@ from the ground up.
 Additionally, I came across a similar use of JSON and GLSL ES called
 [ISF](https://isf.video/) but used for video.
 
-## What is the difference between GLSL ES (or WGSL) and IRMF?
+## What is the difference between GLSL ES (or WGSL or TSL) and IRMF?
 
 GLSL ES is the [OpenGL Shading
 Language](https://www.khronos.org/opengles/) developed by the [Khronos
@@ -127,10 +129,10 @@ shaders that can be run in parallel on GPU cards.
 Similarly, WGSL is the WebGPU Shading Language by the
 [W3C (World Wide Web Consortium)](https://www.w3.org/).
 
-IRMF is designed to be a standard for working with GLSL ES or WGSL in such a
-way that 3D printers can manufacture objects at any resolution
+IRMF is designed to be a standard for working with GLSL ES, WGSL, or TSL in
+such a way that 3D printers can manufacture objects at any resolution
 possible. IRMF files consist of a JSON blob followed by a GLSL ES or WGSL
-shader.
+shader, or by a TSL JavaScript program.
 
 ## How are IRMF shaders different from signed distance functions (SDFs)?
 
@@ -234,6 +236,18 @@ a 3D printing using digital incoherent synthesis of holographic light fields (DI
 to 3D small object in under 0.6 seconds. This technology would be a great fit for IRMF.
 (See https://www.nature.com/articles/s41586-026-10114-5 and https://github.com/sugar10w/DISH
 for more information.)
+
+### Supported shader languages
+
+| `language` | Body type | Version key | Compiled by |
+|---|---|---|---|
+| `glsl` | GLSL ES source text | `glslVersion` | the GPU / driver |
+| `wgsl` | WGSL source text | — | the GPU / driver |
+| `tsl` | JavaScript that builds a three.js TSL node graph | `tslVersion` | three.js, at graph-build time |
+
+Every canonical example in
+[irmf-examples](https://github.com/gmlewis/irmf-examples) is provided in all
+three languages (`<base>.irmf`, `<base>-wgsl.irmf`, `<base>-tsl.irmf`).
 
 Please see the [IRMF Spec](spec) and [provided examples](#examples).
 
