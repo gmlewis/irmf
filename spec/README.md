@@ -259,6 +259,12 @@ remote code execution for TSL. Therefore:
   *MUST* enforce per-include and total byte limits plus an include-count limit
   and a request timeout, and *MUST* fail closed if an include cannot be fetched
   or verified. Silently substituting or omitting an include is forbidden.
+* A consumer *MAY* offer an explicit, off-by-default override that accepts a
+  mutable branch or tag reference. When it does, the consumer *MUST* warn for
+  that specific source (naming the URL and, when available, a content hash)
+  and the override *MUST NOT* apply to other models or to later sessions
+  without a new decision. A restricted "safe" profile *MUST NOT* allow mutable
+  includes at all.
 * A future revision *SHOULD* define a self-contained bundle that embeds all
   included sources and their hashes so that rendering requires no network
   access.
@@ -319,8 +325,9 @@ voxel; per-sample decisions are expressed in the graph itself.
   WGSL was added.
 * **1.0 amendment** — clarified the trust model: explicit per-source consent
   and sandboxing for TSL, no `#include` in TSL bodies, opt-in network includes
-  with host allowlisting/pinning/limits, resource limits, and the rule that
-  header strings are untrusted display data. Added rejection test vectors in
+  with host allowlisting/pinning/limits (plus an optional explicit override
+  for mutable refs), resource limits, and the rule that header strings are
+  untrusted display data. Added rejection test vectors in
   [`test-vectors/`](test-vectors/).
 
 ## Canonical example
